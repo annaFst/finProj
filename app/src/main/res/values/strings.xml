@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BT</string>
+    <string name="creat_event">creat event</string>
+    <string name="add_contacts">add contacts</string>
+    <string name="hello">Hello!</string>
+    <string name="new_activity">New activity</string>
+    <string name="done">DONE</string>
+</resources>
