@@ -12,8 +12,13 @@ import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private Button moveBtn;
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +40,5 @@ public class MainActivity extends AppCompatActivity {
     public void openSecondScreen(){
         Intent intent  = new Intent(this,creatActivity.class);
         startActivity(intent);
-
-
     }
 }

@@ -3,7 +3,6 @@ package com.example.bt;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,12 +14,11 @@ import java.util.ArrayList;
 public class creatActivity extends AppCompatActivity {
 
 
-    private Button addBt;
-    private Button dBtn;
-    private String title;
-    private String date;
+    private Button mAddBtn;
+    private Button mDoneBtn;
+    private String mTitle;
     private EditText txt;
-    private ImageButton dateChoice;
+    private ImageButton mDateChoice;
 
     ArrayList <String> names = new ArrayList<String>();
     ListView showToScreen;
@@ -30,10 +28,10 @@ public class creatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creat);
-        addBt = (Button)findViewById(R.id.addBt);
-        dBtn = (Button)findViewById(R.id.doneBtn);
-        txt = (EditText)findViewById(R.id.titelBtn);
-        dateChoice = (ImageButton)findViewById(R.id.calendarButton);
+        mAddBtn = (Button)findViewById(R.id.addBt);
+        mDoneBtn = (Button)findViewById(R.id.doneBtn);
+        txt = (EditText)findViewById(R.id.titleBtn);
+        mDateChoice = (ImageButton)findViewById(R.id.calendarButton);
 
         showToScreen = (ListView)findViewById(R.id.eventsList);
 
@@ -44,30 +42,28 @@ public class creatActivity extends AppCompatActivity {
         }
 
 
-        addBt.setOnClickListener(new View.OnClickListener() {
+        mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openSecondScreen();
             }
         });
 
-        dBtn.setOnClickListener(new View.OnClickListener() {
+        mDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                title = txt.getText().toString();
+                mTitle = txt.getText().toString();
                 Intent intent  = new Intent(creatActivity.this,MainActivity.class);
                 startActivity(intent);
             }
         });
 
-        dateChoice.setOnClickListener(new View.OnClickListener() {
+        mDateChoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openCalendar();
             }
         });
-
-
     }
 
     public void openCalendar(){

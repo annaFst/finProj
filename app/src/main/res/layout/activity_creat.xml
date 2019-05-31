@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="@+id/editText2" />
 
     <EditText
-        android:id="@+id/titelBtn"
+        android:id="@+id/titleBtn"
         android:layout_width="183dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -31,7 +31,7 @@
         android:layout_marginBottom="40dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="Titel"
+        android:hint="Title"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/dateView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
         android:layout_marginBottom="96dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="time"
+        android:hint="Time"
         android:inputType="time"
         app:layout_constraintBottom_toTopOf="@+id/addBt"
         app:layout_constraintEnd_toEndOf="@+id/dateView"
@@ -58,12 +58,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         android:ems="10"
-        android:hint="date"
+        android:hint="Date"
         android:inputType="date"
         app:layout_constraintBottom_toTopOf="@+id/editText2"
-        app:layout_constraintEnd_toEndOf="@+id/titelBtn"
+        app:layout_constraintEnd_toEndOf="@+id/titleBtn"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/titelBtn" />
+        app:layout_constraintStart_toStartOf="@+id/titleBtn" />
 
     <Button
         android:id="@+id/doneBtn"
