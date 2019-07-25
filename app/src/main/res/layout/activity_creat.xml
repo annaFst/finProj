@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarAlwaysDrawHorizontalTrack="true"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbars="horizontal|vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".creatActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="131dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="44dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/titleBtn"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Title"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/grey"
+                    android:textSize="16dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/dateView"
+                    android:layout_width="330dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Date"
+                    android:inputType="date"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/grey"
+                    android:textSize="16dp" />
+
+                <ImageButton
+                    android:id="@+id/calendarButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:background="@drawable/simbol_style"
+                    app:srcCompat="@android:drawable/ic_menu_today" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/timeStr"
+                    android:layout_width="330dp"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:hint="Time"
+                    android:inputType="time"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/grey"
+                    android:textSize="16dp" />
+
+                <ImageButton
+                    android:id="@+id/timeBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/simbol_style"
+                    app:srcCompat="@android:drawable/ic_menu_recent_history" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="14dp"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/alert"
+                    android:layout_width="330dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:text=" Alert"
+                    android:textColor="@color/grey"
+                    android:textSize="16dp" />
+
+                <ImageButton
+                    android:id="@+id/alert_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity= "center_vertical"
+                    android:layout_gravity="center"
+                    android:background="@drawable/simbol_style"
+                    android:outlineAmbientShadowColor="@color/grey"
+                    android:outlineSpotShadowColor="@color/grey"
+                    android:tint="#7D7F80"
+                    app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="14dp"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="239dp"
+                android:layout_height="wrap_content"
+                android:text="  Creat list"
+                android:textColor="#27E753"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/enterItem"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Enter item"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/grey"
+                    android:textSize="16dp" />
+
+                <ImageButton
+                    android:id="@+id/addItemBtn"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/simbol_style"
+                    android:enabled="false"
+                    app:srcCompat="@android:drawable/ic_menu_add" />
+
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="183dp"
+                android:layout_height="65dp">
+
+                <ListView
+                    android:id="@+id/itemList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </ScrollView>
+
+            <Button
+                android:id="@+id/addBt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="28dp"
+                android:text="@string/add_contacts"
+                android:background="@drawable/button_syle"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/doneBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="72dp"
+                android:enabled="false"
+                android:text="@string/done"
+                android:textColor="@color/white"
+                android:background="@drawable/button_syle"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>
