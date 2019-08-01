@@ -2,7 +2,6 @@ package com.example.bt;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +9,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+//import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.bt.models.Event;
+import com.example.bt.models.Item;
 
 import java.util.List;
 
-public class currEvent extends AppCompatActivity {
+public class CurrentEventActivity extends AppCompatActivity {
 
     private TextView mEventName;
     private TextView mEventDate;
@@ -49,9 +53,9 @@ public class currEvent extends AppCompatActivity {
             public void onClick(View v) {
                 Event temp = new Event();
                 temp.copyEvent(currEvent);
-                Toast.makeText(currEvent.this, "The event has been duplicated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CurrentEventActivity.this, "The event has been duplicated", Toast.LENGTH_SHORT).show();
 
-                Intent intent  = new Intent(currEvent.this,MainActivity.class);
+                Intent intent  = new Intent(CurrentEventActivity.this,MainActivity.class);
                 startActivity(intent);
 
             }
@@ -83,10 +87,10 @@ public class currEvent extends AppCompatActivity {
 
 
 
-    private class itemListAdapter extends  ArrayAdapter<String>{
+    private class itemListAdapter extends  ArrayAdapter<Item>{
         private int layout;
 
-        public itemListAdapter(Context context, int resource, List<String> objects) {
+        public itemListAdapter(Context context, int resource, List<Item> objects) {
             super(context, resource, objects);
             layout = resource;
         }
@@ -100,22 +104,22 @@ public class currEvent extends AppCompatActivity {
                 convertView = inflater.inflate(layout,parent,false);
                 ItemHolder listItem = new ItemHolder();
                 listItem.item = (TextView)convertView.findViewById(R.id.curr_item);
-                listItem.item.setText(getItem(position));
+                listItem.item.setText(getItem(position).getName());
                 convertView.setTag(listItem);
             }
             else{
                 lItem = (ItemHolder)convertView.getTag();
-                lItem.item.setText(getItem(position));
+                lItem.item.setText(getItem(position).getName());
             }
             return convertView;
         }
 
     }
 
-    private class takenItemListAdapter extends  ArrayAdapter<String>{
+    private class takenItemListAdapter extends  ArrayAdapter<Item>{
         private int layout;
 
-        public takenItemListAdapter(Context context, int resource, List<String> objects) {
+        public takenItemListAdapter(Context context, int resource, List<Item> objects) {
             super(context, resource, objects);
             layout = resource;
         }
@@ -129,12 +133,12 @@ public class currEvent extends AppCompatActivity {
                 convertView = inflater.inflate(layout,parent,false);
                 ItemHolder listItem = new ItemHolder();
                 listItem.item = (TextView)convertView.findViewById(R.id.taken_item);
-                listItem.item.setText(getItem(position));
+                listItem.item.setText(getItem(position).getName());
                 convertView.setTag(listItem);
             }
             else{
                 lItem = (ItemHolder)convertView.getTag();
-                lItem.item.setText(getItem(position));
+                lItem.item.setText(getItem(position).getName());
             }
             return convertView;
         }

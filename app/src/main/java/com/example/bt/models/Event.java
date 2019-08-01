@@ -1,12 +1,16 @@
-package com.example.bt;
+package com.example.bt.models;
+
+import com.example.bt.DBdemo;
+import com.example.bt.MainActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Event {
 
     private String eventName= "";
-    private ArrayList<String> myList= new ArrayList<String>();
-    private ArrayList<String> takenItems= new ArrayList<String>();
+    private List<Item> myList= new ArrayList<>();
+    private List<Item> takenItems= new ArrayList<>();
     private String date = "";
     private String eventTime = "";
 
@@ -26,13 +30,22 @@ public class Event {
     }
 
     public void addToList(String str){
-        myList.add(str);
+        myList.add(new Item(str));
+    }
+
+    public void addToList(Item item){
+        myList.add(item);
     }
 
     public void addToTakenList(String str){
-        takenItems.add(str);
+        takenItems.add(new Item(str));
     }
-    public String getFromList(int i){
+
+    public void addToTakenList(Item item){
+        takenItems.add(item);
+    }
+
+    public Item getFromList(int i){
         return myList.get(i);
     }
 
@@ -40,11 +53,11 @@ public class Event {
         return myList.size();
     }
 
-    public ArrayList<String> getItems(){
+    public List<Item> getItems(){
         return myList;
     }
 
-    public ArrayList<String> getTakenItems(){
+    public List<Item> getTakenItems(){
         return takenItems;
     }
 
@@ -66,14 +79,13 @@ public class Event {
         int size  = other.myList.size();
         int takenSize = other.takenItems.size();
 
-        for (int i=0; i<size ;i++){
-            String item = other.myList.get(i);
+        for (Item item : takenItems){
             res.addToList(item);
         }
 
         if (takenSize>0) {
             for (int i=0; i<takenSize ;i++) {
-                String takenItem = other.takenItems.get(i);
+                Item takenItem = other.takenItems.get(i);
                 res.addToTakenList(takenItem);
             }
         }

@@ -2,7 +2,6 @@ package com.example.bt;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+//import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
@@ -63,13 +65,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void openSecondScreen(){
-        Intent intent  = new Intent(this,creatActivity.class);
+        Intent intent  = new Intent(this, CreateActivity.class);
         startActivity(intent);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent  = new Intent(this,currEvent.class);
+        Intent intent  = new Intent(this, CurrentEventActivity.class);
         intent.putExtra("index",position);
         startActivity(intent);
     }

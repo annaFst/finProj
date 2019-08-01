@@ -1,11 +1,14 @@
 package com.example.bt;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.CalendarView;
 
-public class myCalendar extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+
+public class MyCalendar extends AppCompatActivity {
 
     private String resDate;
     @Override
@@ -20,7 +23,7 @@ public class myCalendar extends AppCompatActivity {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 resDate = dayOfMonth+"/"+month+"/"+year;
 
-                Intent intent  = new Intent( myCalendar.this, creatActivity.class);
+                Intent intent  = new Intent( MyCalendar.this, CreateActivity.class);
                 intent.putExtra("date",resDate);
                 startActivity(intent);
             }

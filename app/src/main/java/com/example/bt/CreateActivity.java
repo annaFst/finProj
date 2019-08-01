@@ -3,7 +3,6 @@ package com.example.bt;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,10 +16,14 @@ import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import androidx.appcompat.app.AppCompatActivity;
+//import android.support.v7.app.AppCompatActivity;
+
+import com.example.bt.models.Event;
+
 import java.util.Calendar;
 
-public class creatActivity extends AppCompatActivity {
+public class CreateActivity extends AppCompatActivity {
 
     private Button mAddBtn;
     private Button mDoneBtn;
@@ -79,7 +82,7 @@ public class creatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MainActivity.updateList(title);
-                Intent intent  = new Intent(creatActivity.this,MainActivity.class);
+                Intent intent  = new Intent(CreateActivity.this,MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -91,7 +94,7 @@ public class creatActivity extends AppCompatActivity {
                     myEvent.addToList(item);
                     //adapter.add(item);
                     enterItem.setText("");
-                    Toast.makeText(creatActivity.this, "Item Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateActivity.this, "Item Added", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -110,7 +113,7 @@ public class creatActivity extends AppCompatActivity {
                 myYear = myCalendar.get(Calendar.YEAR);
 
 
-                myDate = new DatePickerDialog(creatActivity.this, new DatePickerDialog.OnDateSetListener() {
+                myDate = new DatePickerDialog(CreateActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String currDate = dayOfMonth + "/" + (month+1) + "/" + year;
@@ -130,7 +133,7 @@ public class creatActivity extends AppCompatActivity {
                 int hours= myCalendar.get(Calendar.HOUR);
                 int minute = myCalendar.get(Calendar.MINUTE);
 
-                TimePickerDialog tpd = new TimePickerDialog(creatActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog tpd = new TimePickerDialog(CreateActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         String cuttTime = hourOfDay + ":" + minute;
@@ -185,7 +188,7 @@ public class creatActivity extends AppCompatActivity {
     };
 
     public void openSecondScreen(){
-        Intent intent  = new Intent(this,contactsList.class);
+        Intent intent  = new Intent(this, ContactsList.class);
         startActivity(intent);
     }
 /*
@@ -228,7 +231,7 @@ public class creatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mTitle = txt.getText().toString();
-                Intent intent  = new Intent(creatActivity.this,MainActivity.class);
+                Intent intent  = new Intent(CreateActivity.this,MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -242,12 +245,12 @@ public class creatActivity extends AppCompatActivity {
     }
 
     public void openCalendar(){
-        Intent intent  = new Intent(this,myCalendar.class);
+        Intent intent  = new Intent(this,MyCalendar.class);
         startActivity(intent);
     }
 
     public void openSecondScreen(){
-        Intent intent  = new Intent(this,contactsList.class);
+        Intent intent  = new Intent(this,ContactsList.class);
         startActivity(intent);
     }
     */
