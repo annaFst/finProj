@@ -15,7 +15,7 @@
         <activity android:name=".MyCalendar" />
         <activity android:name=".ContactsList" />
         <activity android:name=".CreateActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".EventsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

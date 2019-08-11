@@ -55,7 +55,7 @@ public class CurrentEventActivity extends AppCompatActivity {
                 temp.copyEvent(currEvent);
                 Toast.makeText(CurrentEventActivity.this, "The event has been duplicated", Toast.LENGTH_SHORT).show();
 
-                Intent intent  = new Intent(CurrentEventActivity.this,MainActivity.class);
+                Intent intent  = new Intent(CurrentEventActivity.this, EventsActivity.class);
                 startActivity(intent);
 
             }
@@ -63,15 +63,14 @@ public class CurrentEventActivity extends AppCompatActivity {
 
         currEvent = DBdemo.eventArr.get(index);
         mEventName.setText(currEvent.getName());
-        mEventDate.setText(currEvent.getDate());
-        mEventTime.setText(currEvent.getTime());
-
+        mEventDate.setText(currEvent.getEventDate().toString());
+        mEventTime.setText(currEvent.getEventTime().toString());
 
 
         adapter  = new itemListAdapter(this,R.layout.items_list, currEvent.getItems());
         items.setAdapter(adapter);
 
-        takenAdapter = new takenItemListAdapter(this,R.layout.taken_items, currEvent.getTakenItems());
+        takenAdapter = new takenItemListAdapter(this,R.layout.taken_items, currEvent.getTakenItemsList());
         takenItemsList.setAdapter(takenAdapter);
 
         items.setOnItemClickListener(new AdapterView.OnItemClickListener(){

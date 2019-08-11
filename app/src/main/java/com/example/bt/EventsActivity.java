@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class EventsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
 
     public static boolean updated = false;
