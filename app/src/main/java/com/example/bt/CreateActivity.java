@@ -1,5 +1,6 @@
 package com.example.bt;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -13,6 +14,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -39,12 +42,13 @@ public class CreateActivity extends AppCompatActivity {
     static private ArrayAdapter<String> adapter;
     private Event myEvent;
     private String item = null;
+    private Switch onOffAlert;
+    private TextView setAlert;
 
-
+    public static Calendar myCalendar;
    // ArrayList <String> inputEvents;
     //ListView showToScreen;
 
-    Calendar myCalendar;
     DatePickerDialog myDate;
 
     @Override
@@ -61,6 +65,8 @@ public class CreateActivity extends AppCompatActivity {
         mTimeBtn = (ImageButton)findViewById(R.id.timeBtn);
         itemListView = (ListView)findViewById(R.id.itemList);
         mTime = findViewById(R.id.timeStr);
+        onOffAlert = findViewById(R.id.alertSwitch);
+        setAlert = (TextView)findViewById(R.id.alert);
 
 
         myEvent = new Event();
@@ -123,6 +129,23 @@ public class CreateActivity extends AppCompatActivity {
                 },myYear,myMonth,myDay);
                 myDate.show();
 
+            }
+        });
+
+        onOffAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onOffAlert.isChecked()){
+                    //onOffAlert.setChecked(true);
+                    Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
+                    intent.putExtra("title", title);
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
+                    intent.putExtra("TODO", 2);
+                    startActivity(intent);
+                }
             }
         });
 

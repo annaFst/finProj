@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="131dp">
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
 
                 <EditText
                     android:id="@+id/titleBtn"
-                    android:layout_width="190dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
@@ -114,20 +114,15 @@
                     android:gravity="center|left"
                     android:text=" Alert"
                     android:textColor="@color/grey"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"
+                    android:clickable="false"/>
 
-                <ImageButton
-                    android:id="@+id/alert_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity= "center_vertical"
-                    android:layout_gravity="center"
-                    android:background="@drawable/simbol_style"
-                    android:outlineAmbientShadowColor="@color/grey"
-                    android:outlineSpotShadowColor="@color/grey"
-                    android:tint="#7D7F80"
-                    app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
+                <Switch
+                    android:id="@+id/alertSwitch"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
             </LinearLayout>
 
             <View
@@ -186,22 +181,23 @@
                 android:id="@+id/addBt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="28dp"
-                android:text="@string/add_contacts"
                 android:background="@drawable/button_syle"
-                android:textColor="@color/white"
-                android:layout_gravity="center_horizontal"/>
+                android:text="@string/add_contacts"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/doneBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="72dp"
+                android:background="@drawable/button_syle"
                 android:enabled="false"
                 android:text="@string/done"
-                android:textColor="@color/white"
-                android:background="@drawable/button_syle"
-                android:layout_gravity="center_horizontal"/>
+                android:textColor="@color/white" />
+
         </LinearLayout>
     </ScrollView>
 
