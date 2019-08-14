@@ -24,6 +24,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bt.models.Event;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Calendar;
 
 public class CreateActivity extends AppCompatActivity {
@@ -70,6 +73,8 @@ public class CreateActivity extends AppCompatActivity {
 
 
         myEvent = new Event();
+        final LocalDate[] localDate = new LocalDate[1];
+        final LocalTime[] localTime = new LocalTime[1];
         DBdemo.eventArr.add(myEvent);
         //adapter  = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, myEvent.getItems());
        // itemListView.setAdapter(adapter);
@@ -87,8 +92,8 @@ public class CreateActivity extends AppCompatActivity {
         mDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.updateList(title);
-                Intent intent  = new Intent(CreateActivity.this,MainActivity.class);
+                EventsActivity.updateList(title);
+                Intent intent  = new Intent(CreateActivity.this, EventsActivity.class);
                 startActivity(intent);
             }
         });
@@ -124,7 +129,7 @@ public class CreateActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String currDate = dayOfMonth + "/" + (month+1) + "/" + year;
                         date.setText(currDate);
-                        myEvent.setDate(currDate);
+                        localDate[0] = LocalDate.of(year, month, dayOfMonth);
                     }
                 },myYear,myMonth,myDay);
                 myDate.show();
@@ -159,14 +164,17 @@ public class CreateActivity extends AppCompatActivity {
                 TimePickerDialog tpd = new TimePickerDialog(CreateActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String cuttTime = hourOfDay + ":" + minute;
-                        mTime.setText(cuttTime);
-                        myEvent.setTime(cuttTime);
+                        String currTime = hourOfDay + ":" + minute;
+                        mTime.setText(currTime);
+                        localTime[0] = LocalTime.of(hourOfDay, minute);
                     }
                 },hours,minute,true);
                 tpd.show();
             }
         });
+
+        myEvent.setEventDate(localDate[0]);
+        myEvent.setEventTime(localTime[0]);
     }
 
     private TextWatcher itemWatcher = new TextWatcher() {
@@ -214,7 +222,8 @@ public class CreateActivity extends AppCompatActivity {
         Intent intent  = new Intent(this, ContactsList.class);
         startActivity(intent);
     }
-/*
+
+    /*
     private Button mAddBtn;
     private Button mDoneBtn;
     private String mTitle;
@@ -254,7 +263,7 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mTitle = txt.getText().toString();
-                Intent intent  = new Intent(CreateActivity.this,MainActivity.class);
+                Intent intent  = new Intent(CreateActivity.this,EventsActivity.class);
                 startActivity(intent);
             }
         });

@@ -1,101 +1,135 @@
 package com.example.bt.models;
 
 import com.example.bt.DBdemo;
-import com.example.bt.MainActivity;
+import com.example.bt.EventsActivity;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
 
-    private String eventName= "";
-    private List<Item> myList= new ArrayList<>();
-    private List<Item> takenItems= new ArrayList<>();
-    private String date = "";
-    private String eventTime = "";
+    private String mEventId;
+    private String mEventName = "";
+    private List<Item> mItemList = new ArrayList<>();
+    private List<Item> mTakenItemsList = new ArrayList<>();
+    private List<String> participants = new ArrayList<>();
+    private LocalDate eventDate = null;
+    private LocalTime eventTime = null;
+    private String mEventCreatorId;
+
+    public String getEventId(){
+        return mEventId;
+    }
 
     public void setName (String str){
-        eventName = str;
+        mEventName = str;
     }
 
     public String getName (){
-        return eventName;
-    }
-    public void setTime (String str){
-        eventTime = str;
+        return mEventName;
     }
 
-    public String getTime (){
+    public void setEventTime(LocalTime time){
+        eventTime = time;
+    }
+
+    public LocalTime getEventTime(){
         return eventTime;
     }
 
     public void addToList(String str){
-        myList.add(new Item(str));
+        mItemList.add(new Item(str));
     }
 
     public void addToList(Item item){
-        myList.add(item);
+        mItemList.add(item);
     }
 
-    public void addToTakenList(String str){
-        takenItems.add(new Item(str));
+    public void addToList(List<Item> items){
+        mItemList.addAll(items);
     }
+
+//    public void addToTakenList(String str){
+//        mTakenItemsList.add(new Item(str));
+//    }
 
     public void addToTakenList(Item item){
-        takenItems.add(item);
+        mTakenItemsList.add(item);
     }
 
     public Item getFromList(int i){
-        return myList.get(i);
+        return mItemList.get(i);
     }
 
     public int sizeOfList(){
-        return myList.size();
+        return mItemList.size();
     }
 
     public List<Item> getItems(){
-        return myList;
+        return mItemList;
     }
 
-    public List<Item> getTakenItems(){
-        return takenItems;
+    public List<Item> getTakenItemsList(){
+        return mTakenItemsList;
     }
 
-    public void setDate(String dStr){
-        date = dStr;
+    public void setEventDate(LocalDate dStr){
+        eventDate = dStr;
     }
 
-    public String getDate(){
-        return date;
+    public LocalDate getEventDate(){
+        return eventDate;
     }
 
     public void copyEvent(Event other){
         Event res = new Event();
 
         res.setName(other.getName().concat("(copy)"));
-        res.setDate(other.getDate());
-        res.setTime(other.getTime());
+        res.setEventDate(other.getEventDate());
+        res.setEventTime(other.getEventTime());
 
-        int size  = other.myList.size();
-        int takenSize = other.takenItems.size();
+        int size  = other.mItemList.size();
+        int takenSize = other.mTakenItemsList.size();
 
-        for (Item item : takenItems){
+        for (Item item : mTakenItemsList){
             res.addToList(item);
         }
 
         if (takenSize>0) {
             for (int i=0; i<takenSize ;i++) {
-                Item takenItem = other.takenItems.get(i);
+                Item takenItem = other.mTakenItemsList.get(i);
                 res.addToTakenList(takenItem);
             }
         }
 
         DBdemo.eventArr.add(res);
-        MainActivity.updateList(res.getName());
+        EventsActivity.updateList(res.getName());
     }
 
     public void takeItem(int index){
-        takenItems.add(myList.get(index));
-        myList.remove(index);
+        mTakenItemsList.add(mItemList.get(index));
+        mItemList.remove(index);
+    }
+
+    public List<String> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<String> participants) {
+        this.participants = participants;
+    }
+
+    public void setEventId(String eventId) {
+        mEventId = eventId;
+    }
+
+    public String getEventCreatorId() {
+        return mEventCreatorId;
+    }
+
+    public void setEventCreatorId(String eventCreatorId) {
+        mEventCreatorId = eventCreatorId;
     }
 }
