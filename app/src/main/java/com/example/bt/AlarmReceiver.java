@@ -28,7 +28,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
 
-        Intent goToMain  = new Intent(context,MainActivity.class);
+        Intent goToMain  = new Intent(context,EventsActivity.class);
         goToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent contentIntend = PendingIntent.getActivity(context,100, goToMain,PendingIntent.FLAG_UPDATE_CURRENT);

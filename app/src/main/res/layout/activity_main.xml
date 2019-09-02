@@ -7,25 +7,17 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".EventsActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
-    <Button
-        android:id="@+id/addEvent"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/creat_event"
-        android:background="@drawable/button_syle"
-        android:textColor="@color/white"
+        android:layout_height="25dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/my_events"
+        android:textColor="@color/green"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="@+id/scrollView2"
-        app:layout_constraintHorizontal_bias="0.518"
-        app:layout_constraintStart_toStartOf="@+id/scrollView2"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/scrollView2" />
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -44,34 +36,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.498">
 
-        <LinearLayout
+        <ListView
+            android:id="@+id/eventsList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ListView
-                android:id="@+id/eventsList"
-                android:layout_width="350dp"
-                android:layout_height="398dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:textFilterEnabled="false"
-                app:layout_constraintEnd_toEndOf="@+id/scrollView2"
-                app:layout_constraintStart_toStartOf="@+id/scrollView2"
-                app:layout_constraintTop_toTopOf="@+id/scrollView2" />
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:textFilterEnabled="false" />
     </ScrollView>
 
-    <TextView
-        android:id="@+id/textView"
+    <Button
+        android:id="@+id/addEvent"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginBottom="24dp"
-        android:text="My Events"
-        android:textColor="@color/green"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/button_syle"
+        android:text="@string/create_event"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/scrollView2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/scrollView2" />
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="@+id/scrollView2"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -93,7 +93,7 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EventsActivity.updateList(title);
-                Intent intent  = new Intent(CreateActivity.this, EventsActivity.class);
+                Intent intent = new Intent(CreateActivity.this, EventsActivity.class);
                 startActivity(intent);
             }
         });

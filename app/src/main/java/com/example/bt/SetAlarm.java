@@ -83,7 +83,6 @@ public class SetAlarm extends AppCompatActivity {
                 myMonth = myCalendar.get(Calendar.MONTH);
                 myYear = myCalendar.get(Calendar.YEAR);
 
-
                 myDate = new DatePickerDialog(SetAlarm.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -116,16 +115,17 @@ public class SetAlarm extends AppCompatActivity {
                 TimePickerDialog tpd = new TimePickerDialog(SetAlarm.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String cuttTime = hourOfDay + ":" + minute;
+                        String currentTime = hourOfDay + ":" + minute;
                         alarmHour = hourOfDay;
                         alarmMinute = minute;
-                        mTime.setText(cuttTime);
+                        mTime.setText(currentTime);
                     }
                 },myHours,myMinute,false);
 
-               // String temp = myHours + "/" + myMinute;
-                //Tcheck.setText(temp);
-
+                /*
+                String temp = myHours + "/" + myMinute;
+                Tcheck.setText(temp);
+                 */
                 tpd.show();
             }
         });

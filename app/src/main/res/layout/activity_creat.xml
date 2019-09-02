@@ -135,7 +135,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="239dp"
                 android:layout_height="wrap_content"
-                android:text="  Creat list"
+                android:text="  Create list"
                 android:textColor="#27E753"
                 android:textSize="20sp" />
 
