@@ -1,5 +1,9 @@
 package com.example.bt.data.Mappers;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.bt.data.Entities.EventEntity;
 import com.example.bt.models.Event;
 
@@ -10,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 
 public class EventMapper extends FirebaseMapper<EventEntity, Event> {
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Event map(EventEntity eventEntity) {
         Event event = new Event();
@@ -17,19 +22,29 @@ public class EventMapper extends FirebaseMapper<EventEntity, Event> {
         event.setName(eventEntity.getName());
         event.addToList(eventEntity.getItems());
         LocalDateTime localDateTime = getDateTimeFromIsoString(eventEntity.getEventDate());
-        event.setEventDate(localDateTime.toLocalDate());
-        event.setEventTime(localDateTime.toLocalTime());
+        if (localDateTime != null)
+        {
+            event.setEventDate(localDateTime.toLocalDate());
+            event.setEventTime(localDateTime.toLocalTime());
+        }
+        
         event.setParticipants(eventEntity.getParticipants());
         event.setEventCreatorId(eventEntity.getCreator());
 
         return event;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private LocalDateTime getDateTimeFromIsoString(String isoDateTime)
     {
+        if (isoDateTime.isEmpty())
+        {
+            return null;
+        }
+
         DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_DATE_TIME;
 
-        OffsetDateTime offsetDateTime = OffsetDateTime.parse("2015-10-27T16:22:27.605-07:00", timeFormatter);
+        OffsetDateTime offsetDateTime = OffsetDateTime.parse(isoDateTime, timeFormatter);
 
         LocalDateTime date = LocalDateTime.from(Instant.from(offsetDateTime));
 

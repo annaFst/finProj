@@ -39,13 +39,14 @@ public class CurrentUserAccount {
         return(INSTANCE);
     }
 
-    public void InitCurrentUser() throws Exception {
+    public void InitCurrentUser(FirebaseUser firebaseUser) throws Exception {
         UserRepository userRepository =
                 (UserRepository) RepositoryFactory.GetRepositoryInstance(RepositoryFactory.RepositoryType.UserRepository);
 
-        if (userRepository.exists("0546965757"))
+        String userPhoneNum = firebaseUser.getPhoneNumber();
+        if (userRepository.exists(userPhoneNum))
         {
-            DatabaseReference user = userRepository.getDataRef().child("0546965757");
+            DatabaseReference user = userRepository.getDataRef().child(userPhoneNum);
             user.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -59,6 +60,9 @@ public class CurrentUserAccount {
             });
 
             initCurrentUserEventsMap();
+        }
+        else {
+            userRepository.writeNewUser(userPhoneNum, "");
         }
     }
 
