@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.bt.CurrentUserAccount;
+import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.models.Event;
 
 import java.util.List;

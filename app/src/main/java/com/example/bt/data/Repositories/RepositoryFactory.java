@@ -30,6 +30,7 @@ public class RepositoryFactory {
                     repository = new EventRepository();
                     repositoryContainer.put(repositoryType, repository);
                 }
+                break;
             default:
                 throw new Exception();
         }

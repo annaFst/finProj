@@ -1,4 +1,4 @@
-package com.example.bt;
+package com.example.bt.app;
 
 import android.util.Log;
 
@@ -11,6 +11,7 @@ import com.example.bt.data.Repositories.RepositoryFactory;
 import com.example.bt.data.Repositories.UserRepository;
 import com.example.bt.models.Event;
 import com.example.bt.models.User;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +22,7 @@ import java.util.List;
 
 public class CurrentUserAccount {
 
+    private FirebaseUser mFirebaseUser;
     private User mCurrentUser;
     private EventRepository mEventRepository;
     private MutableLiveData<List<Event>> mUserEvents;
@@ -68,7 +70,7 @@ public class CurrentUserAccount {
             public void onSuccess(List<Event> result) {
                 List<Event> userEvents = new ArrayList<>();
                 for (Event event : result) {
-                    if (event.getEventCreatorId() == mCurrentUser.getId()) {
+                    if (mCurrentUser.getEvents().contains(event)) {
                         userEvents.add(event);
                     }
                 }
@@ -94,4 +96,8 @@ public class CurrentUserAccount {
         return mUserEvents;
     }
 
+    public void setFirebaseUser(FirebaseUser firebaseUser)
+    {
+        mFirebaseUser = firebaseUser;
+    }
 }

@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bt.app.CurrentUserAccount;
+
 import java.util.List;
 
 
@@ -40,12 +42,18 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // TODO: Remove this - local test
+        try {
+            CurrentUserAccount.getInstance().InitCurrentUser();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         addEvent = (Button)findViewById(R.id.addEvent);
         eventsListView = (ListView)findViewById(R.id.eventsList);
 
         adapter  = new mainListAdapter(this,R.layout.main_list_view, DBdemo.allEvents);
         eventsListView.setAdapter(adapter);
-
 
         addEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +113,8 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
         }
 
     }
-   public class listItemHolder{
+
+    public class listItemHolder{
         public TextView item;
 
     }

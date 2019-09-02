@@ -7,11 +7,11 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".EventsActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/recycler_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:layoutManager="android.support.v7.widget.LinearLayoutManager" />-->
 
     <Button
         android:id="@+id/addEvent"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="@string/creat_event"
+        android:text="@string/create_event"
         android:background="@drawable/button_syle"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/scrollView2"

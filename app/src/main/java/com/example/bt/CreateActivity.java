@@ -22,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bt.models.Event;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Calendar;
 
@@ -53,7 +52,7 @@ public class CreateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_creat);
+        setContentView(R.layout.activity_create);
         mAddBtn = (Button)findViewById(R.id.addBt);
         mDoneBtn = (Button)findViewById(R.id.doneBtn);
         mDateChoice = (ImageButton)findViewById(R.id.calendarButton);
@@ -214,7 +213,7 @@ public class CreateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_creat);
+        setContentView(R.layout.activity_create);
         mAddBtn = (Button)findViewById(R.id.addBt);
         mDoneBtn = (Button)findViewById(R.id.doneBtn);
         txt = (EditText)findViewById(R.id.titleBtn);
