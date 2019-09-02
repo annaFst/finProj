@@ -7,17 +7,19 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".EventsActivity">
 
-    <TextView
-        android:id="@+id/textView"
+    <Button
+        android:id="@+id/addEvent"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginBottom="24dp"
-        android:text="@string/my_events"
-        android:textColor="@color/green"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/creat_event"
+        android:background="@drawable/button_syle"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/scrollView2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/scrollView2" />
+        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintStart_toStartOf="@+id/scrollView2"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -33,33 +35,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498">
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
-        <ListView
-            android:id="@+id/eventsList"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:textFilterEnabled="false" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/eventsList"
+                android:layout_width="350dp"
+                android:layout_height="399dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:textFilterEnabled="false"
+                app:layout_constraintEnd_toEndOf="@+id/scrollView2"
+                app:layout_constraintStart_toStartOf="@+id/scrollView2"
+                app:layout_constraintTop_toTopOf="@+id/scrollView2" />
+        </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/addEvent"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/button_syle"
-        android:text="@string/create_event"
-        android:textColor="@color/white"
+        android:layout_height="25dp"
+        android:text="My Events"
+        android:textColor="@color/green"
         app:layout_constraintEnd_toEndOf="@+id/scrollView2"
-        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/scrollView2"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
-
-
+        tools:layout_editor_absoluteY="43dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
