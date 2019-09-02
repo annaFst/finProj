@@ -38,6 +38,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         return mEvents.size();
     }
 
+
     public class EventViewHolder extends RecyclerView.ViewHolder {
 
         TextView eventName;

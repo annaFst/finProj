@@ -29,7 +29,10 @@ public class CurrentUserAccount {
 
     private static CurrentUserAccount INSTANCE = null;
 
-    private CurrentUserAccount() {}
+    private CurrentUserAccount()
+    {
+        mUserEvents = new MutableLiveData<>();
+    }
 
     public static synchronized CurrentUserAccount getInstance() {
         if (INSTANCE == null) {
