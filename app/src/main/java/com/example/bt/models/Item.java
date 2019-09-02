@@ -6,6 +6,8 @@ public class Item {
     private User mTakenBy;
     private int mQuantity;
 
+    public Item(){}
+
     public Item(String mName) {
         this.mName = mName;
     }

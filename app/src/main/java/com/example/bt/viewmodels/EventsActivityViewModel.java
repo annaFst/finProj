@@ -15,7 +15,7 @@ public class EventsActivityViewModel extends ViewModel {
 
     public LiveData<List<Event>> getEvents() {
         if (mEvents == null) {
-            mEvents = new MutableLiveData<List<Event>>();
+            mEvents = new MutableLiveData<>();
             loadCurrentUserEvents();
         }
 

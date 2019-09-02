@@ -47,6 +47,7 @@ public abstract class FirebaseDatabaseRepository<Model> {
         mDataRef.removeEventListener(listener);
     }
 
+
     public interface FirebaseDatabaseRepositoryCallback<T> {
         void onSuccess(List<T> result);
 

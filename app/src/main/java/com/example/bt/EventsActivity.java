@@ -14,8 +14,12 @@ import android.widget.TextView;
 //import android.support.v7.app.AppCompatActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
-import com.example.bt.app.CurrentUserAccount;
+import com.example.bt.models.Event;
+import com.example.bt.viewmodels.EventsActivityViewModel;
 
 import java.util.List;
 
@@ -27,9 +31,11 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
 
     private Button addEvent;
     //static private ArrayAdapter<String> adapter;
-    static private mainListAdapter adapter;
+    static private MainListAdapter adapter;
     private ListView eventsListView;
     static private String eventName;
+
+    EventsActivityViewModel mEventsActivityViewModel;
 
     @Override
     protected void onStart() {
@@ -43,16 +49,27 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
         setContentView(R.layout.activity_main);
 
         // TODO: Remove this - local test
-        try {
-            CurrentUserAccount.getInstance().InitCurrentUser();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            CurrentUserAccount.getInstance().InitCurrentUser();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        // TODO: Fix this bug
+        mEventsActivityViewModel = new ViewModelProvider(this).get(EventsActivityViewModel.class);
+//        mEventsActivityViewModel.getEvents().observe(this, new Observer<List<Event>>() {
+//            @Override
+//            public void onChanged(List<Event> events) {
+//                adapter  = new MainListAdapter(getParent().getApplicationContext(), R.layout.main_list_view, events);
+//
+//                eventsListView.setAdapter(adapter);
+//            }
+//        });
 
         addEvent = (Button)findViewById(R.id.addEvent);
         eventsListView = (ListView)findViewById(R.id.eventsList);
 
-        adapter  = new mainListAdapter(this,R.layout.main_list_view, DBdemo.allEvents);
+        adapter  = new MainListAdapter(getParent().getApplicationContext(), R.layout.main_list_view, mEventsActivityViewModel.getEvents().getValue());
         eventsListView.setAdapter(adapter);
 
         addEvent.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +85,9 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
     }
     static public void updateList (String str){
         eventName = str;
-        adapter.add(eventName);
-
+        Event event = new Event();
+        event.setName(str);
+        adapter.add(event);
     }
 
     public void openSecondScreen(){
@@ -85,10 +103,10 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
 
-    private class mainListAdapter extends  ArrayAdapter<String>{
+    private class MainListAdapter extends  ArrayAdapter<Event>{
         private int layout;
 
-        public mainListAdapter( Context context, int resource, List<String> objects) {
+        public MainListAdapter(Context context, int resource, List<Event> objects) {
             super(context, resource, objects);
             layout = resource;
         }
@@ -102,12 +120,12 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
                 convertView = inflater.inflate(layout,parent,false);
                 listItemHolder listItem = new listItemHolder();
                 listItem.item = (TextView)convertView.findViewById(R.id.text_list_item);
-                listItem.item.setText(getItem(position));
+                listItem.item.setText(getItem(position).getName());
                 convertView.setTag(listItem);
             }
             else{
                 lItem = (listItemHolder)convertView.getTag();
-                lItem.item.setText(getItem(position));
+                lItem.item.setText(getItem(position).getName());
             }
             return convertView;
         }
