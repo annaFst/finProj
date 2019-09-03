@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bt.R;
 import com.example.bt.models.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
@@ -18,7 +19,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private List<Event> mEvents;
 
     public EventAdapter(List<Event> events) {
-        mEvents = events;
+        if (events != null)
+            mEvents = events;
+        else
+            mEvents = new ArrayList<>();
     }
 
     @NonNull
@@ -30,6 +34,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
+        if (mEvents.isEmpty()) return;
         holder.bind(mEvents.get(position));
     }
 
@@ -37,7 +42,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public int getItemCount() {
         return mEvents.size();
     }
-
 
     public class EventViewHolder extends RecyclerView.ViewHolder {
 

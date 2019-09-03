@@ -22,11 +22,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 //import android.support.v7.app.AppCompatActivity;
 
+import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.models.Event;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.List;
 
 public class CreateActivity extends AppCompatActivity {
 
@@ -75,6 +77,9 @@ public class CreateActivity extends AppCompatActivity {
         final LocalDate[] localDate = new LocalDate[1];
         final LocalTime[] localTime = new LocalTime[1];
         DBdemo.eventArr.add(myEvent);
+        List<Event> userEvents = CurrentUserAccount.getInstance().GetCurrentUserEventList().getValue();
+        userEvents.add(myEvent);
+        CurrentUserAccount.getInstance().GetCurrentUserEventList().setValue(userEvents);
         //adapter  = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, myEvent.getItems());
        // itemListView.setAdapter(adapter);
 
