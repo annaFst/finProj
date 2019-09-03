@@ -1,5 +1,6 @@
 package com.example.bt.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -9,6 +10,7 @@ public class User {
     private List<String> mEvents;
 
     public User() {
+        mEvents = new ArrayList<>();
     }
 
     public User(String mId, String mName) {

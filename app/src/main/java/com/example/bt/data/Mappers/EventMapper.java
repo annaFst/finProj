@@ -27,7 +27,7 @@ public class EventMapper extends FirebaseMapper<EventEntity, Event> {
             event.setEventDate(localDateTime.toLocalDate());
             event.setEventTime(localDateTime.toLocalTime());
         }
-        
+
         event.setParticipants(eventEntity.getParticipants());
         event.setEventCreatorId(eventEntity.getCreator());
 
@@ -37,7 +37,7 @@ public class EventMapper extends FirebaseMapper<EventEntity, Event> {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private LocalDateTime getDateTimeFromIsoString(String isoDateTime)
     {
-        if (isoDateTime.isEmpty())
+        if (isoDateTime == null || isoDateTime.isEmpty())
         {
             return null;
         }

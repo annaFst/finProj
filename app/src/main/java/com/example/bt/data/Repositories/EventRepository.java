@@ -14,4 +14,5 @@ public class EventRepository extends FirebaseDatabaseRepository<Event> {
     protected String getRootNode() {
         return "events";
     }
+
 }

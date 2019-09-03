@@ -16,15 +16,15 @@ public class Item {
         return mName;
     }
 
-//    public void setName(String mName) {
-//        this.mName = mName;
-//    }
+    public void setName(String mName) {
+        this.mName = mName;
+    }
 
-    public Boolean getIsTaken() {
+    public Boolean getTaken() {
         return mIsTaken;
     }
 
-    public void setIsTaken(Boolean mIsTaken) {
+    public void setTaken(Boolean mIsTaken) {
         this.mIsTaken = mIsTaken;
     }
 

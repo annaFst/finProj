@@ -87,15 +87,18 @@ public class SetAlarm extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String currDate = dayOfMonth + "/" + (month+1) + "/" + year;
+                        date.setText(currDate);
                         alarmYear = year;
                         alarmMonth = month+1;
                         alarmDay = dayOfMonth;
-                        date.setText(currDate);
+                        //////////
+                        String temp = alarmDay + "/" + alarmMonth + "/" + alarmYear;
+                        Dcheck.setText(temp);
+
                     }
                 },myYear,myMonth,myDay);
 
-                //String temp = myDay + "/" + (myMonth+1) + "/" + myYear;
-                //Dcheck.setText(temp);
+
 
                 myDate.show();
 
@@ -116,16 +119,17 @@ public class SetAlarm extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         String currentTime = hourOfDay + ":" + minute;
+                        mTime.setText(currentTime);
                         alarmHour = hourOfDay;
                         alarmMinute = minute;
-                        mTime.setText(currentTime);
+
+                        String temp2 = alarmHour + ":" + alarmMinute;
+                        Tcheck.setText(temp2);
                     }
                 },myHours,myMinute,false);
 
-                /*
-                String temp = myHours + "/" + myMinute;
-                Tcheck.setText(temp);
-                 */
+
+
                 tpd.show();
             }
         });
@@ -140,12 +144,18 @@ public class SetAlarm extends AppCompatActivity {
                 int hour = alarmTimePicker.getCurrentHour();
                 int minute = alarmTimePicker.getCurrentMinute();*/
 
+                String temp = "in set";
+                Dcheck.setText(temp);
+                String temp2 = alarmHour + ":" + alarmMinute;
+                Tcheck.setText(temp2);
+
+
                 Calendar alarmTime = Calendar.getInstance();
 
                 alarmTime.set(Calendar.HOUR_OF_DAY, alarmHour);
                 alarmTime.set(Calendar.MINUTE, alarmMinute);
                 alarmTime.set(Calendar.SECOND, 0);
-                alarmTime.set(alarmYear,alarmMonth,alarmDay);
+
                 long startAlarm = alarmTime.getTimeInMillis();
 
                 Intent intent = new Intent (SetAlarm.this,AlarmReceiver.class);

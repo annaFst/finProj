@@ -17,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bt.models.Event;
+import com.example.bt.ui.EventAdapter;
 import com.example.bt.viewmodels.EventsActivityViewModel;
 
 import java.util.List;
@@ -34,6 +36,7 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
     static private MainListAdapter adapter;
     private ListView eventsListView;
     static private String eventName;
+    private RecyclerView mRecyclerView;
 
     EventsActivityViewModel mEventsActivityViewModel;
 
@@ -56,21 +59,23 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
 //        }
 
         // TODO: Fix this bug
+        LayoutInflater inflater = LayoutInflater.from(this);
+        mRecyclerView = findViewById(R.id.recycler_view);
+
         mEventsActivityViewModel = new ViewModelProvider(this).get(EventsActivityViewModel.class);
-//        mEventsActivityViewModel.getEvents().observe(this, new Observer<List<Event>>() {
-//            @Override
-//            public void onChanged(List<Event> events) {
-//                adapter  = new MainListAdapter(getParent().getApplicationContext(), R.layout.main_list_view, events);
-//
-//                eventsListView.setAdapter(adapter);
-//            }
-//        });
+        mEventsActivityViewModel.getEvents().observe(this, new Observer<List<Event>>() {
+            @Override
+            public void onChanged(List<Event> events) {
+                mRecyclerView.setAdapter(new EventAdapter(events));
+            }
+        });
 
         addEvent = (Button)findViewById(R.id.addEvent);
         eventsListView = (ListView)findViewById(R.id.eventsList);
 
-        adapter  = new MainListAdapter(getParent().getApplicationContext(), R.layout.main_list_view, mEventsActivityViewModel.getEvents().getValue());
-        eventsListView.setAdapter(adapter);
+//        adapter  = new MainListAdapter
+//                (this, R.layout.main_list_view, mEventsActivityViewModel.getEvents().getValue());
+//        eventsListView.setAdapter(adapter);
 
         addEvent.setOnClickListener(new View.OnClickListener() {
             @Override
