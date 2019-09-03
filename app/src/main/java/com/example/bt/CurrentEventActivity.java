@@ -63,8 +63,8 @@ public class CurrentEventActivity extends AppCompatActivity {
 
         currEvent = DBdemo.eventArr.get(index);
         mEventName.setText(currEvent.getName());
-        mEventDate.setText(currEvent.getEventDate().toString());
-        mEventTime.setText(currEvent.getEventTime().toString());
+        mEventDate.setText(currEvent.getEventDate() != null ? currEvent.getEventDate().toString(): "");
+        mEventTime.setText(currEvent.getEventTime() != null ? currEvent.getEventTime().toString(): "");
 
 
         adapter  = new itemListAdapter(this,R.layout.items_list, currEvent.getItems());
@@ -84,8 +84,6 @@ public class CurrentEventActivity extends AppCompatActivity {
 
     }
 
-
-
     private class itemListAdapter extends  ArrayAdapter<Item>{
         private int layout;
 
@@ -93,7 +91,6 @@ public class CurrentEventActivity extends AppCompatActivity {
             super(context, resource, objects);
             layout = resource;
         }
-
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
