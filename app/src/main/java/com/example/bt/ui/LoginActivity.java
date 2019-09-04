@@ -1,5 +1,6 @@
 package com.example.bt.ui;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,9 +21,11 @@ import com.example.bt.app.LoginPersistanceManager;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.auth.OAuthCredential;
 
 import java.util.Collections;
 
@@ -31,8 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
     private static final int RC_SIGN_IN = 101;
-    //private EditText mUserPhone;
-    //private EditText mUserName;
     private Button mBtnLogin;
 
     @Override
@@ -40,20 +41,39 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //mUserPhone = findViewById(R.id.input_phone_number);
-        //mUserName = findViewById(R.id.input_full_name);
+        boolean isLoggedIn = checkLoggedInUser();
+
+        if (isLoggedIn)
+        {
+            openEventsActivity();
+        }
+
         mBtnLogin = findViewById(R.id.btn_login);
 
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
                 login();
-
-
             }
         });
+    }
+
+    private boolean checkLoggedInUser() {
+        String accessToken = LoginPersistanceManager.readFromFile(this);
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null)
+        {
+            // User signed in
+            CurrentUserAccount.getInstance().setFirebaseUser(firebaseUser);
+
+            return true;
+        }
+        else{
+            // No user signed in
+            return false;
+        }
     }
 
     private void login() {
@@ -94,10 +114,10 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                showAlertDialog(user);
+                //showAlertDialog(user);
+                Toast.makeText(getBaseContext(), String.format("Phone Auth Successful: %s", idpResponse.getPhoneNumber()), Toast.LENGTH_LONG).show();
 
-                Intent intent  = new Intent(this, EventsActivity.class);
-                startActivity(intent);
+                openEventsActivity();
 
             } else {
                 /**
@@ -108,6 +128,12 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "Phone Auth Failed", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void openEventsActivity()
+    {
+        Intent intent  = new Intent(this, EventsActivity.class);
+        startActivity(intent);
     }
 
     public void showAlertDialog(FirebaseUser user) {

@@ -107,4 +107,12 @@ public class CurrentUserAccount {
     {
         mFirebaseUser = firebaseUser;
     }
+
+    public FirebaseUser getFirebaseUser() {
+        return mFirebaseUser;
+    }
+
+    public User getCurrentUser() {
+        return mCurrentUser;
+    }
 }

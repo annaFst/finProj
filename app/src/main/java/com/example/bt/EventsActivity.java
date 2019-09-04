@@ -1,5 +1,6 @@
 package com.example.bt;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ import com.example.bt.viewmodels.EventsActivityViewModel;
 import java.util.List;
 
 
-public class EventsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class EventsActivity extends AppCompatActivity implements EventAdapter.ClickListener {
 
 
     public static boolean updated = false;
@@ -51,13 +52,6 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO: Remove this - local test
-//        try {
-//            CurrentUserAccount.getInstance().InitCurrentUser();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
         // TODO: Fix this bug
         LayoutInflater inflater = LayoutInflater.from(this);
         mRecyclerView = findViewById(R.id.recycler_view);
@@ -66,12 +60,14 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
         mEventsActivityViewModel.getEvents().observe(this, new Observer<List<Event>>() {
             @Override
             public void onChanged(List<Event> events) {
-                mRecyclerView.setAdapter(new EventAdapter(events));
+                EventAdapter eventAdapter = new EventAdapter(events);
+                eventAdapter.setOnItemClickListener(EventsActivity.this);
+                mRecyclerView.setAdapter(eventAdapter);
             }
         });
 
         addEvent = (Button)findViewById(R.id.addEvent);
-        eventsListView = (ListView)findViewById(R.id.eventsList);
+        //eventsListView = (ListView)findViewById(R.id.eventsList);
 
 //        adapter  = new MainListAdapter
 //                (this, R.layout.main_list_view, mEventsActivityViewModel.getEvents().getValue());
@@ -84,7 +80,7 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
             }
         });
 
-        eventsListView.setOnItemClickListener(this);
+        //eventsListView.setOnItemClickListener(this);
 
 
     }
@@ -96,12 +92,26 @@ public class EventsActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void openSecondScreen(){
-        Intent intent  = new Intent(this, CreateActivity.class);
+        Intent intent  = new Intent(EventsActivity.this, CreateActivity.class);
+        startActivity(intent);
+    }
+
+//    @Override
+//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//        Intent intent  = new Intent(this, CurrentEventActivity.class);
+//        intent.putExtra("index",position);
+//        startActivity(intent);
+//    }
+
+    @Override
+    public void onItemClick(int position, View v) {
+        Intent intent  = new Intent(this, CurrentEventActivity.class);
+        intent.putExtra("index",position);
         startActivity(intent);
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemLongClick(int position, View v) {
         Intent intent  = new Intent(this, CurrentEventActivity.class);
         intent.putExtra("index",position);
         startActivity(intent);

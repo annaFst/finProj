@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,14 +20,18 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 //import android.support.v7.app.AppCompatActivity;
 
+import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.models.Event;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class CreateActivity extends AppCompatActivity {
 
@@ -48,7 +53,7 @@ public class CreateActivity extends AppCompatActivity {
     private TextView setAlert;
 
     public static Calendar myCalendar;
-   // ArrayList <String> inputEvents;
+    List<Event> inputEvents;
     //ListView showToScreen;
 
     DatePickerDialog myDate;
@@ -72,9 +77,14 @@ public class CreateActivity extends AppCompatActivity {
 
 
         myEvent = new Event();
-        final LocalDate[] localDate = new LocalDate[1];
-        final LocalTime[] localTime = new LocalTime[1];
+        myEvent.setEventCreatorId(CurrentUserAccount.getInstance().getCurrentUser().getId());
         DBdemo.eventArr.add(myEvent);
+
+        inputEvents = CurrentUserAccount.getInstance().GetCurrentUserEventList().getValue();
+        if (inputEvents == null) inputEvents = new ArrayList<>();
+        inputEvents.add(myEvent);
+        //CurrentUserAccount.getInstance().GetCurrentUserEventList().setValue(inputEvents);
+
         //adapter  = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, myEvent.getItems());
        // itemListView.setAdapter(adapter);
 
@@ -91,8 +101,9 @@ public class CreateActivity extends AppCompatActivity {
         mDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventsActivity.updateList(title);
-                Intent intent = new Intent(CreateActivity.this, EventsActivity.class);
+                CurrentUserAccount.getInstance().GetCurrentUserEventList().setValue(inputEvents);
+                //EventsActivity.updateList(title);
+                Intent intent  = new Intent(CreateActivity.this, EventsActivity.class);
                 startActivity(intent);
             }
         });
@@ -106,11 +117,11 @@ public class CreateActivity extends AppCompatActivity {
                     enterItem.setText("");
                     Toast.makeText(CreateActivity.this, "Item Added", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
         mDateChoice.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 int myDay;
@@ -122,17 +133,19 @@ public class CreateActivity extends AppCompatActivity {
                 myMonth = myCalendar.get(Calendar.MONTH);
                 myYear = myCalendar.get(Calendar.YEAR);
 
-
+                LocalDate localDate1;
                 myDate = new DatePickerDialog(CreateActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String currDate = dayOfMonth + "/" + (month+1) + "/" + year;
                         date.setText(currDate);
-                        localDate[0] = LocalDate.of(year, month, dayOfMonth);
-                    }
-                },myYear,myMonth,myDay);
-                myDate.show();
 
+                    }
+                }, myYear, myMonth, myDay);
+
+                localDate1 = LocalDate.of(myYear, myMonth, myDay);
+                myDate.show();
+                myEvent.setEventDate(localDate1);
             }
         });
 
@@ -154,26 +167,29 @@ public class CreateActivity extends AppCompatActivity {
         });
 
         mTimeBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 myCalendar = Calendar.getInstance();
-                int hours= myCalendar.get(Calendar.HOUR);
+                int hours = myCalendar.get(Calendar.HOUR);
                 int minute = myCalendar.get(Calendar.MINUTE);
+
+                LocalTime localTime1;
 
                 TimePickerDialog tpd = new TimePickerDialog(CreateActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         String currTime = hourOfDay + ":" + minute;
                         mTime.setText(currTime);
-                        localTime[0] = LocalTime.of(hourOfDay, minute);
                     }
-                },hours,minute,true);
+                }, hours, minute,true);
+
+                localTime1 = LocalTime.of(hours,minute);
                 tpd.show();
+                myEvent.setEventTime(localTime1);
             }
         });
 
-        myEvent.setEventDate(localDate[0]);
-        myEvent.setEventTime(localTime[0]);
     }
 
     private TextWatcher itemWatcher = new TextWatcher() {
@@ -221,68 +237,4 @@ public class CreateActivity extends AppCompatActivity {
         Intent intent  = new Intent(this, ContactsList.class);
         startActivity(intent);
     }
-
-    /*
-    private Button mAddBtn;
-    private Button mDoneBtn;
-    private String mTitle;
-    private EditText txt;
-    private ImageButton mDateChoice;
-
-    ArrayList <String> names = new ArrayList<String>();
-    ListView showToScreen;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create);
-        mAddBtn = (Button)findViewById(R.id.addBt);
-        mDoneBtn = (Button)findViewById(R.id.doneBtn);
-        txt = (EditText)findViewById(R.id.titleBtn);
-        mDateChoice = (ImageButton)findViewById(R.id.calendarButton);
-
-        showToScreen = (ListView)findViewById(R.id.eventsList);
-
-        EditText date  = (EditText)findViewById(R.id.dateView);
-        String dateStr = getIntent().getStringExtra("date");
-        if (dateStr != null){
-            date.setText(dateStr);
-        }
-
-
-        mAddBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openSecondScreen();
-            }
-        });
-
-        mDoneBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTitle = txt.getText().toString();
-                Intent intent  = new Intent(CreateActivity.this,EventsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        mDateChoice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCalendar();
-            }
-        });
-    }
-
-    public void openCalendar(){
-        Intent intent  = new Intent(this,MyCalendar.class);
-        startActivity(intent);
-    }
-
-    public void openSecondScreen(){
-        Intent intent  = new Intent(this,ContactsList.class);
-        startActivity(intent);
-    }
-    */
 }
