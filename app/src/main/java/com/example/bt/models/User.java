@@ -41,4 +41,6 @@ public class User {
     public void setEvents(List<String> events) {
         mEvents = events;
     }
+
+    public void addEvent(Event event) { mEvents.add(event.getName()); }
 }

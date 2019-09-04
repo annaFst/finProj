@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bt.models.Event;
 import com.example.bt.ui.EventAdapter;
 import com.example.bt.viewmodels.EventsActivityViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
     public static boolean updated = false;
 
     private Button addEvent;
+    private Button btnLogout;
     //static private ArrayAdapter<String> adapter;
     static private MainListAdapter adapter;
     private ListView eventsListView;
@@ -55,6 +57,7 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
         // TODO: Fix this bug
         LayoutInflater inflater = LayoutInflater.from(this);
         mRecyclerView = findViewById(R.id.recycler_view);
+        btnLogout = findViewById(R.id.btnLogout);
 
         mEventsActivityViewModel = new ViewModelProvider(this).get(EventsActivityViewModel.class);
         mEventsActivityViewModel.getEvents().observe(this, new Observer<List<Event>>() {
@@ -79,7 +82,13 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
                 openSecondScreen();
             }
         });
-
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                finish();
+            }
+        });
         //eventsListView.setOnItemClickListener(this);
 
 

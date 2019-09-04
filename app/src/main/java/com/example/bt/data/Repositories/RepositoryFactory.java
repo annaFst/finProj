@@ -13,7 +13,7 @@ public class RepositoryFactory {
 
     private static Map<RepositoryType, FirebaseDatabaseRepository> repositoryContainer = new Hashtable<>();
 
-    public static FirebaseDatabaseRepository GetRepositoryInstance(RepositoryType repositoryType) throws Exception {
+    public static FirebaseDatabaseRepository GetRepositoryInstance(RepositoryType repositoryType) {
         FirebaseDatabaseRepository repository;
 
         switch (repositoryType){
@@ -32,7 +32,7 @@ public class RepositoryFactory {
                 }
                 break;
             default:
-                throw new Exception();
+                repository = null;
         }
 
         return repository;
