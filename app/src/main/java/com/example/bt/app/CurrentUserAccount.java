@@ -42,34 +42,36 @@ public class CurrentUserAccount {
         return(INSTANCE);
     }
 
-    public void InitCurrentUser(FirebaseUser firebaseUser) throws Exception {
-        UserRepository userRepository =
+    public void InitCurrentUser(FirebaseUser firebaseUser) {
+        final UserRepository userRepository =
                 (UserRepository) RepositoryFactory.GetRepositoryInstance(RepositoryFactory.RepositoryType.UserRepository);
 
-        String userPhoneNum = firebaseUser.getPhoneNumber();
-        if (userRepository.exists(userPhoneNum))
-        {
-            DatabaseReference user = userRepository.getDataRef().child(userPhoneNum);
-            user.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        final String userPhoneNum = firebaseUser.getPhoneNumber();
+        DatabaseReference user = userRepository.getDataRef().child(userPhoneNum);
+        user.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                {
                     mCurrentUser = dataSnapshot.getValue(User.class);
                 }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.w("CurrentUser", "loadPost:onCancelled", databaseError.toException());
+                else{
+                    userRepository.addNewUser(userPhoneNum, "");
+                    mCurrentUser = new User(userPhoneNum, "");
                 }
-            });
 
-            initCurrentUserEventsMap();
-        }
-        else {
-            userRepository.writeNewUser(userPhoneNum, "");
-        }
+                initCurrentUserEventsMap();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("CurrentUser", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+
     }
 
-    private void initCurrentUserEventsMap() throws Exception {
+    private void initCurrentUserEventsMap() {
         mEventRepository =
                 (EventRepository) RepositoryFactory.GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository);
         mEventRepository.addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Event>() {

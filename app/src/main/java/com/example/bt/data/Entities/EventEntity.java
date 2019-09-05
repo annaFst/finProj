@@ -3,6 +3,7 @@ package com.example.bt.data.Entities;
 import com.example.bt.models.Item;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @IgnoreExtraProperties
@@ -15,7 +16,10 @@ public class EventEntity {
     private List<Item> items;
     private String creator;
 
-    public EventEntity() { }
+    public EventEntity() {
+        participants = new ArrayList<>();
+        items = new ArrayList<>();
+    }
 
     public String getId() {
         return id;

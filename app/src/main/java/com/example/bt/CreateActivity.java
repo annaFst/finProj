@@ -25,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 //import android.support.v7.app.AppCompatActivity;
 
 import com.example.bt.app.CurrentUserAccount;
+import com.example.bt.data.Repositories.EventRepository;
+import com.example.bt.data.Repositories.RepositoryFactory;
 import com.example.bt.models.Event;
 
 import java.time.LocalDate;
@@ -101,8 +103,12 @@ public class CreateActivity extends AppCompatActivity {
         mDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((EventRepository) RepositoryFactory.
+                        GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository))
+                        .addEvent(myEvent);
+                CurrentUserAccount.getInstance().getCurrentUser().addEvent(myEvent);
                 CurrentUserAccount.getInstance().GetCurrentUserEventList().setValue(inputEvents);
-                //EventsActivity.updateList(title);
+
                 Intent intent  = new Intent(CreateActivity.this, EventsActivity.class);
                 startActivity(intent);
             }

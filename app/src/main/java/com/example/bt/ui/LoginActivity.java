@@ -41,7 +41,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        boolean isLoggedIn = checkLoggedInUser();
+        boolean isLoggedIn;
+        try {
+            isLoggedIn = checkLoggedInUser();
+        } catch (Exception e) {
+            e.printStackTrace();
+            isLoggedIn = false;
+        }
 
         if (isLoggedIn)
         {
@@ -59,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private boolean checkLoggedInUser() {
+    private boolean checkLoggedInUser() throws Exception {
         String accessToken = LoginPersistanceManager.readFromFile(this);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -67,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         {
             // User signed in
             CurrentUserAccount.getInstance().setFirebaseUser(firebaseUser);
-
+            CurrentUserAccount.getInstance().InitCurrentUser(firebaseUser);
             return true;
         }
         else{
@@ -108,11 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
-                try {
-                    CurrentUserAccount.getInstance().InitCurrentUser(user);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                CurrentUserAccount.getInstance().InitCurrentUser(user);
 
                 //showAlertDialog(user);
                 Toast.makeText(getBaseContext(), String.format("Phone Auth Successful: %s", idpResponse.getPhoneNumber()), Toast.LENGTH_LONG).show();
@@ -136,24 +138,4 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void showAlertDialog(FirebaseUser user) {
-        AlertDialog.Builder mAlertDialog = new AlertDialog.Builder(
-                LoginActivity.this);
-
-        // Set Title
-        mAlertDialog.setTitle("Successfully Signed In");
-
-        // Set Message
-        mAlertDialog.setMessage(" Phone Number is " + user.getPhoneNumber());
-
-        mAlertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        mAlertDialog.create();
-
-        // Showing Alert Message
-        mAlertDialog.show();
-    }
 }

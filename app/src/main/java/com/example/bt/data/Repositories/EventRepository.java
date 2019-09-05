@@ -15,4 +15,9 @@ public class EventRepository extends FirebaseDatabaseRepository<Event> {
         return "events";
     }
 
+    public void addEvent(Event event)
+    {
+        String key = mDataRef.push().getKey();
+        mDataRef.child(key).setValue(event);
+    }
 }
