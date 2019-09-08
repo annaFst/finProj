@@ -19,4 +19,6 @@
     <string name="name_hint">Full Name</string>
     <string name="login_text">Login</string>
     <string name="get2gather">Get2Gather</string>
+    <string name="logout">Logout</string>
+    <string name="my_events">My Events</string>
 </resources>

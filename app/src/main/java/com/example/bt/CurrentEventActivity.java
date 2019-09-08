@@ -2,6 +2,7 @@ package com.example.bt;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 //import android.support.v7.app.AppCompatActivity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.models.Event;
 import com.example.bt.models.Item;
 
@@ -34,6 +37,7 @@ public class CurrentEventActivity extends AppCompatActivity {
     static private itemListAdapter adapter;
     static private takenItemListAdapter takenAdapter;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +67,12 @@ public class CurrentEventActivity extends AppCompatActivity {
 
         currEvent = DBdemo.eventArr.get(index);
         mEventName.setText(currEvent.getName());
-        mEventDate.setText(currEvent.getEventDate() != null ? currEvent.getEventDate().toString(): "");
-        mEventTime.setText(currEvent.getEventTime() != null ? currEvent.getEventTime().toString(): "");
+        mEventDate
+                .setText(LocalDateTimeConverter.
+                        GetLocalDateFromEpochSeconds(currEvent.getEventDate()).toString());
+        mEventTime
+                .setText(LocalDateTimeConverter.
+                        GetLocalTimeFromSeconds(currEvent.getEventTime()).toString());
 
 
         adapter  = new itemListAdapter(this,R.layout.items_list, currEvent.getItems());

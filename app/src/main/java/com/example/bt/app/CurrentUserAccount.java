@@ -25,13 +25,13 @@ public class CurrentUserAccount {
     private FirebaseUser mFirebaseUser;
     private User mCurrentUser;
     private EventRepository mEventRepository;
-    private MutableLiveData<List<Event>> mUserEvents;
+    private List<Event> mUserEvents;
 
     private static CurrentUserAccount INSTANCE = null;
 
     private CurrentUserAccount()
     {
-        mUserEvents = new MutableLiveData<>();
+        mUserEvents = new ArrayList<>();
     }
 
     public static synchronized CurrentUserAccount getInstance() {
@@ -53,14 +53,23 @@ public class CurrentUserAccount {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists())
                 {
+                    // User exists - load user data
                     mCurrentUser = dataSnapshot.getValue(User.class);
+
+                    // TODO: Remove test
+                    assert mCurrentUser != null;
+
+                    // Initialize user events
+                    initCurrentUserEventsMap();
                 }
                 else{
-                    userRepository.addNewUser(userPhoneNum, "");
+                    // New user - create a user object and init new events list
                     mCurrentUser = new User(userPhoneNum, "");
-                }
+                    mCurrentUser.setEvents(new ArrayList<String>());
 
-                initCurrentUserEventsMap();
+                    // Add new user to user repository
+                    userRepository.add(mCurrentUser);
+                }
             }
 
             @Override
@@ -71,20 +80,24 @@ public class CurrentUserAccount {
 
     }
 
-    private void initCurrentUserEventsMap() {
+    private void initCurrentUserEventsMap()
+    {
         mEventRepository =
                 (EventRepository) RepositoryFactory.GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository);
+
         mEventRepository.addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Event>() {
             @Override
-            public void onSuccess(List<Event> result) {
+            public void onSuccess(List<Event> repositoryEvents)
+            {
                 List<Event> userEvents = new ArrayList<>();
-                for (Event event : result) {
-                    if (mCurrentUser.getEvents().contains(event)) {
+                for (Event event : repositoryEvents)
+                {
+                    if (mCurrentUser.getEvents() != null && mCurrentUser.getEvents().contains(event)) {
                         userEvents.add(event);
                     }
                 }
 
-                mUserEvents.setValue(userEvents);
+                mUserEvents.addAll(userEvents);
             }
 
             @Override
@@ -100,7 +113,7 @@ public class CurrentUserAccount {
         return mEventRepository;
     }
 
-    public MutableLiveData<List<Event>> GetCurrentUserEventList()
+    public List<Event> GetCurrentUserEventList()
     {
         return mUserEvents;
     }

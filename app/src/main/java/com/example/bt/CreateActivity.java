@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 //import android.support.v7.app.AppCompatActivity;
 
 import com.example.bt.app.CurrentUserAccount;
+import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.data.Repositories.EventRepository;
 import com.example.bt.data.Repositories.RepositoryFactory;
 import com.example.bt.models.Event;
@@ -82,9 +83,9 @@ public class CreateActivity extends AppCompatActivity {
         myEvent.setEventCreatorId(CurrentUserAccount.getInstance().getCurrentUser().getId());
         DBdemo.eventArr.add(myEvent);
 
-        inputEvents = CurrentUserAccount.getInstance().GetCurrentUserEventList().getValue();
-        if (inputEvents == null) inputEvents = new ArrayList<>();
-        inputEvents.add(myEvent);
+//        inputEvents = CurrentUserAccount.getInstance().GetCurrentUserEventList().getValue();
+//        if (inputEvents == null) inputEvents = new ArrayList<>();
+//        inputEvents.add(myEvent);
         //CurrentUserAccount.getInstance().GetCurrentUserEventList().setValue(inputEvents);
 
         //adapter  = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, myEvent.getItems());
@@ -103,12 +104,8 @@ public class CreateActivity extends AppCompatActivity {
         mDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((EventRepository) RepositoryFactory.
-                        GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository))
-                        .addEvent(myEvent);
-                CurrentUserAccount.getInstance().getCurrentUser().addEvent(myEvent);
-                CurrentUserAccount.getInstance().GetCurrentUserEventList().setValue(inputEvents);
 
+                updateDb(myEvent);
                 Intent intent  = new Intent(CreateActivity.this, EventsActivity.class);
                 startActivity(intent);
             }
@@ -151,7 +148,8 @@ public class CreateActivity extends AppCompatActivity {
 
                 localDate1 = LocalDate.of(myYear, myMonth, myDay);
                 myDate.show();
-                myEvent.setEventDate(localDate1);
+                myEvent.setEventDate(LocalDateTimeConverter.
+                        GetLocalDateInEpochSecond(localDate1));
             }
         });
 
@@ -192,10 +190,24 @@ public class CreateActivity extends AppCompatActivity {
 
                 localTime1 = LocalTime.of(hours,minute);
                 tpd.show();
-                myEvent.setEventTime(localTime1);
+                myEvent.setEventTime(LocalDateTimeConverter.
+                        GetLocalTimeInSeconds(localTime1));
             }
         });
 
+    }
+
+    private void updateDb(Event myEvent) {
+        String eventKey = RepositoryFactory.
+                GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository)
+                .add(myEvent);
+        myEvent.setEventId(eventKey);
+        CurrentUserAccount.getInstance().getCurrentUser().addEvent(myEvent);
+        CurrentUserAccount.getInstance().GetCurrentUserEventList().add(myEvent);
+        RepositoryFactory.
+                GetRepositoryInstance(RepositoryFactory.RepositoryType.UserRepository)
+                .update(CurrentUserAccount.getInstance().getCurrentUser().getId(),
+                        CurrentUserAccount.getInstance().getCurrentUser());
     }
 
     private TextWatcher itemWatcher = new TextWatcher() {

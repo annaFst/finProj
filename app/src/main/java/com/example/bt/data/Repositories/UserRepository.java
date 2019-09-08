@@ -15,13 +15,25 @@ public class UserRepository extends FirebaseDatabaseRepository<User> {
         return "users";
     }
 
-    public void addNewUser(String userId, String name) {
-        User user = new User(userId, name);
-        mDataRef.child(userId).setValue(user);
+    @Override
+    public String add(User user) {
+        return addNewUser(user);
     }
 
-    public void addNewUser(User user) {
+    @Override
+    public void update(String key, User user) {
+        mDataRef.child(user.getId()).setValue(user);
+    }
+
+//    private void addNewUser(String userId, String name) {
+//        User user = new User(userId, name);
+//        mDataRef.child(userId).setValue(user);
+//    }
+
+    private String addNewUser(User user) {
         String userId = user.getId();
         mDataRef.child(userId).setValue(user);
+
+        return userId;
     }
 }

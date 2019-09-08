@@ -91,26 +91,12 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
         });
         //eventsListView.setOnItemClickListener(this);
 
-
-    }
-    static public void updateList (String str){
-        eventName = str;
-        Event event = new Event();
-        event.setName(str);
-        adapter.add(event);
     }
 
     public void openSecondScreen(){
         Intent intent  = new Intent(this, CreateActivity.class);
         startActivity(intent);
     }
-
-//    @Override
-//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        Intent intent  = new Intent(this, CurrentEventActivity.class);
-//        intent.putExtra("index",position);
-//        startActivity(intent);
-//    }
 
     @Override
     public void onItemClick(int position, View v) {

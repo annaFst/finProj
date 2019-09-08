@@ -11,7 +11,8 @@ public class EventEntity {
 
     private String id;
     private String name;
-    private String eventDate;
+    private long eventDate;
+    private long eventTime;
     private List<String> participants;
     private List<Item> items;
     private String creator;
@@ -37,11 +38,11 @@ public class EventEntity {
         this.name = mEventName;
     }
 
-    public String getEventDate() {
+    public long getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(String mEventDateTime) {
+    public void setEventDate(long mEventDateTime) {
         this.eventDate = mEventDateTime;
     }
 
@@ -67,5 +68,13 @@ public class EventEntity {
 
     public void setCreator(String creator) {
         this.creator = creator;
+    }
+
+    public long getEventTime() {
+        return eventTime;
+    }
+
+    public void setEventTime(long eventTime) {
+        this.eventTime = eventTime;
     }
 }

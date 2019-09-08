@@ -1,10 +1,16 @@
 package com.example.bt.models;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.bt.DBdemo;
 import com.example.bt.EventsActivity;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +21,40 @@ public class Event {
     private List<Item> mItemList = new ArrayList<>();
     private List<Item> mTakenItemsList = new ArrayList<>();
     private List<String> participants = new ArrayList<>();
-    private LocalDate eventDate = null;
-    private LocalTime eventTime = null;
+    private long eventDate; // Epoch seconds
+    private long eventTime; // Seconds of day
     private String mEventCreatorId;
+
+    public void setEventId(String eventId) {
+        mEventId = eventId;
+    }
 
     public String getEventId(){
         return mEventId;
+    }
+
+    public String getEventCreatorId() {
+        return mEventCreatorId;
+    }
+
+    public void setEventCreatorId(String eventCreatorId) {
+        mEventCreatorId = eventCreatorId;
+    }
+
+    public void setEventDate(long eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public void setEventTime(long eventTime) {
+        this.eventTime = eventTime;
+    }
+
+    public long getEventDate() {
+        return this.eventDate;
+    }
+
+    public long getEventTime() {
+        return this.eventTime;
     }
 
     public void setName (String str){
@@ -31,13 +65,6 @@ public class Event {
         return mEventName;
     }
 
-    public void setEventTime(LocalTime time){
-        eventTime = time;
-    }
-
-    public LocalTime getEventTime(){
-        return eventTime;
-    }
 
     public void addToList(String str){
         mItemList.add(new Item(str));
@@ -75,14 +102,7 @@ public class Event {
         return mTakenItemsList;
     }
 
-    public void setEventDate(LocalDate dStr){
-        eventDate = dStr;
-    }
-
-    public LocalDate getEventDate(){
-        return eventDate;
-    }
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void copyEvent(Event other){
         Event res = new Event();
 
@@ -105,7 +125,7 @@ public class Event {
         }
 
         DBdemo.eventArr.add(res);
-        EventsActivity.updateList(res.getName());
+        //EventsActivity.updateList(res.getName());
     }
 
     public void takeItem(int index){
@@ -121,15 +141,5 @@ public class Event {
         this.participants = participants;
     }
 
-    public void setEventId(String eventId) {
-        mEventId = eventId;
-    }
 
-    public String getEventCreatorId() {
-        return mEventCreatorId;
-    }
-
-    public void setEventCreatorId(String eventCreatorId) {
-        mEventCreatorId = eventCreatorId;
-    }
 }
