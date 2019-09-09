@@ -22,13 +22,18 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Set;
 
 public class SetAlarm extends AppCompatActivity {
 
-    private Button setAlermBt;
-    private Button delAlermBt;
+    public static ArrayList<PendingIntent> alarmsArray = new ArrayList<PendingIntent>();
+    //public static ArrayList<AlarmManager> alarmsArray = new ArrayList<PendingIntent>();
+    public static  int  alarmIndex = 0;
+
+    private Button setAlarmBt;
+    private Button delAlarmBt;
     private int notificationID = 100;
     private TimePicker alarmTimePicker;
     private DatePicker alarmDatePicker;
@@ -44,6 +49,8 @@ public class SetAlarm extends AppCompatActivity {
     int myYear,alarmYear;
     int myHours,alarmHour;
     int myMinute,alarmMinute;
+    String title;
+    boolean isDaySelected, isTimeSelected;
 
     private EditText Dcheck;
     private EditText Tcheck;
@@ -61,18 +68,35 @@ public class SetAlarm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_alarm);
 
+        title = getIntent().getStringExtra("title");
+
         mTimeBtn = (ImageButton)findViewById(R.id.timeBtn);
         mDateChoice = (ImageButton)findViewById(R.id.calendarButton);
         date  = (EditText)findViewById(R.id.dateView);
         mTime = (EditText)findViewById(R.id.timeStr);
-        setAlermBt = findViewById(R.id.setBt);
-        delAlermBt = findViewById(R.id.cancelBt);
-
+        setAlarmBt = findViewById(R.id.setBt);
+        delAlarmBt = findViewById(R.id.cancelBt);
         Dcheck = (EditText)findViewById(R.id.dateChack);
         Tcheck = (EditText)findViewById(R.id.timeCheck);
 
         //larmTimePicker = findViewById(R.id.timePicker);
         //alarmDatePicker = findViewById(R.id.datePicker);
+
+        isDaySelected = getIntent().getBooleanExtra("date selected", false);
+        isTimeSelected = getIntent().getBooleanExtra("time selected", false);
+        if(isDaySelected) {
+            alarmDay = getIntent().getIntExtra("day", 0);
+            alarmMonth = getIntent().getIntExtra("month", 0);
+            alarmYear = getIntent().getIntExtra("year", 0);
+            String currDate = alarmDay + "/" + (alarmMonth+1) + "/" + alarmYear;
+            date.setText(currDate);
+        }
+        if(isTimeSelected) {
+            alarmHour = getIntent().getIntExtra("hour", 0);
+            alarmMinute = getIntent().getIntExtra("minutes", 0);
+            String currentTime = alarmHour + ":" + alarmMinute;
+            mTime.setText(currentTime);
+        }
 
         mDateChoice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,15 +113,10 @@ public class SetAlarm extends AppCompatActivity {
                         String currDate = dayOfMonth + "/" + (month+1) + "/" + year;
                         date.setText(currDate);
                         alarmYear = year;
-                        alarmMonth = month+1;
+                        alarmMonth = month;
                         alarmDay = dayOfMonth;
-                        //////////
-                        String temp = alarmDay + "/" + alarmMonth + "/" + alarmYear;
-                        Dcheck.setText(temp);
-
                     }
                 },myYear,myMonth,myDay);
-
 
 
                 myDate.show();
@@ -122,20 +141,14 @@ public class SetAlarm extends AppCompatActivity {
                         mTime.setText(currentTime);
                         alarmHour = hourOfDay;
                         alarmMinute = minute;
-
-                        String temp2 = alarmHour + ":" + alarmMinute;
-                        Tcheck.setText(temp2);
                     }
-                },myHours,myMinute,false);
-
-
-
+                },myHours,myMinute,true);
                 tpd.show();
             }
         });
 
 
-        setAlermBt.setOnClickListener(new View.OnClickListener(){
+        setAlarmBt.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                /* int day = alarmDatePicker.getDayOfMonth();
@@ -144,37 +157,54 @@ public class SetAlarm extends AppCompatActivity {
                 int hour = alarmTimePicker.getCurrentHour();
                 int minute = alarmTimePicker.getCurrentMinute();*/
 
-                String temp = "in set";
-                Dcheck.setText(temp);
-                String temp2 = alarmHour + ":" + alarmMinute;
-                Tcheck.setText(temp2);
-
-
                 Calendar alarmTime = Calendar.getInstance();
-
                 alarmTime.set(Calendar.HOUR_OF_DAY, alarmHour);
                 alarmTime.set(Calendar.MINUTE, alarmMinute);
                 alarmTime.set(Calendar.SECOND, 0);
+                alarmTime.set(Calendar.DAY_OF_MONTH,alarmDay);
+                alarmTime.set(Calendar.MONTH,alarmMonth);
+                alarmTime.set(Calendar.YEAR,alarmYear);
 
                 long startAlarm = alarmTime.getTimeInMillis();
 
                 Intent intent = new Intent (SetAlarm.this,AlarmReceiver.class);
+                intent.putExtra("index", alarmIndex);
+                intent.putExtra("title", title);
 
-                alarmIn = PendingIntent.getBroadcast(getApplicationContext(),100,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                myAlarm = (AlarmManager)getSystemService(ALARM_SERVICE);
+                alarmIn = PendingIntent.getBroadcast(getApplicationContext(),alarmIndex,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                if (alarmIndex  < 1 ) {
+                    myAlarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+                }
                 myAlarm.set(AlarmManager.RTC_WAKEUP,startAlarm,alarmIn);
-                //myAlarm.setRepeating(AlarmManager.RTC_WAKEUP,alarmTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY,alarmIn);
+                //myAlarm.setRepeating(AlarmManager.RTC_WAKEUP,alarmTime.getTimeInMillis(),(AlarmManager.INTERVAL_FIFTEEN_MINUTES*2),alarmIn);
+
+
+                alarmsArray.add(alarmIn);
+                CreateActivity.setAlarmindex(alarmIndex);
+                alarmIndex++;
 
                 Toast.makeText(SetAlarm.this, "Alarm set!", Toast.LENGTH_SHORT).show();
+                finish();
+
 
             }
 
         });
 
-        delAlermBt.setOnClickListener(new View.OnClickListener() {
+        delAlarmBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myAlarm.cancel(alarmIn);
+                if (alarmIndex > 0) {
+                    int alarmInd = getIntent().getIntExtra("eventIndex", -1);
+                    if (alarmInd != -1) {
+                        myAlarm.cancel(alarmsArray.get(alarmInd));
+                        Toast.makeText(SetAlarm.this, "Alarm deleted!", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                //myAlarm.cancel(alarmIn);
+                //myAlarm.cancel(alarmsArray.get(CreateActivity.getEventIndex()));
+                //alarmsArray.get(CreateActivity.getEventIndex()).cancel();
             }
         });
     }
