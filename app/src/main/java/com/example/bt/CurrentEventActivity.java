@@ -67,11 +67,9 @@ public class CurrentEventActivity extends AppCompatActivity {
 
         //currEvent = DBdemo.eventArr.get(index);
         mEventName.setText(currEvent.getName());
-        mEventDate
-                .setText(LocalDateTimeConverter.
+        mEventDate.setText(LocalDateTimeConverter.
                         GetLocalDateFromEpochSeconds(currEvent.getEventDate()).toString());
-        mEventTime
-                .setText(LocalDateTimeConverter.
+        mEventTime.setText(LocalDateTimeConverter.
                         GetLocalTimeFromSeconds(currEvent.getEventTime()).toString());
 
 
