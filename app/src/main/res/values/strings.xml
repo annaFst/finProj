@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">get2gather</string>
-    <string name="creat_event">creat event</string>
+    <string name="app_name">Get2Gather</string>
+    <string name="create_event">create event</string>
     <string name="add_contacts">add contacts</string>
     <string name="hello">Hello!</string>
     <string name="new_activity">New activity</string>
@@ -19,6 +19,6 @@
     <string name="name_hint">Full Name</string>
     <string name="login_text">Login</string>
     <string name="get2gather">Get2Gather</string>
-    <string name="create_event">create event</string>
-    <string name="my_events">My Events</string>
+    <string name="logout">Logout</string>
+   <!-- <string name="my_events">My Events</string>-->
 </resources>

@@ -18,23 +18,25 @@ public class UserEntity {
         return id;
     }
 
-    public void setId(String mUserId) {
-        this.id = mUserId;
+    public void setId(String userId) {
+        this.id = userId;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String mUserName) {
-        this.name = mUserName;
+    public void setName(String userName) {
+        this.name = userName;
     }
 
     public List<String> getEvents() {
         return events;
     }
 
-    public void setEvents(List<String> mUserEvents) {
-        this.events = mUserEvents;
+    public void setEvents(List<String> events) {
+        this.events = events;
     }
+
+
 }

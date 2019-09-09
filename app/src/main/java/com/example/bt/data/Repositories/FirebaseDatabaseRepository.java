@@ -66,6 +66,10 @@ public abstract class FirebaseDatabaseRepository<Model> {
         }
     }
 
+    public abstract String add(Model model);
+
+    public abstract void update(String key, Model model);
+
     public void removeListener() {
         mDataRef.removeEventListener(listener);
     }

@@ -14,20 +14,14 @@ import java.time.format.DateTimeFormatter;
 
 public class EventMapper extends FirebaseMapper<EventEntity, Event> {
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Event map(EventEntity eventEntity) {
         Event event = new Event();
         event.setEventId(eventEntity.getId());
         event.setName(eventEntity.getName());
         event.addToList(eventEntity.getItems());
-        LocalDateTime localDateTime = getDateTimeFromIsoString(eventEntity.getEventDate());
-        if (localDateTime != null)
-        {
-            event.setEventDate(localDateTime.toLocalDate());
-            event.setEventTime(localDateTime.toLocalTime());
-        }
-
+        event.setEventDate(eventEntity.getEventDate());
+        event.setEventTime(eventEntity.getEventTime());
         event.setParticipants(eventEntity.getParticipants());
         event.setEventCreatorId(eventEntity.getCreator());
 

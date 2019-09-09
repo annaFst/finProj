@@ -42,5 +42,5 @@ public class User {
         mEvents = events;
     }
 
-    public void addEvent(Event event) { mEvents.add(event.getName()); }
+    public void addEvent(Event event) { mEvents.add(event.getEventId()); }
 }

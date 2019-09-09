@@ -13,7 +13,8 @@ public class EventsActivityViewModel extends ViewModel {
 
     private MutableLiveData<List<Event>> mEvents;
 
-    public LiveData<List<Event>> getEvents() {
+    public LiveData<List<Event>> getEvents()
+    {
         if (mEvents == null) {
             mEvents = new MutableLiveData<>();
             loadCurrentUserEvents();
@@ -28,6 +29,6 @@ public class EventsActivityViewModel extends ViewModel {
     }
 
     private void loadCurrentUserEvents() {
-        mEvents = CurrentUserAccount.getInstance().GetCurrentUserEventList();
+        mEvents.setValue(CurrentUserAccount.getInstance().GetCurrentUserEventList());
     }
 }
