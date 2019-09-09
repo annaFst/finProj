@@ -233,11 +233,10 @@ public class CreateActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
-
     private void updateDb(Event myEvent) {
+        // Add new event
         String eventKey = RepositoryFactory.
                 GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository)
                 .add(myEvent);

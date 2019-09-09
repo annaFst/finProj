@@ -9,7 +9,7 @@ import java.util.List;
 @IgnoreExtraProperties
 public class EventEntity {
 
-    private String id;
+    private String eventId;
     private String name;
     private long eventDate;
     private long eventTime;
@@ -22,12 +22,12 @@ public class EventEntity {
         items = new ArrayList<>();
     }
 
-    public String getId() {
-        return id;
+    public String getEventId() {
+        return eventId;
     }
 
-    public void setId(String mEventId) {
-        this.id = mEventId;
+    public void setEventId(String mEventId) {
+        this.eventId = mEventId;
     }
 
     public String getName() {

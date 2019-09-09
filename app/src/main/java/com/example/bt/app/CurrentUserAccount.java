@@ -18,20 +18,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CurrentUserAccount {
 
     private FirebaseUser mFirebaseUser;
     private User mCurrentUser;
-    private EventRepository mEventRepository;
+    private EventRepository mEventRepository = (EventRepository) RepositoryFactory.GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository);
     private List<Event> mUserEvents;
+    private Set<Event> mUserEventsSet;
 
     private static CurrentUserAccount INSTANCE = null;
 
     private CurrentUserAccount()
     {
         mUserEvents = new ArrayList<>();
+        mUserEventsSet = new HashSet<>();
         mCurrentUser = new User();
     }
 
@@ -57,9 +61,6 @@ public class CurrentUserAccount {
                 {
                     // User exists - load user data
                     mCurrentUser = dataSnapshot.getValue(User.class);
-
-                    // Initialize user events
-                    initCurrentUserEventsMap();
                 }
                 else{
                     // New user - create a user object and init new events list
@@ -69,6 +70,9 @@ public class CurrentUserAccount {
                     // Add new user to user repository
                     userRepository.add(mCurrentUser);
                 }
+
+                // Initialize user events
+                initCurrentUserEventsMap();
             }
 
             @Override
@@ -81,22 +85,20 @@ public class CurrentUserAccount {
 
     private void initCurrentUserEventsMap()
     {
-        mEventRepository =
-                (EventRepository) RepositoryFactory.GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository);
-
         mEventRepository.addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Event>() {
             @Override
             public void onSuccess(List<Event> repositoryEvents)
             {
-                List<Event> userEvents = new ArrayList<>();
+                Set<Event> userEvents = new HashSet<>();
                 for (Event event : repositoryEvents)
                 {
-                    if (mCurrentUser.getEvents() != null && mCurrentUser.getEvents().contains(event)) {
+                    if (mCurrentUser.getEvents() != null && mCurrentUser.getEvents().contains(event.getEventId())) {
                         userEvents.add(event);
                     }
                 }
 
-                mUserEvents.addAll(userEvents);
+                mUserEventsSet.addAll(userEvents);
+                //mUserEvents.addAll(userEvents);
             }
 
             @Override
@@ -114,7 +116,7 @@ public class CurrentUserAccount {
 
     public List<Event> GetCurrentUserEventList()
     {
-        return mUserEvents;
+        return new ArrayList<>(mUserEventsSet);
     }
 
     public void setFirebaseUser(FirebaseUser firebaseUser)
