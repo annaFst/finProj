@@ -82,8 +82,10 @@ public class CreateActivity extends AppCompatActivity {
 
 
         myEvent = new Event();
-        myEvent.setEventCreatorId(CurrentUserAccount.getInstance().getCurrentUser().getId());
-        DBdemo.eventArr.add(myEvent);
+        if (!CurrentUserAccount.getInstance().getCurrentUser().getId().isEmpty())
+            myEvent.setEventCreatorId(CurrentUserAccount.getInstance().getCurrentUser().getId());
+
+        //DBdemo.eventArr.add(myEvent);
 
 //        inputEvents = CurrentUserAccount.getInstance().GetCurrentUserEventList().getValue();
 //        if (inputEvents == null) inputEvents = new ArrayList<>();

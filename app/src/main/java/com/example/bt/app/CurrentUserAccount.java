@@ -32,6 +32,7 @@ public class CurrentUserAccount {
     private CurrentUserAccount()
     {
         mUserEvents = new ArrayList<>();
+        mCurrentUser = new User();
     }
 
     public static synchronized CurrentUserAccount getInstance() {
@@ -45,8 +46,9 @@ public class CurrentUserAccount {
     public void InitCurrentUser(FirebaseUser firebaseUser) {
         final UserRepository userRepository =
                 (UserRepository) RepositoryFactory.GetRepositoryInstance(RepositoryFactory.RepositoryType.UserRepository);
-
         final String userPhoneNum = firebaseUser.getPhoneNumber();
+        mCurrentUser.setId(userPhoneNum);
+
         DatabaseReference user = userRepository.getDataRef().child(userPhoneNum);
         user.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -56,15 +58,12 @@ public class CurrentUserAccount {
                     // User exists - load user data
                     mCurrentUser = dataSnapshot.getValue(User.class);
 
-                    // TODO: Remove test
-                    assert mCurrentUser != null;
-
                     // Initialize user events
                     initCurrentUserEventsMap();
                 }
                 else{
                     // New user - create a user object and init new events list
-                    mCurrentUser = new User(userPhoneNum, "");
+                    //mCurrentUser.setId(userPhoneNum);
                     mCurrentUser.setEvents(new ArrayList<String>());
 
                     // Add new user to user repository
