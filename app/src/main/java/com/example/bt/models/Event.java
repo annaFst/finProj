@@ -12,12 +12,26 @@ public class Event {
 
     private String mEventId;
     private String mEventName = "";
+    private int mEventAlarmIndex = -1;
     private List<Item> mItemList = new ArrayList<>();
     private List<Item> mTakenItemsList = new ArrayList<>();
     private List<String> participants = new ArrayList<>();
     private LocalDate eventDate = null;
     private LocalTime eventTime = null;
     private String mEventCreatorId;
+    private boolean admin = false;
+
+    public void setAlarmIndex(int i){
+        mEventAlarmIndex = i;
+    }
+
+    public int getEventAlarmIndex() {
+        return mEventAlarmIndex;
+    }
+
+    public boolean isAdmin () {
+        return admin;
+    }
 
     public String getEventId(){
         return mEventId;

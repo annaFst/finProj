@@ -98,12 +98,12 @@
             <View
                 android:id="@+id/divider3"
                 android:layout_width="match_parent"
-                android:layout_height="14dp"
+                android:layout_height="10dp"
                 android:background="?android:attr/listDivider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="32dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -111,11 +111,11 @@
                     android:layout_width="330dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:clickable="false"
                     android:gravity="center|left"
                     android:text=" Alert"
                     android:textColor="@color/grey"
-                    android:textSize="16dp"
-                    android:clickable="false"/>
+                    android:textSize="16dp" />
 
                 <Switch
                     android:id="@+id/alertSwitch"
@@ -128,7 +128,22 @@
             <View
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
-                android:layout_height="14dp"
+                android:layout_height="10dp"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:text=" Repeat"
+                android:gravity="center_vertical"
+                android:textColor="@color/grey"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
                 android:background="?android:attr/listDivider" />
 
             <TextView

@@ -62,6 +62,7 @@ public class CurrentEventActivity extends AppCompatActivity {
         });
 
         currEvent = DBdemo.eventArr.get(index);
+
         mEventName.setText(currEvent.getName());
         mEventDate.setText(currEvent.getEventDate() != null ? currEvent.getEventDate().toString(): "");
         mEventTime.setText(currEvent.getEventTime() != null ? currEvent.getEventTime().toString(): "");

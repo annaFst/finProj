@@ -18,8 +18,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //int notificationId = intent.getIntExtra("notificationId",0);
-        //String title = intent.getStringExtra("title");
+        int alarmId = intent.getIntExtra("index",0);
+        String title = intent.getStringExtra("title");
         NotificationManager myNotifi = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel1 = new NotificationChannel(CHANNEL_1_ID,"channel1",NotificationManager.IMPORTANCE_HIGH);
@@ -31,19 +31,20 @@ public class AlarmReceiver extends BroadcastReceiver {
         Intent goToMain  = new Intent(context,EventsActivity.class);
         goToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        PendingIntent contentIntend = PendingIntent.getActivity(context,100, goToMain,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntend = PendingIntent.getActivity(context,alarmId, goToMain,PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notification = new NotificationCompat.Builder(context,CHANNEL_1_ID);
         notification.setContentIntent(contentIntend);
         notification.setSmallIcon(android.R.drawable.ic_dialog_info);
-        notification.setContentTitle("It's time!");
-        notification.setContentText("EVENT");
+        notification.setContentTitle(title);
+        notification.setContentText(title);
         notification.setAutoCancel(true);
         //notification.setWhen(System.currentTimeMillis());
         notification.setPriority(Notification.PRIORITY_MAX);
-        notification.setDefaults(Notification.DEFAULT_ALL);
+        notification.setCategory(Notification.CATEGORY_EVENT);
+       // notification.setDefaults(Notification.DEFAULT_ALL);
 
-        myNotifi.notify(100,notification.build());
+        myNotifi.notify(alarmId,notification.build());
 
     }
 

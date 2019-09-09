@@ -49,10 +49,12 @@ public class CreateActivity extends AppCompatActivity {
     private ImageButton addItem;
     private ListView itemListView;
     static private ArrayAdapter<String> adapter;
-    private Event myEvent;
+    private static Event myEvent;
     private String item = null;
     private Switch onOffAlert;
     private TextView setAlert;
+    private int alarmDay=0, alarmMonth=0, alarmYear=0, alarmHour=0, alarmMin=0;
+    private boolean selectedDate = false, selectedTime= false;
 
     public static Calendar myCalendar;
     List<Event> inputEvents;
@@ -144,6 +146,9 @@ public class CreateActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String currDate = dayOfMonth + "/" + (month+1) + "/" + year;
+                        alarmDay = dayOfMonth;
+                        alarmMonth = month;
+                        alarmYear = year;
                         date.setText(currDate);
 
                     }
@@ -151,24 +156,8 @@ public class CreateActivity extends AppCompatActivity {
 
                 localDate1 = LocalDate.of(myYear, myMonth, myDay);
                 myDate.show();
+                selectedDate = true;
                 myEvent.setEventDate(localDate1);
-            }
-        });
-
-        onOffAlert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(onOffAlert.isChecked()){
-                    //onOffAlert.setChecked(true);
-                    Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
-                    intent.putExtra("title", title);
-                    startActivity(intent);
-                }
-                else{
-                    Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
-                    intent.putExtra("TODO", 2);
-                    startActivity(intent);
-                }
             }
         });
 
@@ -186,13 +175,43 @@ public class CreateActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         String currTime = hourOfDay + ":" + minute;
+                        alarmHour = hourOfDay;
+                        alarmMin = minute;
                         mTime.setText(currTime);
                     }
                 }, hours, minute,true);
 
                 localTime1 = LocalTime.of(hours,minute);
                 tpd.show();
+                selectedTime = true;
                 myEvent.setEventTime(localTime1);
+            }
+        });
+
+        onOffAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onOffAlert.isChecked()){
+                    //onOffAlert.setChecked(true);
+                    Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
+                    intent.putExtra("title", title);
+                    intent.putExtra("date selected", selectedDate);
+                    intent.putExtra("time selected", selectedTime);
+                    intent.putExtra("day", alarmDay);
+                    intent.putExtra("month", alarmMonth);
+                    intent.putExtra("year", alarmYear);
+                    intent.putExtra("hour", alarmHour);
+                    intent.putExtra("minutes", alarmMin);
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
+                    int index = myEvent.getEventAlarmIndex();
+                    if (index != -1) {
+                        intent.putExtra("eventIndex", index);
+                    }
+                    startActivity(intent);
+                }
             }
         });
 
@@ -242,5 +261,13 @@ public class CreateActivity extends AppCompatActivity {
     public void openSecondScreen(){
         Intent intent  = new Intent(this, ContactsList.class);
         startActivity(intent);
+    }
+
+    public static void setAlarmindex(int index){
+        myEvent.setAlarmIndex(index);
+    }
+
+    public static int getEventIndex(){
+        return myEvent.getEventAlarmIndex();
     }
 }
