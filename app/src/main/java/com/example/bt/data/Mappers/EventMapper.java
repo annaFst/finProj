@@ -17,7 +17,7 @@ public class EventMapper extends FirebaseMapper<EventEntity, Event> {
     @Override
     public Event map(EventEntity eventEntity) {
         Event event = new Event();
-        event.setEventId(eventEntity.getId());
+        event.setEventId(eventEntity.getEventId());
         event.setName(eventEntity.getName());
         event.addToList(eventEntity.getItems());
         event.setEventDate(eventEntity.getEventDate());

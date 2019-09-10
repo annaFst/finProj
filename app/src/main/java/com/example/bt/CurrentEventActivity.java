@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.models.Event;
 import com.example.bt.models.Item;
@@ -51,7 +52,6 @@ public class CurrentEventActivity extends AppCompatActivity {
         mDupEvent = findViewById(R.id.dupEvent);
         index = getIntent().getIntExtra("index", 0);
 
-
         mDupEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +66,7 @@ public class CurrentEventActivity extends AppCompatActivity {
         });
 
         //currEvent = DBdemo.eventArr.get(index);
+        currEvent = CurrentUserAccount.getInstance().GetCurrentUserEventList().get(index);
         mEventName.setText(currEvent.getName());
         mEventDate.setText(LocalDateTimeConverter.
                         GetLocalDateFromEpochSeconds(currEvent.getEventDate()).toString());

@@ -35,37 +35,6 @@ public abstract class FirebaseDatabaseRepository<Model> {
         mDataRef.addValueEventListener(listener);
     }
 
-    public boolean exists(final String key)
-    {
-        DatabaseReference child = mDataRef.child(key);
-        final boolean[] exists = {};
-        child.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    exists[0] = true;
-                }
-                else
-                {
-                    exists[0] = false;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                exists[0] = false;
-            }
-        });
-
-        if (exists[0])
-        {
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
     public abstract String add(Model model);
 
     public abstract void update(String key, Model model);

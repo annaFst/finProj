@@ -89,7 +89,6 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
                 finish();
             }
         });
-        //eventsListView.setOnItemClickListener(this);
 
     }
 

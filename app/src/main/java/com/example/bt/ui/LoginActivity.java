@@ -41,13 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        boolean isLoggedIn;
-        try {
-            isLoggedIn = checkLoggedInUser();
-        } catch (Exception e) {
-            e.printStackTrace();
-            isLoggedIn = false;
-        }
+        boolean isLoggedIn = checkLoggedInUser();
 
         if (isLoggedIn)
         {
@@ -65,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private boolean checkLoggedInUser() throws Exception {
+    private boolean checkLoggedInUser() {
         String accessToken = LoginPersistanceManager.readFromFile(this);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
