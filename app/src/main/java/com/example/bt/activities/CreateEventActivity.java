@@ -1,6 +1,5 @@
-package com.example.bt;
+package com.example.bt.activities;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -25,9 +24,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 //import android.support.v7.app.AppCompatActivity;
 
+import com.example.bt.R;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
-import com.example.bt.data.Repositories.EventRepository;
 import com.example.bt.data.Repositories.RepositoryFactory;
 import com.example.bt.models.Event;
 
@@ -37,11 +36,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class CreateActivity extends AppCompatActivity {
+public class CreateEventActivity extends AppCompatActivity {
 
     private static final int CONTACT_LIST_CODE = 0;
 
-    private Button mAddBtn, setAlarmBtn;
+    private Button mAddBtn, setAlarmBtn, mDeleteEventBtn;
     private Button mDoneBtn;
     private ImageButton mDateChoice;
     private ImageButton mTimeBtn;
@@ -87,16 +86,6 @@ public class CreateActivity extends AppCompatActivity {
         if (!CurrentUserAccount.getInstance().getCurrentUser().getId().isEmpty())
             myEvent.setEventCreatorId(CurrentUserAccount.getInstance().getCurrentUser().getId());
 
-        //DBdemo.eventArr.add(myEvent);
-
-//        inputEvents = CurrentUserAccount.getInstance().GetCurrentUserEventList().getValue();
-//        if (inputEvents == null) inputEvents = new ArrayList<>();
-//        inputEvents.add(myEvent);
-        //CurrentUserAccount.getInstance().GetCurrentUserEventList().setValue(inputEvents);
-
-        //adapter  = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, myEvent.getItems());
-       // itemListView.setAdapter(adapter);
-
         eventName.addTextChangedListener(nameWatcher);
         enterItem.addTextChangedListener(itemWatcher);
 
@@ -111,10 +100,11 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 updateDb(myEvent);
-                Intent intent  = new Intent(CreateActivity.this, EventsActivity.class);
+                Intent intent  = new Intent(CreateEventActivity.this, EventsActivity.class);
                 startActivity(intent);
             }
         });
+
 
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +113,7 @@ public class CreateActivity extends AppCompatActivity {
                     myEvent.addToList(item);
                     //adapter.add(item);
                     enterItem.setText("");
-                    Toast.makeText(CreateActivity.this, "Item Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateEventActivity.this, "Item Added", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -141,25 +131,24 @@ public class CreateActivity extends AppCompatActivity {
                 myMonth = myCalendar.get(Calendar.MONTH);
                 myYear = myCalendar.get(Calendar.YEAR);
 
-                LocalDate localDate1;
-                myDate = new DatePickerDialog(CreateActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String currDate = dayOfMonth + "/" + (month+1) + "/" + year;
-                        alarmDay = dayOfMonth;
-                        alarmMonth = month;
-                        alarmYear = year;
-                        date.setText(currDate);
+                myDate = new DatePickerDialog(CreateEventActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                String currDate = dayOfMonth + "/" + (month+1) + "/" + year;
+                                alarmDay = dayOfMonth;
+                                alarmMonth = month;
+                                alarmYear = year;
+                                date.setText(currDate);
+                                LocalDate localDate = LocalDate.of(alarmYear, alarmMonth, alarmDay);
+                                selectedDate = true;
+                                myEvent.setEventDate(LocalDateTimeConverter.
+                                        GetLocalDateInEpochSecond(localDate));
+                            }
+                },
+                        myYear, myMonth, myDay);
 
-                    }
-                }, myYear, myMonth, myDay);
-
-                localDate1 = LocalDate.of(myYear, myMonth, myDay);
                 myDate.show();
-                selectedDate = true;
-               // myEvent.setEventDate(localDate1);
-                myEvent.setEventDate(LocalDateTimeConverter.
-                        GetLocalDateInEpochSecond(localDate1));
             }
         });
 
@@ -171,24 +160,25 @@ public class CreateActivity extends AppCompatActivity {
                 int hours = myCalendar.get(Calendar.HOUR);
                 int minute = myCalendar.get(Calendar.MINUTE);
 
-                LocalTime localTime1;
 
-                TimePickerDialog tpd = new TimePickerDialog(CreateActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String currTime = hourOfDay + ":" + minute;
-                        alarmHour = hourOfDay;
-                        alarmMin = minute;
-                        mTime.setText(currTime);
-                    }
-                }, hours, minute,true);
 
-                localTime1 = LocalTime.of(hours,minute);
+                TimePickerDialog tpd = new TimePickerDialog(CreateEventActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                String currTime = hourOfDay + ":" + minute;
+                                alarmHour = hourOfDay;
+                                alarmMin = minute;
+                                mTime.setText(currTime);
+                                LocalTime localTime1 = LocalTime.of(alarmHour,alarmMin);
+                                myEvent.setEventTime(LocalDateTimeConverter.
+                                        GetLocalTimeInSeconds(localTime1));
+                                selectedTime = true;
+                            }
+                },
+                        hours, minute,true);
+
                 tpd.show();
-                myEvent.setEventTime(LocalDateTimeConverter.
-                        GetLocalTimeInSeconds(localTime1));
-                selectedTime = true;
-                //myEvent.setEventTime(localTime1);
             }
         });
 
@@ -197,7 +187,7 @@ public class CreateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(onOffAlert.isChecked()){
                     //onOffAlert.setChecked(true);
-                    Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
+                    Intent intent  = new Intent(CreateEventActivity.this, SetAlarmActivity.class);
                     intent.putExtra("title", title);
                     intent.putExtra("date selected", selectedDate);
                     intent.putExtra("time selected", selectedTime);
@@ -212,15 +202,9 @@ public class CreateActivity extends AppCompatActivity {
 
                     int alarmInd = myEvent.getEventAlarmIndex();
                     if (alarmInd != -1) {
-                        SetAlarm.myAlarm.cancel(SetAlarm.alarmsArray.get(alarmInd));
-                        Toast.makeText(CreateActivity.this, "Alarm deleted!", Toast.LENGTH_SHORT).show();
+                        SetAlarmActivity.myAlarm.cancel(SetAlarmActivity.alarmsArray.get(alarmInd));
+                        Toast.makeText(CreateEventActivity.this, "Alarm deleted!", Toast.LENGTH_SHORT).show();
                     }
-                    /*Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
-                    int index = myEvent.getEventAlarmIndex();
-                    if (index != -1) {
-                        intent.putExtra("eventIndex", index);
-                    }
-                    startActivity(intent);*/
                 }
             }
         });
@@ -236,8 +220,7 @@ public class CreateActivity extends AppCompatActivity {
         CurrentUserAccount.getInstance().GetCurrentUserEventList().add(myEvent);
         RepositoryFactory.
                 GetRepositoryInstance(RepositoryFactory.RepositoryType.UserRepository)
-                .update(CurrentUserAccount.getInstance().getCurrentUser().getId(),
-                        CurrentUserAccount.getInstance().getCurrentUser());
+                .update(CurrentUserAccount.getInstance().getCurrentUser());
     }
 
     private TextWatcher itemWatcher = new TextWatcher() {
@@ -282,7 +265,7 @@ public class CreateActivity extends AppCompatActivity {
     };
 
     public void openSecondScreen(){
-        Intent intent  = new Intent(this, ContactsList.class);
+        Intent intent  = new Intent(this, ContactsListActivity.class);
         startActivityForResult(intent, CONTACT_LIST_CODE);
     }
 

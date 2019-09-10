@@ -24,10 +24,13 @@ import java.util.Set;
 
 public class CurrentUserAccount {
 
+    private static final String TAG = "CurrentUserAccount";
+
     private FirebaseUser mFirebaseUser;
     private User mCurrentUser;
     private EventRepository mEventRepository = (EventRepository) RepositoryFactory.GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository);
     private List<Event> mUserEvents;
+
     private Set<Event> mUserEventsSet;
 
     private static CurrentUserAccount INSTANCE = null;
@@ -47,7 +50,10 @@ public class CurrentUserAccount {
         return(INSTANCE);
     }
 
-    public void InitCurrentUser(FirebaseUser firebaseUser) {
+    public void InitCurrentUser(FirebaseUser firebaseUser)
+    {
+        mFirebaseUser = firebaseUser;
+
         final UserRepository userRepository =
                 (UserRepository) RepositoryFactory.GetRepositoryInstance(RepositoryFactory.RepositoryType.UserRepository);
         final String userPhoneNum = firebaseUser.getPhoneNumber();
@@ -72,12 +78,12 @@ public class CurrentUserAccount {
                 }
 
                 // Initialize user events
-                initCurrentUserEventsMap();
+                //initCurrentUserEventsMap();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.w("CurrentUser", "loadPost:onCancelled", databaseError.toException());
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
             }
         });
 
@@ -119,13 +125,22 @@ public class CurrentUserAccount {
         return new ArrayList<>(mUserEventsSet);
     }
 
-    public void setFirebaseUser(FirebaseUser firebaseUser)
-    {
-        mFirebaseUser = firebaseUser;
+    public Set<Event> getUserEventsSet() {
+        return mUserEventsSet;
     }
 
-    public FirebaseUser getFirebaseUser() {
-        return mFirebaseUser;
+    public Event GetEventIfPresent(String source)
+    {
+        for (Event event : mUserEventsSet) {
+            if (event.getEventId().equals(source))
+                return event;
+        }
+
+        return null;
+    }
+
+    public void setUserEventsSet(Set<Event> userEventsSet) {
+        mUserEventsSet = userEventsSet;
     }
 
     public User getCurrentUser() {

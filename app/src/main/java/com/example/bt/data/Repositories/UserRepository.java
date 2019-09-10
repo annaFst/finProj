@@ -21,8 +21,13 @@ public class UserRepository extends FirebaseDatabaseRepository<User> {
     }
 
     @Override
-    public void update(String key, User user) {
+    public void update(User user) {
         mDataRef.child(user.getId()).setValue(user);
+    }
+
+    @Override
+    public void remove(User user) {
+        mDataRef.child(user.getId()).setValue(null);
     }
 
 //    private void addNewUser(String userId, String name) {

@@ -1,4 +1,4 @@
-package com.example.bt;
+package com.example.bt.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -17,13 +17,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bt.R;
 import com.example.bt.models.Contact;
+import com.example.bt.ui.ContactsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ContactsList extends AppCompatActivity {
+public class ContactsListActivity extends AppCompatActivity {
 
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
@@ -105,7 +107,7 @@ public class ContactsList extends AppCompatActivity {
                     Contact selectedContact = contactsList.get(position);
                     if (!arraySelectedContactsList.isEmpty()){
                         if (arraySelectedContactsList.contains(selectedContact)){
-                            Toast.makeText(ContactsList.this, "This contact already selected", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ContactsListActivity.this, "This contact already selected", Toast.LENGTH_LONG).show();
                         }
                         else {
                             arraySelectedContactsList.add(selectedContact);

@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    tools:context=".CurrentEventActivity">
+    android:background="#f0ffa0"
+    android:scrollIndicators="right"
+    android:scrollbarStyle="insideOverlay"
+    android:scrollbars="vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        tools:context=".activities.CurrentEventActivity">
 
 
         <EditText
@@ -18,133 +26,147 @@
             android:clickable="false"
             android:cursorVisible="false"
             android:ems="10"
+            android:importantForAutofill="no"
             android:inputType="textPersonName"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold|italic" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="78dp"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/currDate"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:cursorVisible="false"
-            android:ems="10"
-            android:hint="Date"
-            android:inputType="date"
-            android:textColor="@color/white"
-            android:textColorHint="@color/grey"
-            android:textSize="12sp" />
+            <EditText
+                android:id="@+id/currDate"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:hint="@string/date"
+                android:inputType="date"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey"
+                android:textSize="12sp" />
 
-        <EditText
-            android:id="@+id/currTime"
-            android:layout_width="wrap_content"
-            android:layout_height="78dp"
-            android:layout_weight="1"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:ems="10"
-            android:hint="Time"
-            android:inputType="time"
-            android:textColor="@color/white"
-            android:textColorHint="@color/grey"
-            android:textSize="12sp" />
-        <ImageButton
-            android:id="@+id/alarm"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/none"
-            android:enabled="false"
-            app:srcCompat="@android:drawable/ic_popup_reminder" />
+            <EditText
+                android:id="@+id/currTime"
+                android:layout_width="wrap_content"
+                android:layout_height="78dp"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:hint="@string/time"
+                android:inputType="time"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey"
+                android:textSize="12sp" />
 
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/none"
+                android:contentDescription="TODO"
+                android:enabled="false"
+                app:srcCompat="@android:drawable/ic_popup_reminder" />
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="7dp"
-        android:background="?android:attr/listDivider" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="10">
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="7dp"
+            android:background="?android:attr/listDivider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_weight="5"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="textPersonName"
+                android:text="@string/items_list"
+                android:textColor="@color/green"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:text="@string/items_taken"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/green"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ListView
+                android:id="@+id/itemsList"
+                android:layout_width="206dp"
+                android:layout_height="260dp">
+
+            </ListView>
+
+            <ListView
+                android:id="@+id/takenItemsList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
         <TextView
-            android:layout_width="58dp"
-            android:layout_height="60dp"
-            android:layout_gravity="left"
-            android:layout_weight="5"
-            android:ems="10"
+            android:layout_width="wrap_content"
+            android:layout_height="20sp"
+            android:layout_gravity="center"
             android:gravity="center"
             android:inputType="textPersonName"
-            android:text=" Items list"
+            android:text="@string/members"
             android:textColor="@color/green"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:text=" Items taken"
-            android:textColor="@color/green"
-            android:textSize="15sp" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            android:textSize="14sp" />
 
         <ListView
-            android:id="@+id/itemsList"
-            android:layout_width="184dp"
-            android:layout_height="260dp">
+            android:id="@+id/membersList"
+            android:layout_width="match_parent"
+            android:layout_height="118dp">
 
         </ListView>
 
-        <ListView
-            android:id="@+id/takenItemsList"
-            android:layout_width="176dp"
-            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/dupEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/button_style"
+            android:text="@string/duplicate_this_event"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnDeleteEvent"
+            style="@style/FirebaseUI.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:baselineAligned="false"
+            android:text="@string/delete_event" />
+
+
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:inputType="textPersonName"
-        android:text="Members"
-        android:textColor="@color/green"
-        android:textSize="14dp" />
-
-    <ListView
-        android:id="@+id/membersList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </ListView>
-
-
-    <Button
-        android:id="@+id/dupEvent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/button_syle"
-        android:text="duplicate this event"
-        android:textColor="@color/white" />
-
-
-</LinearLayout>
+</ScrollView>

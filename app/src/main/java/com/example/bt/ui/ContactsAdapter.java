@@ -1,4 +1,4 @@
-package com.example.bt;
+package com.example.bt.ui;
 
 import android.content.Context;
 import android.view.View;
@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.bt.R;
 import com.example.bt.models.Contact;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class ContactsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = View.inflate(mContext,R.layout.contact_list_view,null);
+        View view = View.inflate(mContext, R.layout.contact_list_view,null);
 
         TextView contact_name = (TextView) view.findViewById(R.id.contact_name);
         TextView contact_number = (TextView) view.findViewById(R.id.contact_number);

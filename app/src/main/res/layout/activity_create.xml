@@ -8,7 +8,7 @@
     android:scrollbarAlwaysDrawVerticalTrack="true"
     android:scrollbars="horizontal|vertical"
     android:background="@color/colorPrimaryDark"
-    tools:context=".CreateActivity">
+    tools:context=".activities.CreateEventActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -199,7 +199,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="28dp"
-                android:background="@drawable/button_syle"
+                android:background="@drawable/button_style"
                 android:text="@string/add_contacts"
                 android:textColor="@color/white" />
 
@@ -209,7 +209,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="72dp"
-                android:background="@drawable/button_syle"
+                android:background="@drawable/button_style"
                 android:enabled="false"
                 android:text="@string/done"
                 android:textColor="@color/white" />

@@ -1,32 +1,28 @@
-package com.example.bt;
+package com.example.bt.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.bt.AlarmReceiver;
+import com.example.bt.R;
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Set;
 
-public class SetAlarm extends AppCompatActivity {
+public class SetAlarmActivity extends AppCompatActivity {
 
     public static ArrayList<PendingIntent> alarmsArray = new ArrayList<PendingIntent>();
     public static  int  alarmIndex = 0;
@@ -106,7 +102,7 @@ public class SetAlarm extends AppCompatActivity {
                 myMonth = myCalendar.get(Calendar.MONTH);
                 myYear = myCalendar.get(Calendar.YEAR);
 
-                myDate = new DatePickerDialog(SetAlarm.this, new DatePickerDialog.OnDateSetListener() {
+                myDate = new DatePickerDialog(SetAlarmActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         String currDate = dayOfMonth + "/" + (month+1) + "/" + year;
@@ -133,7 +129,7 @@ public class SetAlarm extends AppCompatActivity {
                 myHours= myCalendar.get(Calendar.HOUR);
                 myMinute = myCalendar.get(Calendar.MINUTE);
 
-                TimePickerDialog tpd = new TimePickerDialog(SetAlarm.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog tpd = new TimePickerDialog(SetAlarmActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         String currentTime = hourOfDay + ":" + minute;
@@ -166,7 +162,7 @@ public class SetAlarm extends AppCompatActivity {
 
                 long startAlarm = alarmTime.getTimeInMillis();
 
-                Intent intent = new Intent (SetAlarm.this,AlarmReceiver.class);
+                Intent intent = new Intent (SetAlarmActivity.this, AlarmReceiver.class);
                 intent.putExtra("index", alarmIndex);
                 intent.putExtra("title", title);
 
@@ -179,10 +175,10 @@ public class SetAlarm extends AppCompatActivity {
 
 
                 alarmsArray.add(alarmIn);
-                CreateActivity.setAlarmindex(alarmIndex);
+                CreateEventActivity.setAlarmindex(alarmIndex);
                 alarmIndex++;
 
-                Toast.makeText(SetAlarm.this, "Alarm set!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SetAlarmActivity.this, "Alarm set!", Toast.LENGTH_SHORT).show();
                 finish();
 
 
@@ -197,7 +193,7 @@ public class SetAlarm extends AppCompatActivity {
                     int alarmInd = getIntent().getIntExtra("eventIndex", -1);
                     if (alarmInd != -1) {
                         myAlarm.cancel(alarmsArray.get(alarmInd));
-                        Toast.makeText(SetAlarm.this, "Alarm deleted!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SetAlarmActivity.this, "Alarm deleted!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -210,11 +206,11 @@ public class SetAlarm extends AppCompatActivity {
     public void onClick(View view){
         final String myActivityTitle = getIntent().getStringExtra("title");
 
-        Intent intent = new Intent(SetAlarm.this, AlarmReceiver.class);
+        Intent intent = new Intent(SetAlarmActivity.this, AlarmReceiver.class);
         intent.putExtra("notificationId",notificationID);
         intent.putExtra("title", myActivityTitle);
 
-        PendingIntent alarmIn = PendingIntent.getBroadcast(SetAlarm.this,0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent alarmIn = PendingIntent.getBroadcast(SetAlarmActivity.this,0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager myAlarm = (AlarmManager)getSystemService(ALARM_SERVICE);
 
         switch(view.getId()) {
@@ -233,7 +229,7 @@ public class SetAlarm extends AppCompatActivity {
 
                 myAlarm.set(AlarmManager.RTC_WAKEUP, alarmStart, alarmIn);
 
-                Toast.makeText(SetAlarm.this, "Alarm set!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SetAlarmActivity.this, "Alarm set!", Toast.LENGTH_SHORT).show();
                 break;
         }
 
