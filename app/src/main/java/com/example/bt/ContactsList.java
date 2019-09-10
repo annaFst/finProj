@@ -1,6 +1,7 @@
 package com.example.bt;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.provider.ContactsContract;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bt.models.Contact;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ContactsList extends AppCompatActivity {
@@ -31,7 +34,10 @@ public class ContactsList extends AppCompatActivity {
     private ArrayList<Contact> contactsList = new ArrayList<Contact>() ;
     private ArrayList<Contact> arraySelectedContactsList = new ArrayList<Contact>() ;
     private ArrayList <String> names = new ArrayList<String>();
+    private List<String> contactsNames = new ArrayList<String>();
+    private List<String> contactsPhoneNumbers = new ArrayList<String>();
     private ContactsAdapter selectedAdapter;
+    private Button Done;
 
 
     @Override
@@ -41,6 +47,23 @@ public class ContactsList extends AppCompatActivity {
 
         contacts = (ListView)findViewById(R.id.contactsList);
         selectedContacts = (ListView)findViewById(R.id.selectedContactsList);
+        Done = (Button)findViewById(R.id.DoneBtn);
+
+        Done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(Contact con : arraySelectedContactsList){
+                    contactsNames.add(con.contactName);
+                    contactsPhoneNumbers.add(con.phoneNumber);
+                }
+                Intent goBack = new Intent();
+                goBack.putStringArrayListExtra("contacts names",(ArrayList)contactsNames);
+                goBack.putStringArrayListExtra("contacts phones",(ArrayList)contactsPhoneNumbers);
+                setResult(RESULT_OK, goBack);
+                finish();
+
+            }
+        });
         getContacts();
     }
 

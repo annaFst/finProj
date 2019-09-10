@@ -29,15 +29,14 @@ import java.util.Set;
 public class SetAlarm extends AppCompatActivity {
 
     public static ArrayList<PendingIntent> alarmsArray = new ArrayList<PendingIntent>();
-    //public static ArrayList<AlarmManager> alarmsArray = new ArrayList<PendingIntent>();
     public static  int  alarmIndex = 0;
+    public static  AlarmManager myAlarm;
 
     private Button setAlarmBt;
     private Button delAlarmBt;
     private int notificationID = 100;
     private TimePicker alarmTimePicker;
     private DatePicker alarmDatePicker;
-    public static  AlarmManager myAlarm;
     private PendingIntent alarmIn;
     public static Calendar myCalendar;
     private ImageButton mDateChoice;
@@ -199,12 +198,8 @@ public class SetAlarm extends AppCompatActivity {
                     if (alarmInd != -1) {
                         myAlarm.cancel(alarmsArray.get(alarmInd));
                         Toast.makeText(SetAlarm.this, "Alarm deleted!", Toast.LENGTH_SHORT).show();
-
                     }
                 }
-                //myAlarm.cancel(alarmIn);
-                //myAlarm.cancel(alarmsArray.get(CreateActivity.getEventIndex()));
-                //alarmsArray.get(CreateActivity.getEventIndex()).cancel();
             }
         });
     }

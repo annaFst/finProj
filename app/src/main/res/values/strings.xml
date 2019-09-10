@@ -20,5 +20,7 @@
     <string name="login_text">Login</string>
     <string name="get2gather">Get2Gather</string>
     <string name="logout">Logout</string>
-   <!-- <string name="my_events">My Events</string>-->
+    <string name="repeat">Repeat</string>
+    <string name="set">set</string>
+    <!-- <string name="my_events">My Events</string>-->
 </resources>

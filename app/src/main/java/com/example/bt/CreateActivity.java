@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,7 +39,9 @@ import java.util.List;
 
 public class CreateActivity extends AppCompatActivity {
 
-    private Button mAddBtn;
+    private static final int CONTACT_LIST_CODE = 0;
+
+    private Button mAddBtn, setAlarmBtn;
     private Button mDoneBtn;
     private ImageButton mDateChoice;
     private ImageButton mTimeBtn;
@@ -78,7 +81,6 @@ public class CreateActivity extends AppCompatActivity {
         itemListView = (ListView)findViewById(R.id.itemList);
         mTime = findViewById(R.id.timeStr);
         onOffAlert = findViewById(R.id.alertSwitch);
-        setAlert = (TextView)findViewById(R.id.alert);
 
 
         myEvent = new Event();
@@ -161,23 +163,6 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
-        /*onOffAlert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(onOffAlert.isChecked()){
-                    //onOffAlert.setChecked(true);
-                    Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
-                    intent.putExtra("title", title);
-                    startActivity(intent);
-                }
-                else{
-                    Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
-                    intent.putExtra("TODO", 2);
-                    startActivity(intent);
-                }
-            }
-        });*/
-
         mTimeBtn.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -223,13 +208,19 @@ public class CreateActivity extends AppCompatActivity {
                     intent.putExtra("minutes", alarmMin);
                     startActivity(intent);
                 }
-                else{
-                    Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
+                else {
+
+                    int alarmInd = myEvent.getEventAlarmIndex();
+                    if (alarmInd != -1) {
+                        SetAlarm.myAlarm.cancel(SetAlarm.alarmsArray.get(alarmInd));
+                        Toast.makeText(CreateActivity.this, "Alarm deleted!", Toast.LENGTH_SHORT).show();
+                    }
+                    /*Intent intent  = new Intent(CreateActivity.this, SetAlarm.class);
                     int index = myEvent.getEventAlarmIndex();
                     if (index != -1) {
                         intent.putExtra("eventIndex", index);
                     }
-                    startActivity(intent);
+                    startActivity(intent);*/
                 }
             }
         });
@@ -292,7 +283,27 @@ public class CreateActivity extends AppCompatActivity {
 
     public void openSecondScreen(){
         Intent intent  = new Intent(this, ContactsList.class);
-        startActivity(intent);
+        startActivityForResult(intent, CONTACT_LIST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Check if it is the contact list activity with an OK result
+        if (requestCode == CONTACT_LIST_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                ArrayList<String> names = data.getStringArrayListExtra("contacts names");
+                if (names.isEmpty()){
+                    Log.d("NAMES", "IS empty");
+                }
+                ArrayList<String> phones = data.getStringArrayListExtra("contacts phones");
+
+                myEvent.setParticipants(names);
+                myEvent.setParticipantsPhoneNumbers(phones);
+            }
+        }
     }
 
     public static void setAlarmindex(int index){

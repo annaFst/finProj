@@ -22,6 +22,7 @@ public class Event {
     private List<Item> mItemList = new ArrayList<>();
     private List<Item> mTakenItemsList = new ArrayList<>();
     private List<String> participants = new ArrayList<>();
+    private List<String> participantsPhoneNumbers = new ArrayList<>();
     private long eventDate; // Epoch seconds
     private long eventTime; // Seconds of day
     private String mEventCreatorId;
@@ -151,8 +152,18 @@ public class Event {
         return participants;
     }
 
-    public void setParticipants(List<String> participants) {
-        this.participants = participants;
+    public void setParticipants(List<String> members) {
+        for (String name : members){
+            participants.add(name);
+        }
+    }
+
+    public List<String> getParticipantsPhoneNumbers (){
+        return participantsPhoneNumbers;
+    }
+
+    public void setParticipantsPhoneNumbers(List<String> phones){
+        this.participantsPhoneNumbers = phones;
     }
 
 

@@ -135,7 +135,7 @@
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
-                android:text=" Repeat"
+                android:text="@string/repeat"
                 android:gravity="center_vertical"
                 android:textColor="@color/grey"
                 android:textSize="16sp" />
@@ -150,9 +150,10 @@
                 android:id="@+id/textView2"
                 android:layout_width="239dp"
                 android:layout_height="wrap_content"
-                android:text="  Create list"
+                android:text="Create list"
                 android:textColor="#27E753"
-                android:textSize="20sp" />
+                android:textSize="16dp"
+                android:layout_marginLeft="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

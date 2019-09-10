@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,8 @@ import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.models.Event;
 import com.example.bt.models.Item;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CurrentEventActivity extends AppCompatActivity {
@@ -32,11 +35,12 @@ public class CurrentEventActivity extends AppCompatActivity {
     private TextView mEventTime;
     private int index;
     private Event currEvent;
-    private ListView items;
-    private ListView takenItemsList;
+    private ListView items, takenItemsList, membersList;
     private Button mDupEvent;
     static private itemListAdapter adapter;
     static private takenItemListAdapter takenAdapter;
+    static private CustomList membersAdapter;
+    private ImageButton alarmBtn;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -50,8 +54,10 @@ public class CurrentEventActivity extends AppCompatActivity {
         items = (ListView)findViewById(R.id.itemsList);
         takenItemsList = (ListView)findViewById(R.id.takenItemsList);
         mDupEvent = findViewById(R.id.dupEvent);
-        index = getIntent().getIntExtra("index", 0);
+        membersList = findViewById(R.id.membersList);
+        alarmBtn = findViewById(R.id.alarm);
 
+        index = getIntent().getIntExtra("index", 0);
         mDupEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +68,14 @@ public class CurrentEventActivity extends AppCompatActivity {
                 Intent intent  = new Intent(CurrentEventActivity.this, EventsActivity.class);
                 startActivity(intent);
 
+            }
+        });
+
+        alarmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent  = new Intent(CurrentEventActivity.this, SetAlarm.class);
+                startActivity(intent);
             }
         });
 
@@ -80,6 +94,10 @@ public class CurrentEventActivity extends AppCompatActivity {
         takenAdapter = new takenItemListAdapter(this,R.layout.taken_items, currEvent.getTakenItemsList());
         takenItemsList.setAdapter(takenAdapter);
 
+
+        membersAdapter = new CustomList (this, R.layout.items_list,(ArrayList)currEvent.getParticipants());
+        membersList.setAdapter(membersAdapter);
+
         items.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -89,6 +107,24 @@ public class CurrentEventActivity extends AppCompatActivity {
             }
         });
 
+    }
+    private class CustomList extends ArrayAdapter<String>{
+        ArrayList<String> members;
+
+        public CustomList(Context context, int resource, ArrayList<String> list) {
+            super(context, resource, list);
+            members = list;
+
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup parent) {
+            LayoutInflater inflater = CurrentEventActivity.this.getLayoutInflater();
+            View rowView= inflater.inflate(R.layout.member_list, null, true);
+            TextView txtTitle = (TextView) rowView.findViewById(R.id.nameOfContact);
+            txtTitle.setText(members.get(position));
+            return rowView;
+        }
     }
 
     private class itemListAdapter extends  ArrayAdapter<Item>{
