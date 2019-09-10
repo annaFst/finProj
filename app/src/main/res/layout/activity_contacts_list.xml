@@ -14,13 +14,16 @@
         android:layout_gravity="left"
         android:gravity="center"
         android:padding="10dp"
+        android:layout_marginLeft="10dp"
         android:text=" Selected contacts"
         android:textColor="@color/green"
-        android:textSize="16dp" />
+        android:textSize="14dp" />
+
     <ListView
         android:id="@+id/selectedContactsList"
         android:layout_width="302dp"
-        android:layout_height="137dp"
+        android:layout_height="114dp"
+        android:layout_gravity="center"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
@@ -28,7 +31,6 @@
         android:layout_marginRight="32dp"
         android:layout_marginBottom="15dp"
         android:scrollbars="vertical"
-        android:layout_gravity="center"
         tools:ignore="MissingConstraints">
 
     </ListView>
@@ -39,14 +41,15 @@
         android:layout_gravity="left"
         android:gravity="center"
         android:padding="10dp"
+        android:layout_marginLeft="10dp"
         android:text=" Contacts List"
         android:textColor="@color/green"
-        android:textSize="16dp" />
+        android:textSize="14dp" />
 
     <ListView
         android:id="@+id/contactsList"
         android:layout_width="302dp"
-        android:layout_height="293dp"
+        android:layout_height="277dp"
         android:layout_gravity="center"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="15dp"
@@ -56,5 +59,15 @@
         android:layout_marginBottom="15dp"
         android:scrollbars="vertical"
         tools:ignore="MissingConstraints"></ListView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/button_without_background"
+        android:padding="10dp"
+        android:text="DONE"
+        android:textColor="@color/white" />
 
 </LinearLayout>

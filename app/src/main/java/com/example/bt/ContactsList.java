@@ -80,9 +80,18 @@ public class ContactsList extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Contact selectedContact = contactsList.get(position);
-                    arraySelectedContactsList.add(selectedContact);
+                    if (!arraySelectedContactsList.isEmpty()){
+                        if (arraySelectedContactsList.contains(selectedContact)){
+                            Toast.makeText(ContactsList.this, "This contact already selected", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            arraySelectedContactsList.add(selectedContact);
+                        }
+                    }
+                    else {
+                        arraySelectedContactsList.add(selectedContact);
+                    }
                     selectedAdapter.notifyDataSetChanged();
-
                     /*Cursor tempCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
                     tempCur.moveToPosition(position);
                     String phoneNumber = tempCur.getString(tempCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -125,6 +134,7 @@ public class ContactsList extends AppCompatActivity {
             });*/
             contacts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         }
+
     }
 
     @Override
