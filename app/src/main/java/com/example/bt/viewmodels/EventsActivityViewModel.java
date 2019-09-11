@@ -46,10 +46,18 @@ public class EventsActivityViewModel extends ViewModel {
                 for (Event event : result)
                 {
                     if (currentUser.getEvents() != null && currentUser.getEvents().contains(event.getEventId())) {
+                        // Event id appears in user events - add to events set
+                        userEvents.add(event);
+                    }
+                    else if (event.getParticipants().contains(currentUser.getId()))
+                    {
+                        // Event id doesn't appear in user events but user appears in event participants
+                        // 1. Add event id to current user events
+                        currentUser.addEvent(event);
+                        // 2. Add event to events set
                         userEvents.add(event);
                     }
                 }
-                //mUserEventsSet.addAll(userEvents);
 
                 mEvents.setValue(userEvents);
                 CurrentUserAccount.getInstance().setUserEventsSet(userEvents);

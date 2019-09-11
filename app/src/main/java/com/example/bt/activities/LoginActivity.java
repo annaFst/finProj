@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null)
         {
-            // User signed in
+            // User signed in - init user
             CurrentUserAccount.getInstance().InitCurrentUser(firebaseUser);
             return true;
         }
