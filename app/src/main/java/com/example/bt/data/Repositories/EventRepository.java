@@ -21,8 +21,13 @@ public class EventRepository extends FirebaseDatabaseRepository<Event> {
     }
 
     @Override
-    public void update(String key, Event event) {
-        // TODO
+    public void update(Event event) {
+        mDataRef.child(event.getEventId()).setValue(event);
+    }
+
+    @Override
+    public void remove(Event event) {
+        mDataRef.child(event.getEventId()).setValue(null);
     }
 
     private String addEvent(Event event)

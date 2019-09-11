@@ -1,7 +1,5 @@
-package com.example.bt.ui;
+package com.example.bt.activities;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,22 +8,19 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bt.BuildConfig;
-import com.example.bt.EventsActivity;
+import com.example.bt.activities.EventsActivity;
 import com.example.bt.R;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LoginPersistanceManager;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
-import com.google.firebase.auth.OAuthCredential;
 
 import java.util.Collections;
 
@@ -59,14 +54,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private boolean checkLoggedInUser() {
-        String accessToken = LoginPersistanceManager.readFromFile(this);
-
+    private boolean checkLoggedInUser()
+    {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null)
         {
             // User signed in
-            CurrentUserAccount.getInstance().setFirebaseUser(firebaseUser);
             CurrentUserAccount.getInstance().InitCurrentUser(firebaseUser);
             return true;
         }

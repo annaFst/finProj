@@ -8,9 +8,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+
+import com.example.bt.activities.EventsActivity;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -28,7 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
 
-        Intent goToMain  = new Intent(context,EventsActivity.class);
+        Intent goToMain  = new Intent(context, EventsActivity.class);
         goToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent contentIntend = PendingIntent.getActivity(context,alarmId, goToMain,PendingIntent.FLAG_UPDATE_CURRENT);

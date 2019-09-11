@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
-    tools:context=".SetAlarm"
+    tools:context=".activities.SetAlarmActivity"
     android:padding="20dp">
 
     <LinearLayout
@@ -63,30 +63,28 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/cancelBt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="70dp"
-            android:background="@drawable/button_syle"
-            android:text="CANCEL"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/setBt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/button_syle"
-            android:text="SET"
-            android:textColor="@color/white" />
-    </LinearLayout>
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/cancelBt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CANCEL"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginLeft="50dp"
+        android:background="@drawable/button_style"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"/>
+    <Button
+        android:id="@+id/setBt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SET"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_style"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"/>
+</LinearLayout>
 
 </LinearLayout>

@@ -40,7 +40,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mClickListener.onItemClick(position, v);
+                mClickListener.onItemClick(mEvents.get(position).getEventId(), v);
             }
         });
     }
@@ -55,9 +55,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
 
-    public interface ClickListener {
-        void onItemClick(int position, View v);
-        void onItemLongClick(int position, View v);
+    public interface ClickListener<T> {
+        void onItemClick(String itemId, View v);
+        void onItemLongClick(String itemId, View v);
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder {

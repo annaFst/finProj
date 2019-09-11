@@ -1,13 +1,11 @@
-package com.example.bt;
+package com.example.bt.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -17,18 +15,20 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bt.R;
 import com.example.bt.models.Event;
 import com.example.bt.ui.EventAdapter;
 import com.example.bt.viewmodels.EventsActivityViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
-public class EventsActivity extends AppCompatActivity implements EventAdapter.ClickListener {
+public class EventsActivity extends AppCompatActivity implements EventAdapter.ClickListener<Event> {
 
 
     public static boolean updated = false;
@@ -60,10 +60,10 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
         btnLogout = findViewById(R.id.btnLogout);
 
         mEventsActivityViewModel = new ViewModelProvider(this).get(EventsActivityViewModel.class);
-        mEventsActivityViewModel.getEvents().observe(this, new Observer<List<Event>>() {
+        mEventsActivityViewModel.getEvents().observe(this, new Observer<Set<Event>>() {
             @Override
-            public void onChanged(List<Event> events) {
-                EventAdapter eventAdapter = new EventAdapter(events);
+            public void onChanged(Set<Event> events) {
+                EventAdapter eventAdapter = new EventAdapter(new ArrayList<>(events));
                 eventAdapter.setOnItemClickListener(EventsActivity.this);
                 mRecyclerView.setAdapter(eventAdapter);
             }
@@ -93,21 +93,21 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
     }
 
     public void openSecondScreen(){
-        Intent intent  = new Intent(EventsActivity.this, CreateActivity.class);
+        Intent intent  = new Intent(EventsActivity.this, CreateEventActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public void onItemClick(int position, View v) {
+    public void onItemClick(String key, View v) {
         Intent intent  = new Intent(this, CurrentEventActivity.class);
-        intent.putExtra("index",position);
+        intent.putExtra("eventId", key);
         startActivity(intent);
     }
 
     @Override
-    public void onItemLongClick(int position, View v) {
+    public void onItemLongClick(String key, View v) {
         Intent intent  = new Intent(this, CurrentEventActivity.class);
-        intent.putExtra("index",position);
+        intent.putExtra("eventId", key);
         startActivity(intent);
     }
 

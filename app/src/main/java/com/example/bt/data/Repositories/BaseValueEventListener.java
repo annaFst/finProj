@@ -22,7 +22,7 @@ public class BaseValueEventListener<Model, Entity> implements ValueEventListener
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        List data = mapper.mapList(dataSnapshot);
+        List<Model> data = mapper.mapList(dataSnapshot);
         callback.onSuccess(data);
     }
 

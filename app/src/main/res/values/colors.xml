@@ -11,5 +11,6 @@
     <color name="purple">#9C27B0</color>
     <color name="green">#39FC03</color>
     <color name="darkGreen">#376D28</color>
+    <color name= "red">#E20909</color>
     <color name="none">#0039FC03</color>
 </resources>
