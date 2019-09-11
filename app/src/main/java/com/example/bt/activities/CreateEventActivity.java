@@ -28,6 +28,7 @@ import com.example.bt.R;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.data.Repositories.RepositoryFactory;
+import com.example.bt.models.Contact;
 import com.example.bt.models.Event;
 
 import java.time.LocalDate;
@@ -277,11 +278,10 @@ public class CreateEventActivity extends AppCompatActivity {
         if (requestCode == CONTACT_LIST_CODE) {
             if (resultCode == RESULT_OK) {
 
-                ArrayList<String> names = data.getStringArrayListExtra("contacts names");
+                ArrayList<Contact> contacts = (ArrayList)data.getSerializableExtra("contacts");
                 ArrayList<String> phones = data.getStringArrayListExtra("contacts phones");
 
-                myEvent.setParticipants(names);
-                myEvent.setParticipantsPhoneNumbers(phones);
+                myEvent.setParticipants(contacts);
             }
         }
     }

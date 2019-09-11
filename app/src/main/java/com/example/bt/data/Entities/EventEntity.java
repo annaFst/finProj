@@ -1,5 +1,6 @@
 package com.example.bt.data.Entities;
 
+import com.example.bt.models.Contact;
 import com.example.bt.models.Item;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -13,7 +14,7 @@ public class EventEntity {
     private String name;
     private long eventDate;
     private long eventTime;
-    private List<String> participants;
+    private List<Contact> participants;
     private List<Item> items;
     private String creator;
 
@@ -46,11 +47,11 @@ public class EventEntity {
         this.eventDate = mEventDateTime;
     }
 
-    public List<String> getParticipants() {
+    public List<Contact> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<String> mParticipants) {
+    public void setParticipants(List<Contact> mParticipants) {
         this.participants = mParticipants;
     }
 

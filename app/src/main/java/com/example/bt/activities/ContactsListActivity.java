@@ -21,6 +21,7 @@ import com.example.bt.R;
 import com.example.bt.models.Contact;
 import com.example.bt.ui.ContactsAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +34,11 @@ public class ContactsListActivity extends AppCompatActivity {
     private ListView contacts;
     private ListView selectedContacts;
     private TextView check;
-    private ArrayList<Contact> contactsList = new ArrayList<Contact>() ;
-    private ArrayList<Contact> arraySelectedContactsList = new ArrayList<Contact>() ;
-    private ArrayList <String> names = new ArrayList<String>();
-    private List<String> contactsNames = new ArrayList<String>();
-    private List<String> contactsPhoneNumbers = new ArrayList<String>();
+    private List<Contact> contactsList = new ArrayList<>() ;
+    private List<Contact> arraySelectedContactsList = new ArrayList<>() ;
+    private List<String> names = new ArrayList<>();
+    private List<String> contactsNames = new ArrayList<>();
+    private List<String> contactsPhoneNumbers = new ArrayList<>();
     private ContactsAdapter selectedAdapter;
     private Button Done;
 
@@ -60,6 +61,8 @@ public class ContactsListActivity extends AppCompatActivity {
                 }
                 Intent goBack = new Intent();
                 goBack.putStringArrayListExtra("contacts names",(ArrayList)contactsNames);
+                goBack.putExtra("contacts", (Serializable) arraySelectedContactsList);
+
                 goBack.putStringArrayListExtra("contacts phones",(ArrayList)contactsPhoneNumbers);
                 setResult(RESULT_OK, goBack);
                 finish();
