@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bt.R;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
+import com.example.bt.models.Contact;
 import com.example.bt.models.Event;
 import com.example.bt.models.Item;
 
@@ -112,19 +113,21 @@ public class CurrentEventActivity extends AppCompatActivity {
         takenAdapter = new takenItemListAdapter(this,R.layout.taken_items, currEvent.getTakenItemsList());
         takenItemsList.setAdapter(takenAdapter);
 
-
         membersAdapter = new CustomList (this, R.layout.items_list,(ArrayList)currEvent.getParticipants());
         membersList.setAdapter(membersAdapter);
 
         items.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Item currItem = currEvent.getItems().get(position);
+                currItem.setTaken(true);
+                currItem.setTakenBy(CurrentUserAccount.getInstance().getCurrentUser());
+
                 currEvent.takeItem(position);
                 adapter.notifyDataSetChanged();
                 takenAdapter.notifyDataSetChanged();
             }
         });
-
     }
 
 
@@ -135,8 +138,8 @@ public class CurrentEventActivity extends AppCompatActivity {
                 case DialogInterface.BUTTON_POSITIVE:
                     //Yes button clicked
                     CurrentUserAccount.getInstance().getCurrentUser().getEvents().remove(currEvent.getEventId());
-                    CurrentUserAccount.getInstance().GetEventRepository().remove(currEvent);
                     CurrentUserAccount.getInstance().GetCurrentUserEventList().remove(currEvent);
+                    CurrentUserAccount.getInstance().GetEventRepository().remove(currEvent);
                     finish();
                     break;
 
@@ -148,11 +151,10 @@ public class CurrentEventActivity extends AppCompatActivity {
     };
 
 
+    private class CustomList extends ArrayAdapter<Contact>{
+        ArrayList<Contact> members;
 
-    private class CustomList extends ArrayAdapter<String>{
-        ArrayList<String> members;
-
-        public CustomList(Context context, int resource, ArrayList<String> list) {
+        public CustomList(Context context, int resource, ArrayList<Contact> list) {
             super(context, resource, list);
             members = list;
         }
@@ -162,7 +164,7 @@ public class CurrentEventActivity extends AppCompatActivity {
             LayoutInflater inflater = CurrentEventActivity.this.getLayoutInflater();
             View rowView= inflater.inflate(R.layout.member_list, null, true);
             TextView txtTitle = (TextView) rowView.findViewById(R.id.nameOfContact);
-            txtTitle.setText(members.get(position));
+            txtTitle.setText(members.get(position).contactName);
             return rowView;
         }
     }
