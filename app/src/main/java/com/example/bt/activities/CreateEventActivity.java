@@ -266,7 +266,6 @@ public class CreateEventActivity extends AppCompatActivity {
 
     public void openSecondScreen(){
         Intent intent  = new Intent(this, ContactsListActivity.class);
-        intent.putEx
         startActivityForResult(intent, CONTACT_LIST_CODE);
     }
 
