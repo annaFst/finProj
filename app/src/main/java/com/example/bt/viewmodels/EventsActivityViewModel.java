@@ -10,6 +10,8 @@ import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.data.Repositories.FirebaseDatabaseRepository;
 import com.example.bt.models.Event;
 import com.example.bt.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashSet;
 import java.util.List;
@@ -68,5 +70,20 @@ public class EventsActivityViewModel extends ViewModel {
                 Log.d(TAG, "loadCurrentUserEvents: Error");
             }
         });
+    }
+
+    public boolean checkLoggedInUser()
+    {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null)
+        {
+            // User signed in - init user
+            CurrentUserAccount.getInstance().InitCurrentUser(firebaseUser);
+            return true;
+        }
+        else{
+            // No user signed in
+            return false;
+        }
     }
 }

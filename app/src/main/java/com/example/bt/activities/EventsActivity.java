@@ -18,10 +18,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bt.R;
+import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.models.Event;
 import com.example.bt.ui.EventAdapter;
 import com.example.bt.viewmodels.EventsActivityViewModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +55,21 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mEventsActivityViewModel = new ViewModelProvider(this).get(EventsActivityViewModel.class);
+
+        boolean isLoggedIn = mEventsActivityViewModel.checkLoggedInUser();
+
+        if (!isLoggedIn)
+        {
+            openLoginActivity();
+        }
 
         // TODO: Fix this bug
         LayoutInflater inflater = LayoutInflater.from(this);
         mRecyclerView = findViewById(R.id.recycler_view);
         btnLogout = findViewById(R.id.btnLogout);
 
-        mEventsActivityViewModel = new ViewModelProvider(this).get(EventsActivityViewModel.class);
+
         mEventsActivityViewModel.getEvents().observe(this, new Observer<Set<Event>>() {
             @Override
             public void onChanged(Set<Event> events) {
@@ -86,11 +96,18 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                finish();
+                openLoginActivity();
             }
         });
 
     }
+
+    private void openLoginActivity()
+    {
+        Intent intent  = new Intent(EventsActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
+
 
     public void openSecondScreen(){
         Intent intent  = new Intent(EventsActivity.this, CreateEventActivity.class);
