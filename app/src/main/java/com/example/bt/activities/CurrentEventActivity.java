@@ -28,6 +28,7 @@ import com.example.bt.models.Contact;
 import com.example.bt.models.Event;
 import com.example.bt.models.Item;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,19 +76,6 @@ public class CurrentEventActivity extends AppCompatActivity {
             }
         });
 
-        mDeleteEventBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
-
-//                CurrentUserAccount.getInstance().getCurrentUser().getEvents().remove(currEvent.getEventId());
-//                CurrentUserAccount.getInstance().GetEventRepository().remove(currEvent);
-//                CurrentUserAccount.getInstance().GetCurrentUserEventList().remove(currEvent);
-//                finish();
-            }
-        });
 
         alarmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,11 +85,12 @@ public class CurrentEventActivity extends AppCompatActivity {
             }
         });
 
-        //currEvent = DBdemo.eventArr.get(eventId);
         currEvent = CurrentUserAccount.getInstance().GetEventIfPresent(eventId);
         mEventName.setText(currEvent.getName());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
         mEventDate.setText(LocalDateTimeConverter.
-                        GetLocalDateFromEpochSeconds(currEvent.getEventDate()).toString());
+                        GetLocalDateFromEpochSeconds(currEvent.getEventDate()).format(formatter));
         mEventTime.setText(LocalDateTimeConverter.
                         GetLocalTimeFromSeconds(currEvent.getEventTime()).toString());
 
@@ -122,6 +111,15 @@ public class CurrentEventActivity extends AppCompatActivity {
                 currEvent.takeItem(position);
                 adapter.notifyDataSetChanged();
                 takenAdapter.notifyDataSetChanged();
+            }
+        });
+
+        mDeleteEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
             }
         });
     }
@@ -160,7 +158,7 @@ public class CurrentEventActivity extends AppCompatActivity {
             LayoutInflater inflater = CurrentEventActivity.this.getLayoutInflater();
             View rowView= inflater.inflate(R.layout.member_list, null, true);
             TextView txtTitle = (TextView) rowView.findViewById(R.id.nameOfContact);
-            txtTitle.setText(members.get(position).contactName);
+            txtTitle.setText(members.get(position).getContactName());
             return rowView;
         }
     }

@@ -3,6 +3,7 @@ package com.example.bt.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -36,13 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        boolean isLoggedIn = checkLoggedInUser();
-
-        if (isLoggedIn)
-        {
-            openEventsActivity();
-        }
-
         mBtnLogin = findViewById(R.id.btn_login);
 
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
@@ -52,21 +46,6 @@ public class LoginActivity extends AppCompatActivity {
                 login();
             }
         });
-    }
-
-    private boolean checkLoggedInUser()
-    {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null)
-        {
-            // User signed in - init user
-            CurrentUserAccount.getInstance().InitCurrentUser(firebaseUser);
-            return true;
-        }
-        else{
-            // No user signed in
-            return false;
-        }
     }
 
     private void login() {
@@ -103,10 +82,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 CurrentUserAccount.getInstance().InitCurrentUser(user);
 
-                //showAlertDialog(user);
-                Toast.makeText(getBaseContext(), String.format("Phone Auth Successful: %s", idpResponse.getPhoneNumber()), Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(getBaseContext(), String.format("Phone Auth Successful: %s", idpResponse.getPhoneNumber()), Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
 
-                openEventsActivity();
+                finish();
 
             } else {
                 /**
@@ -118,11 +98,4 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-
-    private void openEventsActivity()
-    {
-        Intent intent  = new Intent(this, EventsActivity.class);
-        startActivity(intent);
-    }
-
 }

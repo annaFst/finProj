@@ -42,10 +42,10 @@ public class ContactsAdapter extends BaseAdapter {
         TextView contact_name = (TextView) view.findViewById(R.id.contact_name);
         TextView contact_number = (TextView) view.findViewById(R.id.contact_number);
 
-        contact_name.setText(listOfContacts.get(position).contactName);
-        contact_number.setText(listOfContacts.get(position).phoneNumber);
+        contact_name.setText(listOfContacts.get(position).getContactName());
+        contact_number.setText(listOfContacts.get(position).getPhoneNumber());
 
-        view.setTag(listOfContacts.get(position).contactName);
+        view.setTag(listOfContacts.get(position).getContactName());
         return view;
     }
 }

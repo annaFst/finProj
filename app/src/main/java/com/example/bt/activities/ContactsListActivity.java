@@ -30,15 +30,12 @@ public class ContactsListActivity extends AppCompatActivity {
 
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
-
     private ListView contacts;
     private ListView selectedContacts;
     private TextView check;
     private List<Contact> contactsList = new ArrayList<>() ;
     private List<Contact> arraySelectedContactsList = new ArrayList<>() ;
     private List<String> names = new ArrayList<>();
-    private List<String> contactsNames = new ArrayList<>();
-    private List<String> contactsPhoneNumbers = new ArrayList<>();
     private ContactsAdapter selectedAdapter;
     private Button Done;
 
@@ -58,20 +55,14 @@ public class ContactsListActivity extends AppCompatActivity {
         Done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(Contact con : arraySelectedContactsList){
-                    contactsNames.add(con.contactName);
-                    contactsPhoneNumbers.add(con.phoneNumber);
-                }
                 Intent goBack = new Intent();
-               // goBack.putStringArrayListExtra("contacts names",(ArrayList)contactsNames);
-               // goBack.putStringArrayListExtra("contacts phones",(ArrayList)contactsPhoneNumbers);
-
                 goBack.putExtra("contacts", (Serializable) arraySelectedContactsList);
                 setResult(RESULT_OK, goBack);
-                finish();
 
+                finish();
             }
         });
+
         getContacts();
     }
 
@@ -123,11 +114,6 @@ public class ContactsListActivity extends AppCompatActivity {
                         arraySelectedContactsList.add(selectedContact);
                     }
                     selectedAdapter.notifyDataSetChanged();
-                    /*Cursor tempCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-                    tempCur.moveToPosition(position);
-                    String phoneNumber = tempCur.getString(tempCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                    String memberName = tempCur.getString(tempCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));*/
-                    //tempCur.close();
                 }
             });
 
@@ -175,7 +161,7 @@ public class ContactsListActivity extends AppCompatActivity {
                 // Permission is granted
                 getContacts();
             } else {
-                Toast.makeText(this, "Until you grant the permission, we canot display the names", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Until you grant the permission, we cannot display the names", Toast.LENGTH_SHORT).show();
             }
         }
     }
