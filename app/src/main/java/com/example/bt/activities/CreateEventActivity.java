@@ -26,6 +26,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 //import android.support.v7.app.AppCompatActivity;
 
+import com.example.bt.DBdemo;
+import com.example.bt.NotificationReceiver;
 import com.example.bt.R;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
@@ -44,13 +46,10 @@ public class CreateEventActivity extends AppCompatActivity {
 
     private static final int CONTACT_LIST_CODE = 0;
     private static final int OFFSET = 100;
-    public static ArrayList<PendingIntent> notificationArray= new ArrayList<PendingIntent>();
-    public static  int  notificationIndex = 0;
-    public static AlarmManager onTimeNatification;
+    public static Calendar myCalendar;
+
 
     private boolean setNotifi = false;
-
-
     private Button mAddBtn, setAlarmBtn, mDeleteEventBtn;
     private Button mDoneBtn;
     private ImageButton mDateChoice;
@@ -71,7 +70,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private boolean selectedDate = false, selectedTime= false;
     private ArrayList<Contact> contacts;
 
-    public static Calendar myCalendar;
+    private PendingIntent alarmIntent;
     List<Event> inputEvents;
     //ListView showToScreen;
 
@@ -112,6 +111,10 @@ public class CreateEventActivity extends AppCompatActivity {
         mDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (selectedTime && selectedDate){
+                    Log.d("DEBAG", "onClick: in set notification ");
+                    setNotification();
+                }
                 updateDb(myEvent);
                 Intent intent  = new Intent(CreateEventActivity.this, EventsActivity.class);
                 startActivity(intent);
@@ -162,10 +165,6 @@ public class CreateEventActivity extends AppCompatActivity {
                 },
                         myYear, myMonth, myDay);
 
-                if ((!setNotifi) && selectedTime){
-                    setNotification();
-                }
-
                 myDate.show();
             }
         });
@@ -193,10 +192,6 @@ public class CreateEventActivity extends AppCompatActivity {
                             }
                 },
                         hours, minute,true);
-
-                if ((!setNotifi) && selectedDate){
-                    setNotification();
-                }
 
                 tpd.show();
             }
@@ -315,6 +310,32 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     public void setNotification(){
+        Calendar alarmTime = Calendar.getInstance();
+        alarmTime.set(Calendar.HOUR_OF_DAY, alarmHour);
+        alarmTime.set(Calendar.MINUTE, alarmMin);
+        alarmTime.set(Calendar.SECOND, 0);
+        alarmTime.set(Calendar.DAY_OF_MONTH,alarmDay);
+        alarmTime.set(Calendar.MONTH,alarmMonth);
+        alarmTime.set(Calendar.YEAR,alarmYear);
 
+        int alarmIndex = DBdemo.notificationIndex+OFFSET;
+
+        long startAlarm = alarmTime.getTimeInMillis();
+
+        Intent intent = new Intent (CreateEventActivity.this, NotificationReceiver.class);
+        intent.putExtra("index", alarmIndex);
+        intent.putExtra("title", myEvent.getName());
+
+        alarmIntent = PendingIntent.getBroadcast(getApplicationContext(),alarmIndex,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        if (alarmIndex  < OFFSET+1 ) {
+            DBdemo.onTimeNatification = (AlarmManager)getSystemService(ALARM_SERVICE);
+        }
+        DBdemo.onTimeNatification.set(AlarmManager.RTC_WAKEUP,startAlarm,alarmIntent);
+        //myAlarm.setRepeating(AlarmManager.RTC_WAKEUP,alarmTime.getTimeInMillis(),(AlarmManager.INTERVAL_FIFTEEN_MINUTES*2),alarmIn);
+
+
+        DBdemo.notificationArray.add(alarmIntent);
+        CreateEventActivity.setAlarmindex(alarmIndex);
+        DBdemo.notificationIndex++;
     }
 }

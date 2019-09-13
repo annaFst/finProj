@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.example.bt.activities.CreateEventActivity;
 import com.example.bt.activities.SetAlarmActivity;
@@ -24,8 +25,9 @@ public class DBdemo {
     public static ArrayList<String> allEvents= new ArrayList<String>();
     public static ArrayList<Event> eventArr = new ArrayList<Event> ();
 
-
-
+    public static ArrayList<PendingIntent> notificationArray= new ArrayList<PendingIntent>();
+    public static  int  notificationIndex = 0;
+    public static AlarmManager onTimeNatification;
 
 
 //
