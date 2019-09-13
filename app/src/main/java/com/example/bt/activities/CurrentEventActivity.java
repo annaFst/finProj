@@ -112,9 +112,6 @@ public class CurrentEventActivity extends AppCompatActivity {
         takenAdapter = new takenItemListAdapter(this,R.layout.taken_items, currEvent.getTakenItemsList());
         takenItemsList.setAdapter(takenAdapter);
 
-        membersAdapter = new CustomList (this, R.layout.items_list,(ArrayList)currEvent.getParticipants());
-        membersList.setAdapter(membersAdapter);
-
         items.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

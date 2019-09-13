@@ -1,6 +1,8 @@
 package com.example.bt.activities;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -31,6 +33,7 @@ import com.example.bt.data.Repositories.RepositoryFactory;
 import com.example.bt.models.Contact;
 import com.example.bt.models.Event;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -40,6 +43,13 @@ import java.util.List;
 public class CreateEventActivity extends AppCompatActivity {
 
     private static final int CONTACT_LIST_CODE = 0;
+    private static final int OFFSET = 100;
+    public static ArrayList<PendingIntent> notificationArray= new ArrayList<PendingIntent>();
+    public static  int  notificationIndex = 0;
+    public static AlarmManager onTimeNatification;
+
+    private boolean setNotifi = false;
+
 
     private Button mAddBtn, setAlarmBtn, mDeleteEventBtn;
     private Button mDoneBtn;
@@ -59,6 +69,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private TextView setAlert;
     private int alarmDay=0, alarmMonth=0, alarmYear=0, alarmHour=0, alarmMin=0;
     private boolean selectedDate = false, selectedTime= false;
+    private ArrayList<Contact> contacts;
 
     public static Calendar myCalendar;
     List<Event> inputEvents;
@@ -70,6 +81,7 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
+
         mAddBtn = (Button)findViewById(R.id.addBt);
         mDoneBtn = (Button)findViewById(R.id.doneBtn);
         mDateChoice = (ImageButton)findViewById(R.id.calendarButton);
@@ -145,9 +157,14 @@ public class CreateEventActivity extends AppCompatActivity {
                                 selectedDate = true;
                                 myEvent.setEventDate(LocalDateTimeConverter.
                                         GetLocalDateInEpochSecond(localDate));
+
                             }
                 },
                         myYear, myMonth, myDay);
+
+                if ((!setNotifi) && selectedTime){
+                    setNotification();
+                }
 
                 myDate.show();
             }
@@ -160,8 +177,6 @@ public class CreateEventActivity extends AppCompatActivity {
                 myCalendar = Calendar.getInstance();
                 int hours = myCalendar.get(Calendar.HOUR);
                 int minute = myCalendar.get(Calendar.MINUTE);
-
-
 
                 TimePickerDialog tpd = new TimePickerDialog(CreateEventActivity.this,
                         new TimePickerDialog.OnTimeSetListener() {
@@ -178,6 +193,10 @@ public class CreateEventActivity extends AppCompatActivity {
                             }
                 },
                         hours, minute,true);
+
+                if ((!setNotifi) && selectedDate){
+                    setNotification();
+                }
 
                 tpd.show();
             }
@@ -267,6 +286,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
     public void openSecondScreen(){
         Intent intent  = new Intent(this, ContactsListActivity.class);
+        intent.putExtra("contacts", (Serializable) myEvent.getParticipants());
         startActivityForResult(intent, CONTACT_LIST_CODE);
     }
 
@@ -278,8 +298,8 @@ public class CreateEventActivity extends AppCompatActivity {
         if (requestCode == CONTACT_LIST_CODE) {
             if (resultCode == RESULT_OK) {
 
-                ArrayList<Contact> contacts = (ArrayList)data.getSerializableExtra("contacts");
-                ArrayList<String> phones = data.getStringArrayListExtra("contacts phones");
+                ArrayList<Contact> contacts= (ArrayList)data.getSerializableExtra("contacts");
+                //ArrayList<String> phones = data.getStringArrayListExtra("contacts phones");
 
                 myEvent.setParticipants(contacts);
             }
@@ -292,5 +312,9 @@ public class CreateEventActivity extends AppCompatActivity {
 
     public static int getEventIndex(){
         return myEvent.getEventAlarmIndex();
+    }
+
+    public void setNotification(){
+        
     }
 }

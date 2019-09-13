@@ -52,6 +52,9 @@ public class ContactsListActivity extends AppCompatActivity {
         selectedContacts = (ListView)findViewById(R.id.selectedContactsList);
         Done = (Button)findViewById(R.id.DoneBtn);
 
+        selectedContacts.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        selectedContacts.setStackFromBottom(true);
+
         Done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,10 +63,10 @@ public class ContactsListActivity extends AppCompatActivity {
                     contactsPhoneNumbers.add(con.phoneNumber);
                 }
                 Intent goBack = new Intent();
-                goBack.putStringArrayListExtra("contacts names",(ArrayList)contactsNames);
-                goBack.putExtra("contacts", (Serializable) arraySelectedContactsList);
+               // goBack.putStringArrayListExtra("contacts names",(ArrayList)contactsNames);
+               // goBack.putStringArrayListExtra("contacts phones",(ArrayList)contactsPhoneNumbers);
 
-                goBack.putStringArrayListExtra("contacts phones",(ArrayList)contactsPhoneNumbers);
+                goBack.putExtra("contacts", (Serializable) arraySelectedContactsList);
                 setResult(RESULT_OK, goBack);
                 finish();
 

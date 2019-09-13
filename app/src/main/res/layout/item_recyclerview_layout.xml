@@ -8,13 +8,14 @@
     android:adjustViewBounds="true"
     android:padding="10dp">
 
+
     <TextView
         android:id="@+id/text_list_event"
         android:textStyle="bold"
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:text="@string/textview"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="15sp"
         android:layout_gravity="center_vertical"/>
 </LinearLayout>
