@@ -21,18 +21,17 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d("In Notification:  ", "onReceive: ");
         int alarmId = intent.getIntExtra("index", 0);
         String title = intent.getStringExtra("title");
 
         NotificationManager myNotifi = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel2 = new NotificationChannel(CHANNEL_2_ID, "channel2", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel2 = new NotificationChannel(CHANNEL_2_ID, "channel2", NotificationManager.IMPORTANCE_HIGH);
             channel2.setDescription("This is channel 2");
             myNotifi.createNotificationChannel(channel2);
         }
 
-
+        Log.d("In Notification:  ", "onReceive: ");
         Intent goToMain = new Intent(context, EventsActivity.class);
         goToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

@@ -3,6 +3,7 @@ package com.example.bt.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,9 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
 
         boolean isLoggedIn = mEventsActivityViewModel.checkLoggedInUser();
 
+        String eventTitle = getIntent().getStringExtra("Event");
+        if (eventTitle!=null)
+                //TODO reset item list of eventTitle event
         if (!isLoggedIn)
         {
             openLoginActivity();
@@ -136,6 +140,7 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
             super(context, resource, objects);
             layout = resource;
         }
+
 
 
         @Override

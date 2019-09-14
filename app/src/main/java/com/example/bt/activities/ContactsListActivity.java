@@ -52,6 +52,14 @@ public class ContactsListActivity extends AppCompatActivity {
         selectedContacts.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         selectedContacts.setStackFromBottom(true);
 
+        ArrayList<Contact> tempContacts= (ArrayList)getIntent().getSerializableExtra("contacts");
+        if (!tempContacts.isEmpty()){
+            for(Contact curr: tempContacts){
+                names.add(curr.getContactName());
+                arraySelectedContactsList.add(curr);
+            }
+        }
+
         Done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -29,6 +29,26 @@ public class DBdemo {
     public static  int  notificationIndex = 0;
     public static AlarmManager onTimeNatification;
 
+    public static ArrayList<PendingIntent> updateNotificationArray= new ArrayList<PendingIntent>();
+    public static  int  updateNotificationIndex = 0;
+    public static AlarmManager updateNatification;
+
+
+    public static  void addPedInt( PendingIntent intent ){
+        notificationArray.add(intent);
+    }
+
+    public static int getNotifiIndex(){
+        return notificationIndex;
+    }
+
+    public static void incIndex(){
+        notificationIndex++;
+    }
+
+    public static AlarmManager getAlarmManager(){
+        return onTimeNatification;
+    }
 
 //
 //    public static void  writeToFile (ArrayList<String> events, Context con){

@@ -28,6 +28,7 @@ import com.example.bt.models.Contact;
 import com.example.bt.models.Event;
 import com.example.bt.models.Item;
 
+import java.io.Serializable;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +45,9 @@ public class CurrentEventActivity extends AppCompatActivity {
     static private takenItemListAdapter takenAdapter;
     static private CustomList membersAdapter;
     private ImageButton alarmBtn;
-    private Button mDupEvent;
+    private Button mParticipants;
     private Button mDeleteEventBtn;
+    private List<Item> takenItems = new ArrayList<Item>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -58,12 +60,12 @@ public class CurrentEventActivity extends AppCompatActivity {
         mEventTime = findViewById(R.id.currTime);
         items = (ListView)findViewById(R.id.itemsList);
         takenItemsList = (ListView)findViewById(R.id.takenItemsList);
-        mDupEvent = findViewById(R.id.dupEvent);
+        mParticipants = findViewById(R.id.participants);
         mDeleteEventBtn = (Button)findViewById(R.id.btnDeleteEvent);
         alarmBtn = findViewById(R.id.alarm);
 
         eventId = getIntent().getExtras().getString("eventId");
-        mDupEvent.setOnClickListener(new View.OnClickListener() {
+       /* mDupEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Event temp = new Event();
@@ -71,6 +73,15 @@ public class CurrentEventActivity extends AppCompatActivity {
                 Toast.makeText(CurrentEventActivity.this, "The event has been duplicated", Toast.LENGTH_SHORT).show();
 
                 Intent intent  = new Intent(CurrentEventActivity.this, EventsActivity.class);
+                startActivity(intent);
+
+            }
+        });*/
+        mParticipants.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent  = new Intent(CurrentEventActivity.this, ContactsListActivity.class);
+                intent.putExtra("contacts", (Serializable) currEvent.getParticipants());
                 startActivity(intent);
 
             }
@@ -94,12 +105,28 @@ public class CurrentEventActivity extends AppCompatActivity {
         mEventTime.setText(LocalDateTimeConverter.
                         GetLocalTimeFromSeconds(currEvent.getEventTime()).toString());
 
-
         adapter  = new itemListAdapter(this,R.layout.items_list, currEvent.getItems());
         items.setAdapter(adapter);
 
         takenAdapter = new takenItemListAdapter(this,R.layout.taken_items, currEvent.getTakenItemsList());
         takenItemsList.setAdapter(takenAdapter);
+
+        takenItemsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                Item curr = currEvent.getTakenItemsList().get(position);
+                builder.setMessage(curr.getTakenBy().getName())
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .show();
+
+            }
+        });
+
 
         items.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
@@ -111,8 +138,10 @@ public class CurrentEventActivity extends AppCompatActivity {
                 currEvent.takeItem(position);
                 adapter.notifyDataSetChanged();
                 takenAdapter.notifyDataSetChanged();
+
             }
         });
+
 
         mDeleteEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
