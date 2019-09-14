@@ -36,6 +36,7 @@ import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.data.Repositories.RepositoryFactory;
 import com.example.bt.models.Contact;
 import com.example.bt.models.Event;
+import com.example.bt.models.User;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -96,10 +97,13 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         setRepeat =findViewById(R.id.repeatBtn);
         setRepeatType = findViewById(R.id.repeatType);
 
-
+        User currentUser = CurrentUserAccount.getInstance().getCurrentUser();
         myEvent = new Event();
-        if (!CurrentUserAccount.getInstance().getCurrentUser().getId().isEmpty())
-            myEvent.setEventCreatorId(CurrentUserAccount.getInstance().getCurrentUser().getId());
+        if (!currentUser.getId().isEmpty())
+        {
+            myEvent.setEventCreatorId(currentUser.getId());
+            myEvent.getParticipants().add(new Contact(currentUser.getName(), currentUser.getId()));
+        }
 
         eventName.addTextChangedListener(nameWatcher);
         enterItem.addTextChangedListener(itemWatcher);
