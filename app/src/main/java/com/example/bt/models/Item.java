@@ -2,7 +2,7 @@ package com.example.bt.models;
 
 public class Item {
     private String mName;
-    private Boolean mIsTaken;
+    private Boolean mIsTaken = false;
     private User mTakenBy;
     private int mQuantity;
 

@@ -49,6 +49,17 @@ public class ContactsListActivity extends AppCompatActivity {
         selectedContacts = (ListView)findViewById(R.id.selectedContactsList);
         Done = (Button)findViewById(R.id.DoneBtn);
 
+        selectedContacts.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        selectedContacts.setStackFromBottom(true);
+
+        ArrayList<Contact> tempContacts= (ArrayList)getIntent().getSerializableExtra("contacts");
+        if (!tempContacts.isEmpty()){
+            for(Contact curr: tempContacts){
+                names.add(curr.getContactName());
+                arraySelectedContactsList.add(curr);
+            }
+        }
+
         Done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +125,38 @@ public class ContactsListActivity extends AppCompatActivity {
                 }
             });
 
+            /*
+            String[] from = {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER , ContactsContract.CommonDataKinds.Phone._ID};
+            int[] to = {R.id.contact_name, R.id.contact_number};
+
+            //android.R.layout.simple_list_item_2
+            SimpleCursorAdapter sca = new SimpleCursorAdapter(this, R.layout.contact_list_view, cur, from, to);
+            contacts.setAdapter(sca);
+
+            cur.moveToFirst();
+            Cursor cur2 = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+            while(cur.moveToNext()){
+                String currContactName = cur.getString(cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                cur2.moveToFirst();
+                while(cur2.moveToNext()){
+                    String check = cur2.getString(cur2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                    if (currContactName.equals(check)){
+                        int pos = cur2.getPosition();
+
+                    }
+                }
+            }
+            contacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Cursor tempCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+                    tempCur.moveToPosition(position);
+                    String phoneNumber = tempCur.getString(tempCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String memberName = tempCur.getString(tempCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                    check.setText(memberName);
+                    tempCur.close();
+                }
+            });*/
             contacts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         }
 

@@ -1,6 +1,8 @@
 package com.example.bt.activities;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -24,43 +26,52 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 //import android.support.v7.app.AppCompatActivity;
 
+import com.example.bt.DBdemo;
+import com.example.bt.NotificationReceiver;
 import com.example.bt.R;
+import com.example.bt.RepeatDialog;
+import com.example.bt.UpdateReceiver;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.data.Repositories.RepositoryFactory;
 import com.example.bt.models.Contact;
 import com.example.bt.models.Event;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class CreateEventActivity extends AppCompatActivity {
+public class CreateEventActivity extends AppCompatActivity implements RepeatDialog.repeatDialogListener {
 
     private static final int CONTACT_LIST_CODE = 0;
+    private static final int OFFSET = 100;
+    private static final int UPDATE_EVENT_OFFSET = 200;
+    public static Calendar myCalendar;
 
-    private Button mAddBtn, setAlarmBtn, mDeleteEventBtn;
-    private Button mDoneBtn;
-    private ImageButton mDateChoice;
-    private ImageButton mTimeBtn;
+
+    private boolean setNotifi = false;
+    private Button mAddBtn, setAlarmBtn, mDeleteEventBtn, mDoneBtn;
+    private ImageButton mDateChoice,mTimeBtn;
     private String title = null ;
-    private EditText eventName;
-    private EditText date;
+    private EditText eventName,date,mTime;
     private EditText enterItem;
-    private EditText mTime;
     private ImageButton addItem;
     private ListView itemListView;
     static private ArrayAdapter<String> adapter;
     private static Event myEvent;
     private String item = null;
     private Switch onOffAlert;
-    private TextView setAlert;
+    private TextView setRepeat, setRepeatType;
     private int alarmDay=0, alarmMonth=0, alarmYear=0, alarmHour=0, alarmMin=0;
     private boolean selectedDate = false, selectedTime= false;
+    private ArrayList<Contact> contacts;
+    private long interval;
 
-    public static Calendar myCalendar;
+    private PendingIntent alarmIntent;
+    private PendingIntent updateIntent;
     List<Event> inputEvents;
     //ListView showToScreen;
 
@@ -70,6 +81,7 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
+
         mAddBtn = (Button)findViewById(R.id.addBt);
         mDoneBtn = (Button)findViewById(R.id.doneBtn);
         mDateChoice = (ImageButton)findViewById(R.id.calendarButton);
@@ -81,6 +93,8 @@ public class CreateEventActivity extends AppCompatActivity {
         itemListView = (ListView)findViewById(R.id.itemList);
         mTime = findViewById(R.id.timeStr);
         onOffAlert = findViewById(R.id.alertSwitch);
+        setRepeat =findViewById(R.id.repeatBtn);
+        setRepeatType = findViewById(R.id.repeatType);
 
 
         myEvent = new Event();
@@ -89,6 +103,13 @@ public class CreateEventActivity extends AppCompatActivity {
 
         eventName.addTextChangedListener(nameWatcher);
         enterItem.addTextChangedListener(itemWatcher);
+
+        setRepeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        });
 
         mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +121,10 @@ public class CreateEventActivity extends AppCompatActivity {
         mDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (selectedTime && selectedDate){
+                    Log.d("DEBAG", "onClick: click Done button ");
+                    setNotification();
+                }
                 updateDb(myEvent);
                 Intent intent  = new Intent(CreateEventActivity.this, EventsActivity.class);
                 startActivity(intent);
@@ -145,6 +170,7 @@ public class CreateEventActivity extends AppCompatActivity {
                                 selectedDate = true;
                                 myEvent.setEventDate(LocalDateTimeConverter.
                                         GetLocalDateInEpochSecond(localDate));
+
                             }
                 },
                         myYear, myMonth, myDay);
@@ -160,8 +186,6 @@ public class CreateEventActivity extends AppCompatActivity {
                 myCalendar = Calendar.getInstance();
                 int hours = myCalendar.get(Calendar.HOUR);
                 int minute = myCalendar.get(Calendar.MINUTE);
-
-
 
                 TimePickerDialog tpd = new TimePickerDialog(CreateEventActivity.this,
                         new TimePickerDialog.OnTimeSetListener() {
@@ -211,7 +235,12 @@ public class CreateEventActivity extends AppCompatActivity {
         });
     }
 
-    private void updateDb(Event myEvent) {
+    private void openDialog(){
+        RepeatDialog dialog = new RepeatDialog();
+        dialog.show(getSupportFragmentManager(),"repeat dialog");
+    }
+
+    public void updateDb(Event myEvent) {
         // Add new event
         String eventKey = RepositoryFactory.
                 GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository)
@@ -267,6 +296,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
     public void openSecondScreen(){
         Intent intent  = new Intent(this, ContactsListActivity.class);
+        intent.putExtra("contacts", (Serializable) myEvent.getParticipants());
         startActivityForResult(intent, CONTACT_LIST_CODE);
     }
 
@@ -291,4 +321,130 @@ public class CreateEventActivity extends AppCompatActivity {
     public static int getEventIndex(){
         return myEvent.getEventAlarmIndex();
     }
+
+    public void setNotification(){
+        Log.d("DEBAG check", "onClick: in set notification ");
+
+        Calendar alarmTime = Calendar.getInstance();
+        alarmTime.set(Calendar.HOUR_OF_DAY, alarmHour);
+        alarmTime.set(Calendar.MINUTE, alarmMin);
+        alarmTime.set(Calendar.SECOND, 0);
+        alarmTime.set(Calendar.DAY_OF_MONTH,alarmDay);
+        alarmTime.set(Calendar.MONTH,alarmMonth);
+        alarmTime.set(Calendar.YEAR,alarmYear);
+
+        int alarmIndex = DBdemo.notificationIndex + OFFSET;
+        long startAlarm = alarmTime.getTimeInMillis();
+
+        Intent intent = new Intent (CreateEventActivity.this, NotificationReceiver.class);
+        intent.putExtra("index", alarmIndex);
+        intent.putExtra("title", myEvent.getName());
+
+        alarmIntent = PendingIntent.getBroadcast(getApplicationContext(),alarmIndex,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        if (alarmIndex  < OFFSET + 1 ) {
+            DBdemo.onTimeNatification = (AlarmManager)getSystemService(ALARM_SERVICE);
+        }
+        if (myEvent.getRepeat()) {
+            Log.d("DEBAG", "in if is a repeat");
+            switch (myEvent.getRepeatType()) {
+
+                    case "none":
+                        break;
+                    case "Daily":
+                        DBdemo.onTimeNatification.setRepeating(AlarmManager.RTC_WAKEUP,alarmTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY,alarmIntent);
+                        break;
+                    case "Weekly":
+                        DBdemo.onTimeNatification.setRepeating(AlarmManager.RTC_WAKEUP,alarmTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY*7,alarmIntent);
+                        break;
+                    case "Monthly":
+                        if (alarmMonth==1 || alarmMonth==3 || alarmMonth==5 || alarmMonth==7 || alarmMonth==8 || alarmMonth==10 || alarmMonth==12){
+                            interval  = AlarmManager.INTERVAL_DAY*31;
+                        }else if (alarmMonth == 2 ){
+                            interval  = AlarmManager.INTERVAL_DAY*28;
+                        }
+                        else{
+                            interval  = AlarmManager.INTERVAL_DAY*30;
+                        }
+                        DBdemo.onTimeNatification.setRepeating(AlarmManager.RTC_WAKEUP,alarmTime.getTimeInMillis(),interval,alarmIntent);
+                        break;
+
+            }
+        }
+        else{
+            Log.d("DEBAG", "no enter the if -  is a repeat");
+            DBdemo.onTimeNatification.set(AlarmManager.RTC_WAKEUP,startAlarm,alarmIntent);
+        }
+
+        DBdemo.notificationArray.add(alarmIntent);
+        CreateEventActivity.setAlarmindex(alarmIndex);
+        myEvent.setmNotificationIndex(DBdemo.notificationIndex);
+        DBdemo.notificationIndex++;
+    }
+
+    @Override
+    public void applyChoice(boolean none ,boolean daily, boolean weekly, boolean monyhly) {
+        if (none){
+            Log.d("return from dialog", "none is true");
+            setRepeatType.setText("None");
+            myEvent.setRepeat(false);
+        }
+        if(daily){
+            Log.d("return from dialog", "daily is true");
+            setRepeatType.setText("Daily");
+            myEvent.setRepeat(true);
+            myEvent.setRepeatType("Daily");
+        }
+        if(weekly){
+            Log.d("return from dialog", "weekly is true");
+            setRepeatType.setText("Weekly");
+            myEvent.setRepeat(true);
+            myEvent.setRepeatType("Weekly");
+        }
+        if(monyhly){
+            Log.d("return from dialog", "monthly is true");
+            setRepeatType.setText("Monthly");
+            myEvent.setRepeat(true);
+            myEvent.setRepeatType("Monthly");
+        }
+    }
+/*
+    public void setUpdateNotification(String type){
+
+
+        Calendar alarmTime = Calendar.getInstance();
+        alarmTime.set(Calendar.HOUR_OF_DAY, alarmHour);
+        alarmTime.set(Calendar.MINUTE, alarmMin);
+        alarmTime.set(Calendar.SECOND, 0);
+        alarmTime.set(Calendar.DAY_OF_MONTH,alarmDay);
+        alarmTime.set(Calendar.MONTH,alarmMonth);
+        alarmTime.set(Calendar.YEAR,alarmYear);
+
+        int alarmIndex = DBdemo.notificationIndex + OFFSET;
+        long startAlarm = alarmTime.getTimeInMillis();
+
+        Intent intent = new Intent (CreateEventActivity.this, UpdateReceiver.class);
+        intent.putExtra("index", alarmIndex);
+        intent.putExtra("title", myEvent.getName());
+
+        updateIntent = PendingIntent.getBroadcast(getApplicationContext(),alarmIndex,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        if (alarmIndex  < UPDATE_EVENT_OFFSET+1 ) {
+            DBdemo.updateNatification = (AlarmManager)getSystemService(ALARM_SERVICE);
+        }
+
+        switch(type){
+            case "Daily":
+                //DBdemo.updateNatification.setRepeating(AlarmManager.RTC,alarmTime.getTimeInMillis(),AlarmManager.INTERVAL_FIFTEEN_MINUTES,updateIntent);
+                break;
+            case "Weekly":
+                //myAlarm.setRepeating(AlarmManager.RTC,alarmTime.getTimeInMillis(),(AlarmManager.INTERVAL_FIFTEEN_MINUTES*2),alarmIn);
+                break;
+            case "Monthly":
+                //myAlarm.setRepeating(AlarmManager.RTC,alarmTime.getTimeInMillis(),(AlarmManager.INTERVAL_FIFTEEN_MINUTES*2),alarmIn);
+                break;
+        }
+
+        DBdemo.updateNotificationArray.add(updateIntent);
+        CreateEventActivity.setAlarmindex(alarmIndex);
+        DBdemo.updateNotificationIndex++;
+    }*/
 }

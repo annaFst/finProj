@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f0ffa0"
@@ -11,50 +12,55 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         tools:context=".activities.CurrentEventActivity">
 
 
-        <EditText
+        <TextView
             android:id="@+id/eventName"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:clickable="false"
             android:cursorVisible="false"
             android:ems="10"
+            android:gravity="center_vertical"
             android:importantForAutofill="no"
             android:inputType="textPersonName"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:textStyle="bold|italic" />
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:orientation="horizontal">
 
-            <EditText
+            <TextView
                 android:id="@+id/currDate"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="8"
                 android:cursorVisible="false"
                 android:ems="10"
                 android:hint="@string/date"
                 android:inputType="date"
                 android:textColor="@color/white"
                 android:textColorHint="@color/grey"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:gravity="center_vertical"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/currTime"
                 android:layout_width="wrap_content"
-                android:layout_height="78dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
                 android:clickable="false"
                 android:cursorVisible="false"
                 android:ems="10"
@@ -62,24 +68,49 @@
                 android:inputType="time"
                 android:textColor="@color/white"
                 android:textColorHint="@color/grey"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:gravity="center_vertical"/>
 
             <ImageButton
                 android:id="@+id/alarm"
-                android:layout_width="wrap_content"
+                android:layout_width="54dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:background="@color/none"
                 android:contentDescription="TODO"
                 android:enabled="false"
+                android:padding="60dp"
                 app:srcCompat="@android:drawable/ic_popup_reminder" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="Repeat"
+            android:textColor="@color/greyLigth" />
+
+         <TextView
+            android:id="@+id/repeatType"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/blue"
+             />
+    </LinearLayout>
 
         <View
             android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="7dp"
+            android:layout_marginTop="10dp"
             android:background="?android:attr/listDivider" />
 
         <LinearLayout
@@ -115,47 +146,41 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="207dp"
             android:orientation="horizontal">
 
             <ListView
                 android:id="@+id/itemsList"
-                android:layout_width="206dp"
-                android:layout_height="260dp">
+                android:layout_width="202dp"
+                android:layout_height="260dp"
+                android:layout_weight="5">
 
             </ListView>
 
             <ListView
                 android:id="@+id/takenItemsList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_width="202dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="20sp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:inputType="textPersonName"
-            android:text="@string/members"
-            android:textColor="@color/green"
-            android:textSize="14sp" />
 
-        <ListView
-            android:id="@+id/membersList"
+        <View
+            android:id="@+id/divider3"
             android:layout_width="match_parent"
-            android:layout_height="118dp">
-
-        </ListView>
+            android:layout_height="7dp"
+            android:layout_marginTop="10dp"
+            android:background="?android:attr/listDivider" />
 
 
         <Button
-            android:id="@+id/dupEvent"
+            android:id="@+id/participants"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
             android:background="@drawable/button_style"
-            android:text="@string/duplicate_this_event"
+            android:text="Participants"
             android:textColor="@color/white" />
 
         <Button
@@ -164,9 +189,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@color/none"
             android:baselineAligned="false"
-            android:text="@string/delete_event" />
+            android:text="@string/delete_event"
+            android:textColor="@color/red" />
 
 
     </LinearLayout>
-</ScrollView>
+</LinearLayout>

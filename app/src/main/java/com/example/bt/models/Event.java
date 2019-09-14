@@ -12,6 +12,7 @@ public class Event {
     private String mEventId;
     private String mEventName = "";
     private int mEventAlarmIndex = -1;
+    private int mNotificationIndex = -1;
     private List<Item> mItemList = new ArrayList<>();
     private List<Item> mTakenItemsList = new ArrayList<>();
     private List<Contact> participants = new ArrayList<>();
@@ -19,6 +20,32 @@ public class Event {
     private long eventTime; // Seconds of day
     private String mEventCreatorId;
     private boolean admin = false;
+    private boolean isRepeat = false;
+    private String repeatType ;
+
+    public int getmNotificationIndex() {
+        return mNotificationIndex;
+    }
+
+    public void setmNotificationIndex(int mNotificationIndex) {
+        this.mNotificationIndex = mNotificationIndex;
+    }
+
+    public void setRepeat(boolean repeat){
+        isRepeat = repeat;
+    }
+
+    public boolean getRepeat(){
+        return isRepeat;
+    }
+
+    public void setRepeatType (String repeatTypeStr){
+        repeatType =repeatTypeStr;
+    }
+
+    public String getRepeatType(){
+        return repeatType;
+    }
 
     public void setAlarmIndex(int i){
         mEventAlarmIndex = i;

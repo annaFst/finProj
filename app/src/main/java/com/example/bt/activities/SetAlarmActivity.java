@@ -47,15 +47,8 @@ public class SetAlarmActivity extends AppCompatActivity {
     String title;
     boolean isDaySelected, isTimeSelected;
 
-    private EditText Dcheck;
-    private EditText Tcheck;
 
     DatePickerDialog myDate;
-
-   /*
-    public static AlarmManager getMyAlarm(){
-        return myAlarm;
-    }*/
 
 
     @Override
@@ -71,8 +64,6 @@ public class SetAlarmActivity extends AppCompatActivity {
         mTime = (EditText)findViewById(R.id.timeStr);
         setAlarmBt = findViewById(R.id.setBt);
         delAlarmBt = findViewById(R.id.cancelBt);
-        Dcheck = (EditText)findViewById(R.id.dateChack);
-        Tcheck = (EditText)findViewById(R.id.timeCheck);
 
         //larmTimePicker = findViewById(R.id.timePicker);
         //alarmDatePicker = findViewById(R.id.datePicker);
@@ -146,11 +137,6 @@ public class SetAlarmActivity extends AppCompatActivity {
         setAlarmBt.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-               /* int day = alarmDatePicker.getDayOfMonth();
-                int month = alarmDatePicker.getMonth();
-                int year = alarmDatePicker.getYear();
-                int hour = alarmTimePicker.getCurrentHour();
-                int minute = alarmTimePicker.getCurrentMinute();*/
 
                 Calendar alarmTime = Calendar.getInstance();
                 alarmTime.set(Calendar.HOUR_OF_DAY, alarmHour);

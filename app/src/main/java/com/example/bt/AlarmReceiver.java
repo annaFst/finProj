@@ -40,10 +40,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         notification.setContentTitle(title);
         notification.setContentText(title);
         notification.setAutoCancel(true);
-        //notification.setWhen(System.currentTimeMillis());
+        notification.setWhen(System.currentTimeMillis());
         notification.setPriority(Notification.PRIORITY_MAX);
         notification.setCategory(Notification.CATEGORY_EVENT);
-       // notification.setDefaults(Notification.DEFAULT_ALL);
 
         myNotifi.notify(alarmId,notification.build());
 
