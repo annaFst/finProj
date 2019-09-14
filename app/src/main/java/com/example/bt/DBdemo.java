@@ -50,6 +50,19 @@ public class DBdemo {
         return onTimeNatification;
     }
 
+    public static void writeToFile(Context context, String data, String fileName)
+    {
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            outputStream.write(data.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 //
 //    public static void  writeToFile (ArrayList<String> events, Context con){
 //        try {
