@@ -77,7 +77,6 @@ public class CurrentEventActivity extends AppCompatActivity {
             }
         });
 
-
         alarmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +93,6 @@ public class CurrentEventActivity extends AppCompatActivity {
                         GetLocalDateFromEpochSeconds(currEvent.getEventDate()).format(formatter));
         mEventTime.setText(LocalDateTimeConverter.
                         GetLocalTimeFromSeconds(currEvent.getEventTime()).toString());
-
 
         adapter  = new itemListAdapter(this,R.layout.items_list, currEvent.getItems());
         items.setAdapter(adapter);

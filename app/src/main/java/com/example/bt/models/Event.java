@@ -4,8 +4,6 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.bt.DBdemo;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,7 +131,6 @@ public class Event {
             }
         }
 
-        DBdemo.eventArr.add(res);
         //EventsActivity.updateList(res.getName());
     }
 

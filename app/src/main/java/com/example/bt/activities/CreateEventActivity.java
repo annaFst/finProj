@@ -276,11 +276,9 @@ public class CreateEventActivity extends AppCompatActivity {
 
         // Check if it is the contact list activity with an OK result
         if (requestCode == CONTACT_LIST_CODE) {
-            if (resultCode == RESULT_OK) {
-
+            if (resultCode == RESULT_OK)
+            {
                 ArrayList<Contact> contacts = (ArrayList)data.getSerializableExtra("contacts");
-                ArrayList<String> phones = data.getStringArrayListExtra("contacts phones");
-
                 myEvent.setParticipants(contacts);
             }
         }
