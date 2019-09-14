@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bt.R;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
+import com.example.bt.data.Repositories.RepositoryFactory;
 import com.example.bt.models.Contact;
 import com.example.bt.models.Event;
 import com.example.bt.models.Item;
@@ -126,7 +127,6 @@ public class CurrentEventActivity extends AppCompatActivity {
             }
         });
 
-
         items.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -141,7 +141,6 @@ public class CurrentEventActivity extends AppCompatActivity {
             }
         });
 
-
         mDeleteEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,6 +153,11 @@ public class CurrentEventActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
+        finish();
+    }
 
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         @Override
@@ -164,6 +168,9 @@ public class CurrentEventActivity extends AppCompatActivity {
                     CurrentUserAccount.getInstance().getCurrentUser().getEvents().remove(currEvent.getEventId());
                     CurrentUserAccount.getInstance().GetCurrentUserEventList().remove(currEvent);
                     CurrentUserAccount.getInstance().GetEventRepository().remove(currEvent);
+                    RepositoryFactory.
+                            GetRepositoryInstance(RepositoryFactory.RepositoryType.UserRepository)
+                            .update(CurrentUserAccount.getInstance().getCurrentUser());
                     finish();
                     break;
 
@@ -186,7 +193,7 @@ public class CurrentEventActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View view, ViewGroup parent) {
             LayoutInflater inflater = CurrentEventActivity.this.getLayoutInflater();
-            View rowView= inflater.inflate(R.layout.member_list, null, true);
+            View rowView = inflater.inflate(R.layout.member_list, parent, true);
             TextView txtTitle = (TextView) rowView.findViewById(R.id.nameOfContact);
             txtTitle.setText(members.get(position).getContactName());
             return rowView;

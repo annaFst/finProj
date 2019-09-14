@@ -33,7 +33,6 @@ import java.util.Set;
 
 public class EventsActivity extends AppCompatActivity implements EventAdapter.ClickListener<Event> {
 
-
     public static boolean updated = false;
 
     private Button addEvent;
