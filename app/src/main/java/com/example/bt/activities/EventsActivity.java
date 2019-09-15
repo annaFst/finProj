@@ -89,12 +89,14 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
             @Override
             public void onChanged(Set<Event> events) {
                 EventAdapter eventAdapter = new EventAdapter(new ArrayList<>(events));
-                if (!reSetNotifi) {
+                /*if (!reSetNotifi) {
                     for (Event event : events) {
-                        reSetNotifi = true;
-                        reSetNotification(event);
+                        if (event.isActive()) {
+                            reSetNotifi = true;
+                            //reSetNotification(event);
+                        }
                     }
-                }
+                }*/
                 eventAdapter.setOnItemClickListener(EventsActivity.this);
                 mRecyclerView.setAdapter(eventAdapter);
             }

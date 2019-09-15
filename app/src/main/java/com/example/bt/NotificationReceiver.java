@@ -13,6 +13,9 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.example.bt.activities.EventsActivity;
+import com.example.bt.app.CurrentUserAccount;
+import com.example.bt.models.Event;
+import com.example.bt.models.Item;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
@@ -24,6 +27,22 @@ public class NotificationReceiver extends BroadcastReceiver {
         int alarmId = intent.getIntExtra("index", 0);
         String title = intent.getStringExtra("title");
 
+       /*
+        String eventId = intent.getExtras().getString("eventId");
+        Event currEvent = CurrentUserAccount.getInstance().GetEventIfPresent(eventId);
+
+        if (currEvent.getIsRepeat()){
+           String type = currEvent.getRepeatType();
+           for (Item item : currEvent.getItems()){
+               item.setTaken(false);
+           }
+        }
+        else{
+            currEvent.setActive(false);
+
+        }
+        CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
+*/
         NotificationManager myNotifi = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel2 = new NotificationChannel(CHANNEL_2_ID, "channel2", NotificationManager.IMPORTANCE_HIGH);

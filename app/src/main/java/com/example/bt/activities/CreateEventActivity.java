@@ -342,12 +342,14 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         Intent intent = new Intent (CreateEventActivity.this, NotificationReceiver.class);
         intent.putExtra("index", alarmIndex);
         intent.putExtra("title", myEvent.getName());
+        intent.putExtra("eventId", myEvent.getEventId());
+
 
         alarmIntent = PendingIntent.getBroadcast(getApplicationContext(),alarmIndex,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmIndex  < DBdemo.OFFSET + 1 ) {
             DBdemo.onTimeNatification = (AlarmManager)getSystemService(ALARM_SERVICE);
         }
-        if (myEvent.getRepeat()) {
+        if (myEvent.getIsRepeat()) {
             Log.d("DEBAG", "in if is a repeat");
             switch (myEvent.getRepeatType()) {
 
