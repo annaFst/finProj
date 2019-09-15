@@ -4,16 +4,19 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.bt.activities.CreateEventActivity;
 import com.example.bt.activities.SetAlarmActivity;
 import com.example.bt.models.Event;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -52,15 +55,41 @@ public class DBdemo {
 
     public static void writeToFile(Context context, String data, String fileName)
     {
-        FileOutputStream outputStream;
+        String file_name = fileName.concat(".txt");
 
         try {
-            outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            FileOutputStream outputStream = context.openFileOutput(file_name, Context.MODE_PRIVATE);
             outputStream.write(data.getBytes());
             outputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    public static ArrayList<String> readFromFile(Context context, String fileName)
+    {
+        String file_name = fileName.concat(".txt");
+        ArrayList<String> res = new ArrayList<>();
+        String curr;
+
+        try{
+            FileInputStream fileInputStream = context.openFileInput(file_name);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
+            curr = bufferedReader.readLine();
+            while (curr!=null) {
+                res.add(curr);
+                curr = bufferedReader.readLine();
+            }
+            fileInputStream.close();
+            bufferedReader.close();
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return res;
     }
 
 //

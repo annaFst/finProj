@@ -21,7 +21,7 @@ public class Event {
     private String mEventCreatorId;
     private boolean admin = false;
     private boolean isRepeat = false;
-    private String repeatType ;
+    private String repeatType = "None" ;
 
     public int getmNotificationIndex() {
         return mNotificationIndex;

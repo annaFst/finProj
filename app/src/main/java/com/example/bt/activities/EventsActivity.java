@@ -18,14 +18,18 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bt.DBdemo;
 import com.example.bt.R;
 import com.example.bt.app.CurrentUserAccount;
+import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.models.Event;
 import com.example.bt.ui.EventAdapter;
 import com.example.bt.viewmodels.EventsActivityViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -60,6 +64,7 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
         boolean isLoggedIn = mEventsActivityViewModel.checkLoggedInUser();
 
         String eventTitle = getIntent().getStringExtra("Event");
+
         if (eventTitle!=null)
                 //TODO reset item list of eventTitle event
         if (!isLoggedIn)
@@ -77,6 +82,9 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
             @Override
             public void onChanged(Set<Event> events) {
                 EventAdapter eventAdapter = new EventAdapter(new ArrayList<>(events));
+                for( Event event: events){
+                    reSetNotification(event);
+                }
                 eventAdapter.setOnItemClickListener(EventsActivity.this);
                 mRecyclerView.setAdapter(eventAdapter);
             }
@@ -167,6 +175,16 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
 
     }
 
+    private void  reSetNotification( Event event) {
+        Log.d("DEBAG EVENTS ACTIVITY", "the event is  " + event.getName());
+        long date = (event.getEventDate());
+        Log.d("DEBAG EVENTS ACTIVITY", "the long representishion od date   " + date);
+
+        ArrayList<String> res = DBdemo.readFromFile(EventsActivity.this,event.getName());
+        for ( String curr: res) {
+            Log.d("DEBAG EVENTS ACTIVITY", "the string from file is " + curr);
+        }
+    }
 
 }
 

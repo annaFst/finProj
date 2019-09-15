@@ -352,7 +352,7 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
             Log.d("DEBAG", "in if is a repeat");
             switch (myEvent.getRepeatType()) {
 
-                    case "none":
+                    case "None":
                         break;
                     case "Daily":
                         DBdemo.onTimeNatification.setRepeating(AlarmManager.RTC_WAKEUP,alarmTime.getTimeInMillis(),AlarmManager.INTERVAL_DAY,alarmIntent);
@@ -382,6 +382,9 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         DBdemo.notificationArray.add(alarmIntent);
         CreateEventActivity.setAlarmindex(alarmIndex);
         myEvent.setmNotificationIndex(DBdemo.notificationIndex);
+        String saveNotification = alarmHour+ "\n" + alarmMin+"\n" + alarmDay+"\n" + alarmMonth+"\n" + alarmYear + "\n"+ myEvent.getRepeatType()+"\n" + DBdemo.notificationIndex ;
+        Log.d("DEBAG ", saveNotification);
+        DBdemo.writeToFile(this,saveNotification,myEvent.getName());
         DBdemo.notificationIndex++;
     }
 
