@@ -16,7 +16,7 @@ public class EventEntity {
     private long eventTime;
     private List<Contact> participants;
     private List<Item> items;
-    private String creator;
+    private String eventCreatorId;
 
     public EventEntity() {
         participants = new ArrayList<>();
@@ -63,12 +63,12 @@ public class EventEntity {
         this.items = mEventItems;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getEventCreatorId() {
+        return eventCreatorId;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setEventCreatorId(String creator) {
+        this.eventCreatorId = creator;
     }
 
     public long getEventTime() {
