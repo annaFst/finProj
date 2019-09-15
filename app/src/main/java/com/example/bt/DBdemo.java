@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class DBdemo {
+    public static final int OFFSET = 100;
 
     public static final String FILENAME = "eventsListInfo.dat";
     public static ArrayList<String> allEvents= new ArrayList<String>();

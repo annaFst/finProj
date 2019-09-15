@@ -1,5 +1,7 @@
 package com.example.bt.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bt.DBdemo;
+import com.example.bt.NotificationReceiver;
 import com.example.bt.R;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
@@ -31,13 +34,17 @@ import com.google.firebase.auth.FirebaseUser;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
+
+import static java.lang.Integer.parseInt;
 
 
 public class EventsActivity extends AppCompatActivity implements EventAdapter.ClickListener<Event> {
 
     public static boolean updated = false;
+    private static boolean reSetNotifi = false;
 
     private Button addEvent;
     private Button btnLogout;
@@ -82,8 +89,11 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
             @Override
             public void onChanged(Set<Event> events) {
                 EventAdapter eventAdapter = new EventAdapter(new ArrayList<>(events));
-                for( Event event: events){
-                    reSetNotification(event);
+                if (!reSetNotifi) {
+                    for (Event event : events) {
+                        reSetNotifi = true;
+                        reSetNotification(event);
+                    }
                 }
                 eventAdapter.setOnItemClickListener(EventsActivity.this);
                 mRecyclerView.setAdapter(eventAdapter);
@@ -176,14 +186,80 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
     }
 
     private void  reSetNotification( Event event) {
-        Log.d("DEBAG EVENTS ACTIVITY", "the event is  " + event.getName());
-        long date = (event.getEventDate());
-        Log.d("DEBAG EVENTS ACTIVITY", "the long representishion od date   " + date);
-
+        int hour ;
+        int minute ;
+        int day ;
+        int month ;
+        int year ;
+        String type ;
+        int index ;
+        // in the array :
+        //alarmHour, alarmMin,  alarmDay, alarmMonth, alarmYear, RepeatType(), notificationIndex
         ArrayList<String> res = DBdemo.readFromFile(EventsActivity.this,event.getName());
-        for ( String curr: res) {
-            Log.d("DEBAG EVENTS ACTIVITY", "the string from file is " + curr);
+        if (!res.isEmpty()) {
+            hour = parseInt(res.get(0));
+            minute = parseInt(res.get(1));
+            day = parseInt(res.get(2));
+            month = parseInt(res.get(3));
+            year = parseInt(res.get(4));
+            type = res.get(5);
+            index = parseInt(res.get(6));
+            //Log.d("DEBAG EVENTS ACTIVITY", "the string from file is " + hour + " " + minute + " " + day + " " + month + " " + year + " " + type + " " + index);
+
+
+            Calendar alarmTime = Calendar.getInstance();
+            alarmTime.set(Calendar.HOUR_OF_DAY, hour);
+            alarmTime.set(Calendar.MINUTE, minute);
+            alarmTime.set(Calendar.SECOND, 0);
+            alarmTime.set(Calendar.DAY_OF_MONTH, day);
+            alarmTime.set(Calendar.MONTH, month);
+            alarmTime.set(Calendar.YEAR, year);
+
+            int alarmIndex = index+ DBdemo.OFFSET;
+            long startAlarm = alarmTime.getTimeInMillis();
+
+            Intent intent = new Intent(EventsActivity.this, NotificationReceiver.class);
+            intent.putExtra("index", alarmIndex);
+            intent.putExtra("title", event.getName());
+
+            PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), alarmIndex, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            if (alarmIndex < DBdemo.OFFSET + 1) {
+                DBdemo.onTimeNatification = (AlarmManager) getSystemService(ALARM_SERVICE);
+            }
+
+            switch (type) {
+
+                    case "None":
+                        DBdemo.onTimeNatification.set(AlarmManager.RTC_WAKEUP, startAlarm, alarmIntent);
+                        break;
+                    case "Daily":
+                        DBdemo.onTimeNatification.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
+                        break;
+                    case "Weekly":
+                        DBdemo.onTimeNatification.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, alarmIntent);
+                        break;
+                    case "Monthly":
+                        long interval;
+                        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+                            interval = AlarmManager.INTERVAL_DAY * 31;
+                        } else if (month == 2) {
+                            interval = AlarmManager.INTERVAL_DAY * 28;
+                        } else {
+                            interval = AlarmManager.INTERVAL_DAY * 30;
+                        }
+                        DBdemo.onTimeNatification.setRepeating(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), interval, alarmIntent);
+                        break;
+            }
+
+            DBdemo.notificationArray.add(alarmIntent);
+            CreateEventActivity.setAlarmindex(alarmIndex);
+            event.setNotificationIndex(index);
+            String saveNotification = hour + "\n" + minute + "\n" + day + "\n" + month + "\n" + year + "\n" + type + "\n" + index;
+            Log.d("DEBAG ", saveNotification);
+            DBdemo.writeToFile(this, saveNotification, event.getName());
+            DBdemo.notificationIndex++;
         }
+
     }
 
 }

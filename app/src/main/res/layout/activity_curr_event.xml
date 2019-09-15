@@ -92,8 +92,9 @@
             android:layout_gravity="left"
             android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
-            android:text="Repeat"
-            android:textColor="@color/greyLigth" />
+            android:text="Repeat: "
+            android:textColor="@color/white"
+            android:textSize="16dp"/>
 
          <TextView
             android:id="@+id/repeatType"
@@ -103,7 +104,7 @@
             android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
             android:textColor="@color/blue"
-             />
+             android:textSize="14dp"/>
     </LinearLayout>
 
         <View

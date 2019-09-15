@@ -48,7 +48,6 @@ import java.util.List;
 public class CreateEventActivity extends AppCompatActivity implements RepeatDialog.repeatDialogListener {
 
     private static final int CONTACT_LIST_CODE = 0;
-    private static final int OFFSET = 100;
     private static final int UPDATE_EVENT_OFFSET = 200;
     public static Calendar myCalendar;
 
@@ -337,7 +336,7 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         alarmTime.set(Calendar.MONTH,alarmMonth);
         alarmTime.set(Calendar.YEAR,alarmYear);
 
-        int alarmIndex = DBdemo.notificationIndex + OFFSET;
+        int alarmIndex = DBdemo.notificationIndex + DBdemo.OFFSET;
         long startAlarm = alarmTime.getTimeInMillis();
 
         Intent intent = new Intent (CreateEventActivity.this, NotificationReceiver.class);
@@ -345,7 +344,7 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         intent.putExtra("title", myEvent.getName());
 
         alarmIntent = PendingIntent.getBroadcast(getApplicationContext(),alarmIndex,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-        if (alarmIndex  < OFFSET + 1 ) {
+        if (alarmIndex  < DBdemo.OFFSET + 1 ) {
             DBdemo.onTimeNatification = (AlarmManager)getSystemService(ALARM_SERVICE);
         }
         if (myEvent.getRepeat()) {
