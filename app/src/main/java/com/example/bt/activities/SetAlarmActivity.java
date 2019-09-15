@@ -179,39 +179,4 @@ public class SetAlarmActivity extends AppCompatActivity {
             }
         });
     }
-
-
-/*
-    @Override
-    public void onClick(View view){
-        final String myActivityTitle = getIntent().getStringExtra("title");
-
-        Intent intent = new Intent(SetAlarmActivity.this, AlarmReceiver.class);
-        intent.putExtra("notificationId",notificationID);
-        intent.putExtra("title", myActivityTitle);
-
-        PendingIntent alarmIn = PendingIntent.getBroadcast(SetAlarmActivity.this,0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager myAlarm = (AlarmManager)getSystemService(ALARM_SERVICE);
-
-        switch(view.getId()) {
-            case R.id.setBt:
-                alarmTime = (TimePicker)findViewById(R.id.timePicker);
-
-                int hours = alarmTime.getCurrentHour();
-                int minutes = alarmTime.getCurrentMinute();
-
-                Calendar startT = Calendar.getInstance();
-                startT.set(Calendar.HOUR_OF_DAY, hours);
-                startT.set(Calendar.MINUTE, minutes);
-                startT.set(Calendar.SECOND, 0);
-
-                long alarmStart = startT.getTimeInMillis();
-
-                myAlarm.set(AlarmManager.RTC_WAKEUP, alarmStart, alarmIn);
-
-                Toast.makeText(SetAlarmActivity.this, "Alarm set!", Toast.LENGTH_SHORT).show();
-                break;
-        }
-
-    }*/
 }
