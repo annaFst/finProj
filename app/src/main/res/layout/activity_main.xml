@@ -8,26 +8,6 @@
     android:orientation="vertical"
     tools:context=".activities.EventsActivity">
 
-    <!--<androidx.recyclerview.widget.RecyclerView-->
-        <!--android:id="@+id/recycler_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />-->
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/logout"
-        android:layout_gravity="right"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/button_style"
-        app:layout_constraintBottom_toTopOf="@id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.973"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.08" />
 
     <TextView
         android:id="@+id/textView"
@@ -36,44 +16,16 @@
         android:text="@string/my_events"
         android:layout_marginLeft="10dp"
         android:textColor="@color/green"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toStartOf="@+id/btnLogout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        android:layout_marginStart="10dp" />
+        android:layout_marginTop="30dp" />
 
-
-    <!--<ScrollView-->
-        <!--android:id="@+id/scrollView2"-->
-        <!--android:layout_width="337dp"-->
-        <!--android:layout_height="402dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:layout_marginLeft="8dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:layout_marginRight="8dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintHorizontal_bias="0.488"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent"-->
-        <!--app:layout_constraintVertical_bias="0.498">-->
-
-    <!--</ScrollView>-->
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="263dp"
         android:layout_height="398dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:orientation="vertical"
-        android:layout_gravity="left"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.393"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_gravity="left">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -81,18 +33,13 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
 
 
-        <!--<ListView-->
-        <!--android:id="@+id/eventsList"-->
-        <!--android:layout_width="350dp"-->
-        <!--android:layout_height="398dp"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:layout_marginRight="8dp"-->
-        <!--android:textFilterEnabled="false"-->
-        <!--app:layout_constraintEnd_toEndOf="@+id/scrollView2"-->
-        <!--app:layout_constraintStart_toStartOf="@+id/scrollView2"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/scrollView2" />-->
     </LinearLayout>
     <Button
         android:id="@+id/addEvent"
@@ -109,6 +56,16 @@
         app:layout_constraintStart_toStartOf="@+id/linearLayout"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+       android:background="@color/none"
+        android:text="@string/logout"
+        android:textColor="@color/red" />
 
 
 

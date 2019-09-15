@@ -25,6 +25,17 @@ public class Event {
     private boolean admin = false;
     private boolean isRepeat = false;
     private String repeatType = "None" ;
+    private boolean active = true;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+
 
     public int getNotificationIndex() {
         return mNotificationIndex;
@@ -38,7 +49,7 @@ public class Event {
         isRepeat = repeat;
     }
 
-    public boolean getRepeat(){
+    public boolean getIsRepeat(){
         return isRepeat;
     }
 

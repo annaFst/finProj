@@ -103,13 +103,7 @@ public class SetAlarmActivity extends AppCompatActivity {
                         alarmDay = dayOfMonth;
                     }
                 },myYear,myMonth,myDay);
-
-
                 myDate.show();
-
-
-
-
             }
         });
 

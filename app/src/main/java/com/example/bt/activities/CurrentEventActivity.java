@@ -5,15 +5,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 //import android.support.v7.app.AppCompatActivity;
 
 import androidx.annotation.RequiresApi;
@@ -36,7 +41,7 @@ import java.util.List;
 
 public class CurrentEventActivity extends AppCompatActivity {
 
-    private TextView mEventName, mEventDate, mEventTime;
+    private TextView mEventName, mEventDate, mEventTime, repeat;
     private String eventId;
     private Event currEvent;
     private ListView itemsListView, takenItemsListView, membersList;
@@ -48,12 +53,16 @@ public class CurrentEventActivity extends AppCompatActivity {
     private Button mDeleteEventBtn;
     private List<Item> takenItems = new ArrayList<>();
     private List<Item> nonTakenItems = new ArrayList<>();
+    private EditText enterItem;
+    private ImageButton addItem;
+    private String item = null;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curr_event);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         mEventName = findViewById(R.id.eventName);
         mEventDate = findViewById(R.id.currDate);
@@ -63,8 +72,29 @@ public class CurrentEventActivity extends AppCompatActivity {
         mParticipants = findViewById(R.id.participants);
         mDeleteEventBtn = (Button)findViewById(R.id.btnDeleteEvent);
         alarmBtn = findViewById(R.id.alarm);
+        enterItem = (EditText)findViewById(R.id.enterItem);
+        addItem = (ImageButton)findViewById(R.id.addItemBtn);
+        repeat = findViewById(R.id.repeatType);
+
+        enterItem.addTextChangedListener(itemWatcher);
 
         eventId = getIntent().getExtras().getString("eventId");
+        //repeat.setText(currEvent.getRepeatType());
+
+        addItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (item !=  null) {
+                    currEvent.addToList(item);
+                    nonTakenItems.add(currEvent.getItems().get(currEvent.getItems().size()-1));
+                    //adapter.add(item);
+                    enterItem.setText("");
+                    CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(CurrentEventActivity.this, "Item Added", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         mParticipants.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +109,7 @@ public class CurrentEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent  = new Intent(CurrentEventActivity.this, SetAlarmActivity.class);
+                intent.putExtra("title" , currEvent.getName());
                 startActivity(intent);
             }
         });
@@ -120,6 +151,7 @@ public class CurrentEventActivity extends AppCompatActivity {
                 nonTakenItems.remove(currItem);
                 adapter.notifyDataSetChanged();
                 takenAdapter.notifyDataSetChanged();
+                CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
 
             }
         });
@@ -135,6 +167,26 @@ public class CurrentEventActivity extends AppCompatActivity {
             }
         });
     }
+
+    private TextWatcher itemWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            item = enterItem.getText().toString().trim();
+            if (item != null) {
+                addItem.setEnabled(true);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 
     private void populateItemLists()
     {

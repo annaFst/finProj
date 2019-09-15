@@ -17,10 +17,32 @@ public class EventEntity {
     private List<Contact> participants;
     private List<Item> items;
     private String creator;
+   // private boolean active;
+   // private boolean repeat;
+
+   /* public boolean isRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(boolean repeat) {
+        this.repeat = repeat;
+    }
+
+
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }*/
 
     public EventEntity() {
         participants = new ArrayList<>();
         items = new ArrayList<>();
+        //repeat = false;
+       // active = true;
     }
 
     public String getEventId() {
