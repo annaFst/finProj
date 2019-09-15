@@ -6,6 +6,7 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +19,15 @@ import android.widget.Toast;
 
 import com.example.bt.AlarmReceiver;
 import com.example.bt.R;
+import com.example.bt.app.CurrentUserAccount;
+import com.example.bt.models.Event;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -46,6 +55,7 @@ public class SetAlarmActivity extends AppCompatActivity {
     int myMinute,alarmMinute;
     String title;
     boolean isDaySelected, isTimeSelected;
+    private Event currEvent;
 
 
     DatePickerDialog myDate;
@@ -57,6 +67,10 @@ public class SetAlarmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_set_alarm);
 
         title = getIntent().getStringExtra("title");
+        String eventId = getIntent().getStringExtra("eventId");
+        currEvent = CurrentUserAccount.getInstance().GetEventIfPresent(eventId);
+        currEvent.setAlarm(true);
+        CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
 
         mTimeBtn = (ImageButton)findViewById(R.id.timeBtn);
         mDateChoice = (ImageButton)findViewById(R.id.calendarButton);
@@ -155,7 +169,7 @@ public class SetAlarmActivity extends AppCompatActivity {
 
 
                 alarmsArray.add(alarmIn);
-                CreateEventActivity.setAlarmindex(alarmIndex);
+                currEvent.setAlarmIndex(alarmIndex);
                 alarmIndex++;
 
                 Toast.makeText(SetAlarmActivity.this, "Alarm set!", Toast.LENGTH_SHORT).show();
@@ -179,4 +193,48 @@ public class SetAlarmActivity extends AppCompatActivity {
             }
         });
     }
+
+    public static void writeToFile(Context context, String data, String fileName)
+    {
+        String alarmStr = "Alarm";
+        String temp = alarmStr.concat(fileName);
+        String file_name = temp.concat(".txt");
+
+        try {
+            FileOutputStream outputStream = context.openFileOutput(file_name, Context.MODE_PRIVATE);
+            outputStream.write(data.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static ArrayList<String> readFromFile(Context context, String fileName)
+    {
+        String alarmStr = "Alarm";
+        String temp = alarmStr.concat(fileName);
+        String file_name = temp.concat(".txt");
+        ArrayList<String> res = new ArrayList<>();
+        String curr;
+
+        try{
+            FileInputStream fileInputStream = context.openFileInput(file_name);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
+            curr = bufferedReader.readLine();
+            while (curr!=null) {
+                res.add(curr);
+                curr = bufferedReader.readLine();
+            }
+            fileInputStream.close();
+            bufferedReader.close();
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
 }

@@ -89,14 +89,14 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
             @Override
             public void onChanged(Set<Event> events) {
                 EventAdapter eventAdapter = new EventAdapter(new ArrayList<>(events));
-                /*if (!reSetNotifi) {
+                if (!reSetNotifi) {
+                    reSetNotifi = true;
                     for (Event event : events) {
-                        if (event.isActive()) {
-                            reSetNotifi = true;
-                            //reSetNotification(event);
-                        }
+                       if (event.isActive()) {
+                          // reSetNotification(event);
+                       }
                     }
-                }*/
+                }
                 eventAdapter.setOnItemClickListener(EventsActivity.this);
                 mRecyclerView.setAdapter(eventAdapter);
             }
@@ -124,6 +124,8 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
         });
 
     }
+
+
 
     private void openLoginActivity()
     {
@@ -186,6 +188,59 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
         public TextView item;
 
     }
+    private void resetAlarm(Event event) {
+        int hour ;
+        int minute ;
+        int day ;
+        int month ;
+        int year ;
+        String type ;
+        int index ;
+        // in the array :
+        //alarmHour, alarmMin,  alarmDay, alarmMonth, alarmYear, RepeatType(), notificationIndex
+        ArrayList<String> res = SetAlarmActivity.readFromFile(EventsActivity.this, event.getName());
+        if (!res.isEmpty()) {
+            hour = parseInt(res.get(0));
+            minute = parseInt(res.get(1));
+            day = parseInt(res.get(2));
+            month = parseInt(res.get(3));
+            year = parseInt(res.get(4));
+            type = res.get(5);
+            index = parseInt(res.get(6));
+            //Log.d("DEBAG EVENTS ACTIVITY", "the string from file is " + hour + " " + minute + " " + day + " " + month + " " + year + " " + type + " " + index);
+
+
+            Calendar alarmTime = Calendar.getInstance();
+            alarmTime.set(Calendar.HOUR_OF_DAY, hour);
+            alarmTime.set(Calendar.MINUTE, minute);
+            alarmTime.set(Calendar.SECOND, 0);
+            alarmTime.set(Calendar.DAY_OF_MONTH, day);
+            alarmTime.set(Calendar.MONTH, month);
+            alarmTime.set(Calendar.YEAR, year);
+
+            int alarmIndex = SetAlarmActivity.alarmIndex;
+            long startAlarm = alarmTime.getTimeInMillis();
+
+            Intent intent = new Intent(EventsActivity.this, NotificationReceiver.class);
+            intent.putExtra("index", alarmIndex);
+            intent.putExtra("title", event.getName());
+
+            PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), alarmIndex, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            if (alarmIndex < SetAlarmActivity.alarmIndex+1) {
+                SetAlarmActivity.myAlarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+            }
+
+            SetAlarmActivity.alarmsArray.add(alarmIntent);
+            CreateEventActivity.setAlarmindex(alarmIndex);
+            event.setNotificationIndex(index);
+            String saveNotification = hour + "\n" + minute + "\n" + day + "\n" + month + "\n" + year + "\n" + type + "\n" + index;
+            Log.d("DEBAG ", saveNotification);
+            SetAlarmActivity.writeToFile(this, saveNotification, event.getName());
+            SetAlarmActivity.alarmIndex++;
+        }
+
+    }
+
 
     private void  reSetNotification( Event event) {
         int hour ;

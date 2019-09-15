@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bt.R;
+import com.example.bt.RepeatDialog;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.data.Repositories.RepositoryFactory;
@@ -39,9 +41,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrentEventActivity extends AppCompatActivity {
+public class CurrentEventActivity extends AppCompatActivity implements RepeatDialog.repeatDialogListener{
 
-    private TextView mEventName, mEventDate, mEventTime, repeat;
+    private TextView mEventName, mEventDate, mEventTime, repeat, repeatType;
     private String eventId;
     private Event currEvent;
     private ListView itemsListView, takenItemsListView, membersList;
@@ -74,12 +76,20 @@ public class CurrentEventActivity extends AppCompatActivity {
         alarmBtn = findViewById(R.id.alarm);
         enterItem = (EditText)findViewById(R.id.enterItem);
         addItem = (ImageButton)findViewById(R.id.addItemBtn);
-        repeat = findViewById(R.id.repeatType);
+        repeat = findViewById(R.id.repeatBtn);
+        repeatType = findViewById(R.id.repeatType);
 
         enterItem.addTextChangedListener(itemWatcher);
 
         eventId = getIntent().getExtras().getString("eventId");
         //repeat.setText(currEvent.getRepeatType());
+
+        repeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        });
 
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,11 +120,13 @@ public class CurrentEventActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent  = new Intent(CurrentEventActivity.this, SetAlarmActivity.class);
                 intent.putExtra("title" , currEvent.getName());
+                intent.putExtra("eventId" , eventId);
                 startActivity(intent);
             }
         });
 
         currEvent = CurrentUserAccount.getInstance().GetEventIfPresent(eventId);
+        repeatType.setText(currEvent.getRepeatType());
         populateItemLists();
         populateTextView();
         setAdapters();
@@ -166,6 +178,11 @@ public class CurrentEventActivity extends AppCompatActivity {
                         .show();
             }
         });
+    }
+
+    private void openDialog(){
+        RepeatDialog dialog = new RepeatDialog();
+        dialog.show(getSupportFragmentManager(),"repeat dialog");
     }
 
     private TextWatcher itemWatcher = new TextWatcher() {
@@ -329,5 +346,32 @@ public class CurrentEventActivity extends AppCompatActivity {
     public class ItemHolder{
         public TextView item;
 
+    }
+
+    @Override
+    public void applyChoice(boolean none ,boolean daily, boolean weekly, boolean monyhly) {
+        if (none){
+            Log.d("return from dialog", "none is true");
+            repeatType.setText("None");
+            currEvent.setRepeat(false);
+        }
+        if(daily){
+            Log.d("return from dialog", "daily is true");
+            repeatType.setText("Daily");
+            currEvent.setRepeat(true);
+            currEvent.setRepeatType("Daily");
+        }
+        if(weekly){
+            Log.d("return from dialog", "weekly is true");
+            repeatType.setText("Weekly");
+            currEvent.setRepeat(true);
+            currEvent.setRepeatType("Weekly");
+        }
+        if(monyhly){
+            Log.d("return from dialog", "monthly is true");
+            repeatType.setText("Monthly");
+            currEvent.setRepeat(true);
+            currEvent.setRepeatType("Monthly");
+        }
     }
 }

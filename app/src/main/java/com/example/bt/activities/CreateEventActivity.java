@@ -104,13 +104,19 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
             myEvent.getParticipants().add(new Contact(currentUser.getName(), currentUser.getId()));
         }
 
+
         eventName.addTextChangedListener(nameWatcher);
         enterItem.addTextChangedListener(itemWatcher);
 
         setRepeat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDialog();
+                if (selectedDate && selectedTime) {
+                    openDialog();
+                }
+                else{
+                    Toast.makeText(CreateEventActivity.this, "Please select date and time first.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -125,12 +131,15 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
             @Override
             public void onClick(View v) {
                 if (selectedTime && selectedDate){
-                    Log.d("DEBAG", "onClick: click Done button ");
+                    updateDb(myEvent);
                     setNotification();
+                    Intent intent  = new Intent(CreateEventActivity.this, EventsActivity.class);
+                    startActivity(intent);
                 }
-                updateDb(myEvent);
-                Intent intent  = new Intent(CreateEventActivity.this, EventsActivity.class);
-                startActivity(intent);
+                else {
+                    Toast.makeText(CreateEventActivity.this, "Please select date and time first.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -214,7 +223,6 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
             @Override
             public void onClick(View v) {
                 if(onOffAlert.isChecked()){
-                    //onOffAlert.setChecked(true);
                     Intent intent  = new Intent(CreateEventActivity.this, SetAlarmActivity.class);
                     intent.putExtra("title", title);
                     intent.putExtra("date selected", selectedDate);
@@ -340,8 +348,11 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         long startAlarm = alarmTime.getTimeInMillis();
 
         Intent intent = new Intent (CreateEventActivity.this, NotificationReceiver.class);
+        Log.d("DEBAG", "send index number"+alarmIndex );
         intent.putExtra("index", alarmIndex);
+        Log.d("DEBAG", "send event name"+myEvent.getName() );
         intent.putExtra("title", myEvent.getName());
+        Log.d("DEBAG", "send event ID"+myEvent.getEventId() );
         intent.putExtra("eventId", myEvent.getEventId());
 
 

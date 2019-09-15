@@ -17,15 +17,15 @@ public class EventEntity {
     private List<Contact> participants;
     private List<Item> items;
     private String creator;
-   // private boolean active;
-   // private boolean repeat;
+    private boolean active;
+    private boolean alarm;
 
-   /* public boolean isRepeat() {
-        return repeat;
+    public boolean isAlarm() {
+        return alarm;
     }
 
-    public void setRepeat(boolean repeat) {
-        this.repeat = repeat;
+    public void setAlarm (boolean alarm) {
+        this.alarm = alarm;
     }
 
 
@@ -36,7 +36,7 @@ public class EventEntity {
 
     public void setActive(boolean active) {
         this.active = active;
-    }*/
+    }
 
     public EventEntity() {
         participants = new ArrayList<>();

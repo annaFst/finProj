@@ -26,6 +26,15 @@ public class Event {
     private boolean isRepeat = false;
     private String repeatType = "None" ;
     private boolean active = true;
+    private boolean alarm = false;
+
+    public boolean isAlarm() {
+        return alarm;
+    }
+
+    public void setAlarm(boolean alarm) {
+        this.alarm = alarm;
+    }
 
     public boolean isActive() {
         return active;
@@ -34,8 +43,6 @@ public class Event {
     public void setActive(boolean active) {
         this.active = active;
     }
-
-
 
     public int getNotificationIndex() {
         return mNotificationIndex;

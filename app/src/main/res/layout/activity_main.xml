@@ -16,7 +16,8 @@
         android:text="@string/my_events"
         android:layout_marginLeft="10dp"
         android:textColor="@color/green"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"/>
 
 
     <LinearLayout
@@ -54,7 +55,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="@+id/linearLayout"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:textStyle="bold"/>
 
     <Button
         android:id="@+id/btnLogout"
