@@ -30,7 +30,6 @@ import com.example.bt.DBdemo;
 import com.example.bt.NotificationReceiver;
 import com.example.bt.R;
 import com.example.bt.RepeatDialog;
-import com.example.bt.UpdateReceiver;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.data.Repositories.RepositoryFactory;
@@ -381,7 +380,7 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
 
         DBdemo.notificationArray.add(alarmIntent);
         CreateEventActivity.setAlarmindex(alarmIndex);
-        myEvent.setmNotificationIndex(DBdemo.notificationIndex);
+        myEvent.setNotificationIndex(DBdemo.notificationIndex);
         DBdemo.notificationIndex++;
     }
 

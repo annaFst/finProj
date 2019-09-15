@@ -4,8 +4,12 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.bt.app.CurrentUserAccount;
+
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Event {
 
@@ -14,7 +18,6 @@ public class Event {
     private int mEventAlarmIndex = -1;
     private int mNotificationIndex = -1;
     private List<Item> mItemList = new ArrayList<>();
-    private List<Item> mTakenItemsList = new ArrayList<>();
     private List<Contact> participants = new ArrayList<>();
     private long eventDate; // Epoch seconds
     private long eventTime; // Seconds of day
@@ -23,11 +26,11 @@ public class Event {
     private boolean isRepeat = false;
     private String repeatType ;
 
-    public int getmNotificationIndex() {
+    public int getNotificationIndex() {
         return mNotificationIndex;
     }
 
-    public void setmNotificationIndex(int mNotificationIndex) {
+    public void setNotificationIndex(int mNotificationIndex) {
         this.mNotificationIndex = mNotificationIndex;
     }
 
@@ -116,61 +119,55 @@ public class Event {
 //        mTakenItemsList.add(new Item(str));
 //    }
 
-    public void addToTakenList(Item item){
-        mTakenItemsList.add(item);
-    }
-
-    public Item getFromList(int i){
-        return mItemList.get(i);
-    }
-
-    public int sizeOfList(){
-        return mItemList.size();
-    }
-
     public List<Item> getItems(){
         return mItemList;
     }
 
-    public List<Item> getTakenItemsList(){
-        return mTakenItemsList;
+
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    public void copyEvent(Event other){
+//        Event res = new Event();
+//
+//        res.setName(other.getName().concat("(copy)"));
+//        res.setEventDate(other.getEventDate());
+//        res.setEventTime(other.getEventTime());
+//
+//        int size  = other.mItemList.size();
+//        int takenSize = other.mTakenItemsList.size();
+//
+//        for (Item item : mTakenItemsList){
+//            res.addToList(item);
+//        }
+//
+//        if (takenSize>0) {
+//            for (int i=0; i<takenSize ;i++) {
+//                Item takenItem = other.mTakenItemsList.get(i);
+//                res.addToTakenList(takenItem);
+//            }
+//        }
+//
+//        //EventsActivity.updateList(res.getName());
+//    }
+
+    public void takeItem(int index)
+    {
+        User currUser = CurrentUserAccount.getInstance().getCurrentUser();
+        Contact itemTaker =
+                new Contact(currUser.getName(), currUser.getId());
+        mItemList.get(index).setTaken(true);
+        mItemList.get(index).setTakenBy(itemTaker);
+
+        //mTakenItemsList.add(mItemList.get(index));
+        //mItemList.remove(index);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void copyEvent(Event other){
-        Event res = new Event();
-
-        res.setName(other.getName().concat("(copy)"));
-        res.setEventDate(other.getEventDate());
-        res.setEventTime(other.getEventTime());
-
-        int size  = other.mItemList.size();
-        int takenSize = other.mTakenItemsList.size();
-
-        for (Item item : mTakenItemsList){
-            res.addToList(item);
-        }
-
-        if (takenSize>0) {
-            for (int i=0; i<takenSize ;i++) {
-                Item takenItem = other.mTakenItemsList.get(i);
-                res.addToTakenList(takenItem);
-            }
-        }
-
-        //EventsActivity.updateList(res.getName());
-    }
-
-    public void takeItem(int index){
-        mTakenItemsList.add(mItemList.get(index));
-        mItemList.remove(index);
-    }
-
-    public List<Contact> getParticipants() {
+    public List<Contact> getParticipants()
+    {
         return participants;
     }
 
-    public void setParticipants(List<Contact> members) {
+    public void setParticipants(List<Contact> members)
+    {
         for (Contact name : members){
             participants.add(name);
         }
