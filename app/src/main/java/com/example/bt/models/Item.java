@@ -3,7 +3,7 @@ package com.example.bt.models;
 public class Item {
     private String mName;
     private Boolean mIsTaken = false;
-    private User mTakenBy;
+    private Contact mTakenBy;
     private int mQuantity;
 
     public Item(){}
@@ -28,11 +28,11 @@ public class Item {
         this.mIsTaken = mIsTaken;
     }
 
-    public User getTakenBy() {
+    public Contact getTakenBy() {
         return mTakenBy;
     }
 
-    public void setTakenBy(User mTakenBy) {
+    public void setTakenBy(Contact mTakenBy) {
         this.mTakenBy = mTakenBy;
     }
 

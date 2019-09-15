@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 //import android.support.v7.app.AppCompatActivity;
 
 import androidx.annotation.RequiresApi;
@@ -28,6 +27,7 @@ import com.example.bt.data.Repositories.RepositoryFactory;
 import com.example.bt.models.Contact;
 import com.example.bt.models.Event;
 import com.example.bt.models.Item;
+import com.example.bt.models.User;
 
 import java.io.Serializable;
 import java.time.format.DateTimeFormatter;
@@ -36,19 +36,18 @@ import java.util.List;
 
 public class CurrentEventActivity extends AppCompatActivity {
 
-    private TextView mEventName;
-    private TextView mEventDate;
-    private TextView mEventTime;
+    private TextView mEventName, mEventDate, mEventTime;
     private String eventId;
     private Event currEvent;
-    private ListView items, takenItemsList, membersList;
+    private ListView itemsListView, takenItemsListView, membersList;
     static private itemListAdapter adapter;
     static private takenItemListAdapter takenAdapter;
     static private CustomList membersAdapter;
     private ImageButton alarmBtn;
     private Button mParticipants;
     private Button mDeleteEventBtn;
-    private List<Item> takenItems = new ArrayList<Item>();
+    private List<Item> takenItems = new ArrayList<>();
+    private List<Item> nonTakenItems = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -59,32 +58,20 @@ public class CurrentEventActivity extends AppCompatActivity {
         mEventName = findViewById(R.id.eventName);
         mEventDate = findViewById(R.id.currDate);
         mEventTime = findViewById(R.id.currTime);
-        items = (ListView)findViewById(R.id.itemsList);
-        takenItemsList = (ListView)findViewById(R.id.takenItemsList);
+        itemsListView = (ListView)findViewById(R.id.itemsList);
+        takenItemsListView = (ListView)findViewById(R.id.takenItemsList);
         mParticipants = findViewById(R.id.participants);
         mDeleteEventBtn = (Button)findViewById(R.id.btnDeleteEvent);
         alarmBtn = findViewById(R.id.alarm);
 
         eventId = getIntent().getExtras().getString("eventId");
-       /* mDupEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Event temp = new Event();
-                temp.copyEvent(currEvent);
-                Toast.makeText(CurrentEventActivity.this, "The event has been duplicated", Toast.LENGTH_SHORT).show();
 
-                Intent intent  = new Intent(CurrentEventActivity.this, EventsActivity.class);
-                startActivity(intent);
-
-            }
-        });*/
         mParticipants.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent  = new Intent(CurrentEventActivity.this, ContactsListActivity.class);
                 intent.putExtra("contacts", (Serializable) currEvent.getParticipants());
                 startActivity(intent);
-
             }
         });
 
@@ -97,26 +84,16 @@ public class CurrentEventActivity extends AppCompatActivity {
         });
 
         currEvent = CurrentUserAccount.getInstance().GetEventIfPresent(eventId);
-        mEventName.setText(currEvent.getName());
+        populateItemLists();
+        populateTextView();
+        setAdapters();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
-        mEventDate.setText(LocalDateTimeConverter.
-                        GetLocalDateFromEpochSeconds(currEvent.getEventDate()).format(formatter));
-        mEventTime.setText(LocalDateTimeConverter.
-                        GetLocalTimeFromSeconds(currEvent.getEventTime()).toString());
-
-        adapter  = new itemListAdapter(this,R.layout.items_list, currEvent.getItems());
-        items.setAdapter(adapter);
-
-        takenAdapter = new takenItemListAdapter(this,R.layout.taken_items, currEvent.getTakenItemsList());
-        takenItemsList.setAdapter(takenAdapter);
-
-        takenItemsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        takenItemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                Item curr = currEvent.getTakenItemsList().get(position);
-                builder.setMessage(curr.getTakenBy().getName())
+                Item curr = takenItems.get(position);
+                builder.setMessage(curr.getTakenBy().getContactName())
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -127,14 +104,20 @@ public class CurrentEventActivity extends AppCompatActivity {
             }
         });
 
-        items.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Item currItem = currEvent.getItems().get(position);
+                Item currItem = nonTakenItems.get(position);
+                // Update item state
+                User currUser = CurrentUserAccount.getInstance().getCurrentUser();
+                Contact itemTaker =
+                        new Contact(currUser.getName(), currUser.getId());
                 currItem.setTaken(true);
-                currItem.setTakenBy(CurrentUserAccount.getInstance().getCurrentUser());
+                currItem.setTakenBy(itemTaker);
 
-                currEvent.takeItem(position);
+                // Update local lists and adapters
+                takenItems.add(currItem);
+                nonTakenItems.remove(currItem);
                 adapter.notifyDataSetChanged();
                 takenAdapter.notifyDataSetChanged();
 
@@ -151,6 +134,39 @@ public class CurrentEventActivity extends AppCompatActivity {
                         .show();
             }
         });
+    }
+
+    private void populateItemLists()
+    {
+        for (Item item : currEvent.getItems())
+        {
+            if (item.getTaken()){
+                takenItems.add(item);
+            }
+            else{
+                nonTakenItems.add(item);
+            }
+        }
+    }
+
+    private void setAdapters()
+    {
+        adapter  = new itemListAdapter(this,R.layout.items_list, nonTakenItems);
+        itemsListView.setAdapter(adapter);
+
+        takenAdapter = new takenItemListAdapter(this,R.layout.taken_items, takenItems);
+        takenItemsListView.setAdapter(takenAdapter);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void populateTextView()
+    {
+        mEventName.setText(currEvent.getName());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
+        mEventDate.setText(LocalDateTimeConverter.
+                GetLocalDateFromEpochSeconds(currEvent.getEventDate()).format(formatter));
+        mEventTime.setText(LocalDateTimeConverter.
+                GetLocalTimeFromSeconds(currEvent.getEventTime()).toString());
     }
 
     @Override
@@ -240,6 +256,7 @@ public class CurrentEventActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ItemHolder lItem = null;
+
             if (convertView == null ){
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(layout,parent,false);
@@ -256,6 +273,7 @@ public class CurrentEventActivity extends AppCompatActivity {
         }
 
     }
+
     public class ItemHolder{
         public TextView item;
 
