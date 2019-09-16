@@ -101,7 +101,7 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         if (!currentUser.getId().isEmpty())
         {
             myEvent.setEventCreatorId(currentUser.getId());
-            myEvent.getParticipants().add(new Contact(currentUser.getName(), currentUser.getId()));
+            myEvent.getParticipants().add(new Contact("Me", currentUser.getId()));
         }
 
 
