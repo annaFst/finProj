@@ -19,6 +19,26 @@ public class EventEntity {
     private String creator;
     private boolean active;
     private boolean alarm;
+    private boolean repeat;
+    private String repeatType;
+
+    public String getRepeatType() {
+        return repeatType;
+    }
+
+    public void setRepeatType(String repeatType) {
+        this.repeatType = repeatType;
+    }
+
+    public boolean isRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(boolean repeat) {
+        this.repeat = repeat;
+    }
+
+
 
     public boolean isAlarm() {
         return alarm;
@@ -27,8 +47,6 @@ public class EventEntity {
     public void setAlarm (boolean alarm) {
         this.alarm = alarm;
     }
-
-
 
     public boolean isActive() {
         return active;
@@ -41,8 +59,6 @@ public class EventEntity {
     public EventEntity() {
         participants = new ArrayList<>();
         items = new ArrayList<>();
-        //repeat = false;
-       // active = true;
     }
 
     public String getEventId() {

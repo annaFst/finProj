@@ -1,5 +1,6 @@
 package com.example.bt.activities;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bt.DBdemo;
 import com.example.bt.R;
 import com.example.bt.RepeatDialog;
 import com.example.bt.app.CurrentUserAccount;
@@ -42,6 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CurrentEventActivity extends AppCompatActivity implements RepeatDialog.repeatDialogListener{
+
+    private static final int CONTACT_LIST = 1;
 
     private TextView mEventName, mEventDate, mEventTime, repeat, repeatType;
     private String eventId;
@@ -111,7 +115,7 @@ public class CurrentEventActivity extends AppCompatActivity implements RepeatDia
             public void onClick(View v) {
                 Intent intent  = new Intent(CurrentEventActivity.this, ContactsListActivity.class);
                 intent.putExtra("contacts", (Serializable) currEvent.getParticipants());
-                startActivity(intent);
+                startActivityForResult(intent, CONTACT_LIST);
             }
         });
 
@@ -168,6 +172,33 @@ public class CurrentEventActivity extends AppCompatActivity implements RepeatDia
             }
         });
 
+        itemsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                final Item currItem = nonTakenItems.get(position);
+                builder.setTitle("Delete Item")
+                        .setMessage("Are you sure?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                nonTakenItems.remove(currItem);
+                                currEvent.removeFromList(currItem);
+                                adapter.notifyDataSetChanged();
+                                CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
+                return true;
+            }
+        });
+
         mDeleteEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,6 +209,20 @@ public class CurrentEventActivity extends AppCompatActivity implements RepeatDia
                         .show();
             }
         });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Check if it is the contact list activity with an OK result
+        if (requestCode == CONTACT_LIST) {
+            if (resultCode == RESULT_OK)
+            {
+                ArrayList<Contact> contacts = (ArrayList)data.getSerializableExtra("contacts");
+                currEvent.setParticipants(contacts);
+                CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
+            }
+        }
     }
 
     private void openDialog(){

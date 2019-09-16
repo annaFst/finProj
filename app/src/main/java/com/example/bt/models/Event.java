@@ -23,7 +23,7 @@ public class Event {
     private long eventTime; // Seconds of day
     private String mEventCreatorId;
     private boolean admin = false;
-    private boolean isRepeat = false;
+    private boolean repeat = false;
     private String repeatType = "None" ;
     private boolean active = true;
     private boolean alarm = false;
@@ -53,11 +53,11 @@ public class Event {
     }
 
     public void setRepeat(boolean repeat){
-        isRepeat = repeat;
+        repeat = repeat;
     }
 
-    public boolean getIsRepeat(){
-        return isRepeat;
+    public boolean IsRepeat(){
+        return repeat;
     }
 
     public void setRepeatType (String repeatTypeStr){
@@ -133,6 +133,11 @@ public class Event {
         mItemList.addAll(items);
     }
 
+    public void removeFromList(Item item){
+        int i = mItemList.indexOf(item);
+        mItemList.remove(i);
+    }
+
 //    public void addToTakenList(String str){
 //        mTakenItemsList.add(new Item(str));
 //    }
@@ -186,8 +191,6 @@ public class Event {
 
     public void setParticipants(List<Contact> members)
     {
-        for (Contact name : members){
-            participants.add(name);
-        }
+        this.participants = members;
     }
 }

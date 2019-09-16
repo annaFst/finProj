@@ -222,24 +222,25 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         onOffAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onOffAlert.isChecked()){
-                    Intent intent  = new Intent(CreateEventActivity.this, SetAlarmActivity.class);
-                    intent.putExtra("title", title);
-                    intent.putExtra("date selected", selectedDate);
-                    intent.putExtra("time selected", selectedTime);
-                    intent.putExtra("day", alarmDay);
-                    intent.putExtra("month", alarmMonth);
-                    intent.putExtra("year", alarmYear);
-                    intent.putExtra("hour", alarmHour);
-                    intent.putExtra("minutes", alarmMin);
-                    startActivity(intent);
-                }
-                else {
+                if(selectedTime && selectedDate) {
+                    if (onOffAlert.isChecked()) {
+                        Intent intent = new Intent(CreateEventActivity.this, SetAlarmActivity.class);
+                        intent.putExtra("title", title);
+                        intent.putExtra("date selected", selectedDate);
+                        intent.putExtra("time selected", selectedTime);
+                        intent.putExtra("day", alarmDay);
+                        intent.putExtra("month", alarmMonth);
+                        intent.putExtra("year", alarmYear);
+                        intent.putExtra("hour", alarmHour);
+                        intent.putExtra("minutes", alarmMin);
+                        startActivity(intent);
+                    } else {
 
-                    int alarmInd = myEvent.getEventAlarmIndex();
-                    if (alarmInd != -1) {
-                        SetAlarmActivity.myAlarm.cancel(SetAlarmActivity.alarmsArray.get(alarmInd));
-                        Toast.makeText(CreateEventActivity.this, "Alarm deleted!", Toast.LENGTH_SHORT).show();
+                        int alarmInd = myEvent.getEventAlarmIndex();
+                        if (alarmInd != -1) {
+                            SetAlarmActivity.myAlarm.cancel(SetAlarmActivity.alarmsArray.get(alarmInd));
+                            Toast.makeText(CreateEventActivity.this, "Alarm deleted!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
@@ -348,11 +349,8 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         long startAlarm = alarmTime.getTimeInMillis();
 
         Intent intent = new Intent (CreateEventActivity.this, NotificationReceiver.class);
-        Log.d("DEBAG", "send index number"+alarmIndex );
         intent.putExtra("index", alarmIndex);
-        Log.d("DEBAG", "send event name"+myEvent.getName() );
         intent.putExtra("title", myEvent.getName());
-        Log.d("DEBAG", "send event ID"+myEvent.getEventId() );
         intent.putExtra("eventId", myEvent.getEventId());
 
 
@@ -360,8 +358,7 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         if (alarmIndex  < DBdemo.OFFSET + 1 ) {
             DBdemo.onTimeNatification = (AlarmManager)getSystemService(ALARM_SERVICE);
         }
-        if (myEvent.getIsRepeat()) {
-            Log.d("DEBAG", "in if is a repeat");
+        if (myEvent.IsRepeat()) {
             switch (myEvent.getRepeatType()) {
 
                     case "None":

@@ -47,7 +47,7 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
     private static boolean reSetNotifi = false;
 
     private Button addEvent;
-    private Button btnLogout;
+    //private Button btnLogout;
     //static private ArrayAdapter<String> adapter;
     static private MainListAdapter adapter;
     private ListView eventsListView;
@@ -82,7 +82,7 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
         // TODO: Fix this bug
         LayoutInflater inflater = LayoutInflater.from(this);
         mRecyclerView = findViewById(R.id.recycler_view);
-        btnLogout = findViewById(R.id.btnLogout);
+        //btnLogout = findViewById(R.id.btnLogout);
 
 
         mEventsActivityViewModel.getEvents().observe(this, new Observer<Set<Event>>() {
@@ -93,7 +93,7 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
                     reSetNotifi = true;
                     for (Event event : events) {
                        if (event.isActive()) {
-                          // reSetNotification(event);
+                           //reSetNotification(event);
                        }
                     }
                 }
@@ -115,13 +115,13 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
                 openSecondScreen();
             }
         });
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        /*btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 openLoginActivity();
             }
-        });
+        });*/
 
     }
 
@@ -231,10 +231,8 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
             }
 
             SetAlarmActivity.alarmsArray.add(alarmIntent);
-            CreateEventActivity.setAlarmindex(alarmIndex);
-            event.setNotificationIndex(index);
-            String saveNotification = hour + "\n" + minute + "\n" + day + "\n" + month + "\n" + year + "\n" + type + "\n" + index;
-            Log.d("DEBAG ", saveNotification);
+            event.setAlarmIndex(alarmIndex);
+            String saveNotification = hour + "\n" + minute + "\n" + day + "\n" + month + "\n" + year + "\n" + type + "\n" + alarmIndex;
             SetAlarmActivity.writeToFile(this, saveNotification, event.getName());
             SetAlarmActivity.alarmIndex++;
         }
@@ -272,7 +270,7 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
             alarmTime.set(Calendar.MONTH, month);
             alarmTime.set(Calendar.YEAR, year);
 
-            int alarmIndex = index+ DBdemo.OFFSET;
+            int alarmIndex = DBdemo.notificationIndex + DBdemo.OFFSET;
             long startAlarm = alarmTime.getTimeInMillis();
 
             Intent intent = new Intent(EventsActivity.this, NotificationReceiver.class);
@@ -285,7 +283,6 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
             }
 
             switch (type) {
-
                     case "None":
                         DBdemo.onTimeNatification.set(AlarmManager.RTC_WAKEUP, startAlarm, alarmIntent);
                         break;
@@ -309,10 +306,8 @@ public class EventsActivity extends AppCompatActivity implements EventAdapter.Cl
             }
 
             DBdemo.notificationArray.add(alarmIntent);
-            CreateEventActivity.setAlarmindex(alarmIndex);
-            event.setNotificationIndex(index);
-            String saveNotification = hour + "\n" + minute + "\n" + day + "\n" + month + "\n" + year + "\n" + type + "\n" + index;
-            Log.d("DEBAG ", saveNotification);
+            event.setNotificationIndex(DBdemo.notificationIndex);
+            String saveNotification = hour + "\n" + minute + "\n" + day + "\n" + month + "\n" + year + "\n" + type + "\n" + DBdemo.notificationIndex;
             DBdemo.writeToFile(this, saveNotification, event.getName());
             DBdemo.notificationIndex++;
         }

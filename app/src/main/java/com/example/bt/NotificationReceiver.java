@@ -14,12 +14,16 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.example.bt.activities.EventsActivity;
+import com.example.bt.activities.SetAlarmActivity;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.models.Event;
 import com.example.bt.models.Item;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+
+import static java.lang.Integer.parseInt;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
@@ -64,10 +68,10 @@ public class NotificationReceiver extends BroadcastReceiver {
                         break;
                 }
 
-
+            CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
         }
 
-        CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
+
 
         NotificationManager myNotifi = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -94,5 +98,6 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         myNotifi.notify(alarmId, notification.build());
     }
+
 }
 

@@ -31,6 +31,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static java.lang.Integer.parseInt;
+
 public class SetAlarmActivity extends AppCompatActivity {
 
     public static ArrayList<PendingIntent> alarmsArray = new ArrayList<PendingIntent>();
@@ -56,6 +58,7 @@ public class SetAlarmActivity extends AppCompatActivity {
     String title;
     boolean isDaySelected, isTimeSelected;
     private Event currEvent;
+    private boolean first ;
 
 
     DatePickerDialog myDate;
@@ -68,9 +71,17 @@ public class SetAlarmActivity extends AppCompatActivity {
 
         title = getIntent().getStringExtra("title");
         String eventId = getIntent().getStringExtra("eventId");
-        currEvent = CurrentUserAccount.getInstance().GetEventIfPresent(eventId);
-        currEvent.setAlarm(true);
-        CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
+        isDaySelected = getIntent().getBooleanExtra("date selected", false);
+        isTimeSelected = getIntent().getBooleanExtra("time selected", false);
+        if (!isDaySelected && !isTimeSelected) {
+            currEvent = CurrentUserAccount.getInstance().GetEventIfPresent(eventId);
+            currEvent.setAlarm(true);
+            CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
+            //checkIfSet();
+        }
+        else{
+            first = true;
+        }
 
         mTimeBtn = (ImageButton)findViewById(R.id.timeBtn);
         mDateChoice = (ImageButton)findViewById(R.id.calendarButton);
@@ -169,7 +180,15 @@ public class SetAlarmActivity extends AppCompatActivity {
 
 
                 alarmsArray.add(alarmIn);
-                currEvent.setAlarmIndex(alarmIndex);
+                if (first){
+                    CreateEventActivity.setAlarmindex(alarmIndex);
+                }
+                else {
+                    currEvent.setAlarmIndex(alarmIndex);
+                }
+
+                //String saveNotification = alarmHour + "\n" + alarmMinute + "\n" + alarmDay + "\n" + alarmMonth + "\n" + alarmYear + "\n" + currEvent.getRepeatType() + "\n" + alarmIndex;
+                //writeToFile(SetAlarmActivity.this, saveNotification, currEvent.getName());
                 alarmIndex++;
 
                 Toast.makeText(SetAlarmActivity.this, "Alarm set!", Toast.LENGTH_SHORT).show();
@@ -237,4 +256,31 @@ public class SetAlarmActivity extends AppCompatActivity {
         return res;
     }
 
+    public void checkIfSet() {
+        int hour;
+        int minute;
+        int day;
+        int month;
+        int year;
+        String type;
+        int index;
+        // in the array :
+        //alarmHour, alarmMin,  alarmDay, alarmMonth, alarmYear, RepeatType(), notificationIndex
+        ArrayList<String> res = readFromFile(SetAlarmActivity.this, currEvent.getName());
+        if (!res.isEmpty()) {
+            hour = parseInt(res.get(0));
+            minute = parseInt(res.get(1));
+            day = parseInt(res.get(2));
+            month = parseInt(res.get(3));
+            year = parseInt(res.get(4));
+            type = res.get(5);
+            index = parseInt(res.get(6));
+
+            String currDate = day + "/" + (month+1) + "/" + year;
+            date.setText(currDate);
+            String currentTime = hour + ":" + minute;
+            mTime.setText(currentTime);
+
+        }
+    }
 }

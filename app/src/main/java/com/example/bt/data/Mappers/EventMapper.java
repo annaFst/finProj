@@ -26,6 +26,8 @@ public class EventMapper extends FirebaseMapper<EventEntity, Event> {
         event.setEventCreatorId(eventEntity.getCreator());
         event.setActive(eventEntity.isActive());
         event.setAlarm(eventEntity.isAlarm());
+        event.setRepeat(eventEntity.isRepeat());
+        event.setRepeatType(eventEntity.getRepeatType());
 
         return event;
     }
