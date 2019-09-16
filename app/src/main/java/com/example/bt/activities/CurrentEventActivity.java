@@ -141,6 +141,7 @@ public class CurrentEventActivity extends AppCompatActivity implements RepeatDia
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 Item curr = takenItems.get(position);
                 builder.setMessage(curr.getTakenBy().getContactName())
+                        .setMessage("This item taken by" + curr.getTakenBy().getContactName())
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
