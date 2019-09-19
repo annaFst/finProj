@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 
+/**
+ * Utility class to parse seconds into LocalDate/Time class and vice versa.
+ */
 public class LocalDateTimeConverter {
 
     @RequiresApi(api = Build.VERSION_CODES.O)

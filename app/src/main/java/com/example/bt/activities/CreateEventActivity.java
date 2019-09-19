@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 //import android.support.v7.app.AppCompatActivity;
 
 import com.example.bt.notifications.DBdemo;
@@ -36,6 +37,7 @@ import com.example.bt.data.Repositories.RepositoryFactory;
 import com.example.bt.models.Contact;
 import com.example.bt.models.Event;
 import com.example.bt.models.User;
+import com.example.bt.viewmodels.CreateEventActivityViewModel;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -50,7 +52,7 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
     private static final int UPDATE_EVENT_OFFSET = 200;
     public static Calendar myCalendar;
 
-
+    private CreateEventActivityViewModel mCreateEventActivityViewModel;
     private boolean setNotifi = false;
     private Button mAddBtn, setAlarmBtn, mDeleteEventBtn, mDoneBtn;
     private ImageButton mDateChoice,mTimeBtn;
@@ -81,6 +83,8 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
 
+        mCreateEventActivityViewModel = new ViewModelProvider(this).get(CreateEventActivityViewModel.class);
+
         mAddBtn = (Button)findViewById(R.id.addBt);
         mDoneBtn = (Button)findViewById(R.id.doneBtn);
         mDateChoice = (ImageButton)findViewById(R.id.calendarButton);
@@ -95,14 +99,7 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
         setRepeat =findViewById(R.id.repeatBtn);
         setRepeatType = findViewById(R.id.repeatType);
 
-        User currentUser = CurrentUserAccount.getInstance().getCurrentUser();
-        myEvent = new Event();
-        if (!currentUser.getId().isEmpty())
-        {
-            myEvent.setEventCreatorId(currentUser.getId());
-            myEvent.getParticipants().add(new Contact("Me", currentUser.getId()));
-        }
-
+        myEvent = mCreateEventActivityViewModel.initEvent();
 
         eventName.addTextChangedListener(nameWatcher);
         enterItem.addTextChangedListener(itemWatcher);
@@ -130,7 +127,7 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
             @Override
             public void onClick(View v) {
                 if (selectedTime && selectedDate){
-                    updateDb(myEvent);
+                    mCreateEventActivityViewModel.updateDb(myEvent);
                     setNotification();
                     Intent intent  = new Intent(CreateEventActivity.this, EventsActivity.class);
                     startActivity(intent);
@@ -141,7 +138,6 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
 
             }
         });
-
 
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,19 +245,6 @@ public class CreateEventActivity extends AppCompatActivity implements RepeatDial
     private void openDialog(){
         RepeatDialog dialog = new RepeatDialog();
         dialog.show(getSupportFragmentManager(),"repeat dialog");
-    }
-
-    public void updateDb(Event myEvent) {
-        // Add new event
-        String eventKey = RepositoryFactory.
-                GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository)
-                .add(myEvent);
-        myEvent.setEventId(eventKey);
-        CurrentUserAccount.getInstance().getCurrentUser().addEvent(myEvent);
-        CurrentUserAccount.getInstance().GetCurrentUserEventList().add(myEvent);
-        RepositoryFactory.
-                GetRepositoryInstance(RepositoryFactory.RepositoryType.UserRepository)
-                .update(CurrentUserAccount.getInstance().getCurrentUser());
     }
 
     private TextWatcher itemWatcher = new TextWatcher() {

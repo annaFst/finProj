@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
+/**
+ * The ViewModel for the EventsActivity
+ */
 public class EventsActivityViewModel extends ViewModel
 {
 
@@ -28,6 +31,9 @@ public class EventsActivityViewModel extends ViewModel
 
     private MutableLiveData<Set<Event>> mEvents;
 
+    /**
+     * @return The current user LiveData events set
+     */
     public LiveData<Set<Event>> getEvents()
     {
         if (mEvents == null) {
@@ -43,6 +49,9 @@ public class EventsActivityViewModel extends ViewModel
         CurrentUserAccount.getInstance().GetEventRepository().removeListener();
     }
 
+    /**
+     * Sets the LiveData to be observed by the activity.
+     */
     private void loadCurrentUserEvents() {
         CurrentUserAccount.getInstance().GetEventRepository().addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Event>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -85,6 +94,10 @@ public class EventsActivityViewModel extends ViewModel
         });
     }
 
+
+    /**
+     * @return True if the user is logged in. False, otherwise.
+     */
     public boolean checkLoggedInUser()
     {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();

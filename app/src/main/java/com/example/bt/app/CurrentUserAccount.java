@@ -22,22 +22,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * A singleton class of the currently logged in user
+ */
 public class CurrentUserAccount {
 
     private static final String TAG = "CurrentUserAccount";
 
     private FirebaseUser mFirebaseUser;
     private User mCurrentUser;
-    private EventRepository mEventRepository = (EventRepository) RepositoryFactory.GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository);
-    private List<Event> mUserEvents;
-
+    private EventRepository mEventRepository;
     private Set<Event> mUserEventsSet;
 
     private static CurrentUserAccount INSTANCE = null;
 
     private CurrentUserAccount()
     {
-        mUserEvents = new ArrayList<>();
+        mEventRepository = (EventRepository) RepositoryFactory.GetRepositoryInstance(RepositoryFactory.RepositoryType.EventRepository);
         mUserEventsSet = new HashSet<>();
         mCurrentUser = new User();
     }
@@ -123,10 +124,6 @@ public class CurrentUserAccount {
     public List<Event> GetCurrentUserEventList()
     {
         return new ArrayList<>(mUserEventsSet);
-    }
-
-    public Set<Event> getUserEventsSet() {
-        return mUserEventsSet;
     }
 
     public Event GetEventIfPresent(String source)
