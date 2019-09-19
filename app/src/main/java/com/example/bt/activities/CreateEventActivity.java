@@ -26,11 +26,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 //import android.support.v7.app.AppCompatActivity;
 
-import com.example.bt.DBdemo;
-import com.example.bt.NotificationReceiver;
+import com.example.bt.notifications.DBdemo;
+import com.example.bt.notifications.NotificationReceiver;
 import com.example.bt.R;
-import com.example.bt.RepeatDialog;
-import com.example.bt.UpdateReceiver;
+import com.example.bt.activities.fragments.RepeatDialog;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.data.Repositories.RepositoryFactory;

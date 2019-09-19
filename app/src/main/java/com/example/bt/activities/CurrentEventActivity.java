@@ -1,6 +1,5 @@
 package com.example.bt.activities;
 
-import android.app.AlarmManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,10 +25,12 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.bt.DBdemo;
 import com.example.bt.R;
-import com.example.bt.RepeatDialog;
+import com.example.bt.activities.fragments.RepeatDialog;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.app.LocalDateTimeConverter;
 import com.example.bt.data.Repositories.RepositoryFactory;
@@ -37,6 +38,7 @@ import com.example.bt.models.Contact;
 import com.example.bt.models.Event;
 import com.example.bt.models.Item;
 import com.example.bt.models.User;
+import com.example.bt.viewmodels.CurrentEventActivityViewModel;
 
 import java.io.Serializable;
 import java.time.format.DateTimeFormatter;
@@ -47,6 +49,7 @@ public class CurrentEventActivity extends AppCompatActivity implements RepeatDia
 
     private static final int CONTACT_LIST = 1;
 
+    private CurrentEventActivityViewModel mCurrentEventViewModel;
     private TextView mEventName, mEventDate, mEventTime, repeat, repeatType;
     private String eventId;
     private Event currEvent;
@@ -69,6 +72,8 @@ public class CurrentEventActivity extends AppCompatActivity implements RepeatDia
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curr_event);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        mCurrentEventViewModel = new ViewModelProvider(this).get(CurrentEventActivityViewModel.class);
 
         mEventName = findViewById(R.id.eventName);
         mEventDate = findViewById(R.id.currDate);
@@ -129,11 +134,25 @@ public class CurrentEventActivity extends AppCompatActivity implements RepeatDia
             }
         });
 
-        currEvent = CurrentUserAccount.getInstance().GetEventIfPresent(eventId);
-        repeatType.setText(currEvent.getRepeatType());
-        populateItemLists();
-        populateTextView();
-        setAdapters();
+        //currEvent = CurrentUserAccount.getInstance().GetEventIfPresent(eventId);
+        mCurrentEventViewModel.getEvent(eventId).observe(this, new Observer<Event>()
+        {
+            @Override
+            public void onChanged(Event event)
+            {
+                currEvent = event;
+                repeatType.setText(currEvent.getRepeatType());
+
+                populateItemLists();
+                populateTextView();
+                setAdapters();
+            }
+        });
+
+
+//        populateItemLists();
+//        populateTextView();
+//        setAdapters();
 
         takenItemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -169,7 +188,6 @@ public class CurrentEventActivity extends AppCompatActivity implements RepeatDia
                 adapter.notifyDataSetChanged();
                 takenAdapter.notifyDataSetChanged();
                 CurrentUserAccount.getInstance().GetEventRepository().update(currEvent);
-
             }
         });
 
@@ -211,6 +229,8 @@ public class CurrentEventActivity extends AppCompatActivity implements RepeatDia
             }
         });
     }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

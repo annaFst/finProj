@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.bt.AlarmReceiver;
+import com.example.bt.notifications.AlarmReceiver;
 import com.example.bt.R;
 import com.example.bt.app.CurrentUserAccount;
 import com.example.bt.models.Event;

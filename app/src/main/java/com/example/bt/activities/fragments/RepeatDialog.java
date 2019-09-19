@@ -1,4 +1,4 @@
-package com.example.bt;
+package com.example.bt.activities.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,6 +12,8 @@ import android.widget.RadioButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import com.example.bt.R;
 
 import java.util.Objects;
 

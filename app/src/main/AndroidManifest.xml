@@ -29,9 +29,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".AlarmReceiver"/>
-        <receiver android:name=".NotificationReceiver"/>
-        <receiver android:name=".UpdateReceiver"/>
+        <receiver android:name=".notifications.AlarmReceiver"/>
+        <receiver android:name=".notifications.NotificationReceiver"/>
+        <receiver android:name=".notifications.UpdateReceiver"/>
     </application>
 
 </manifest>

@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public class EventsActivityViewModel extends ViewModel {
+public class EventsActivityViewModel extends ViewModel
+{
 
     private static final String TAG = "EventsActivityViewModel";
 

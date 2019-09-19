@@ -1,4 +1,4 @@
-package com.example.bt;
+package com.example.bt.notifications;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
