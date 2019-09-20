@@ -54,7 +54,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.mClickListener = clickListener;
     }
 
-
     public interface ClickListener<T> {
         void onItemClick(String itemId, View v);
         void onItemLongClick(String itemId, View v);
